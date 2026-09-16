@@ -1,0 +1,31 @@
+Claude.md 파일을 만들어줘. 내용은 다음 내용을 포함해줘.
+ 
+작업을 시작하기 전에, 네가 완벽히 이해하기 위해 나에게 필요한 정보가 있다면 3가지 이내로 역질문해 줘
+
+1.아키텍처 (Architecture & Manager)
+전담 매니저 사용: 상태, 사운드, UI 등 공통 시스템은 Manager 클래스로 중앙 제어.
+제한적 싱글톤: 싱글톤은 Manager에만 허용(GameManager.Instance). 일반 객체(플레이어, 몬스터 등)는 절대 사용 금지.
+단일 책임 원칙 (SRP): 1스크립트 1역할. (예: Player를 Movement, Health, Inventory로 분할)
+
+2.객체 통신 (Object Communication)
+GameObject.Find() 엄격 금지: 인스펙터 할당(Drag & Drop) 또는 Manager 캐싱을 통해 객체 참조.
+이벤트 기반 통신 (Observer): C# event / Action으로 결합도 최소화. (예: Player는 '피격 이벤트'만 발생시키고, UI가 이를 구독해 스스로 업데이트)
+
+3.객체참조
+GetComponent 지향: 특별한 경우를 제외하고 인스펙터 직접 할당보다는 GetComponent 계열 함수를 우선 사용.
+Find 계열 금지: 런타임 성능 저하를 막기 위해 GameObject.Find 등 하이어라키 탐색 함수 사용 엄격히 금지.
+String 비교 금지: 태그, 이름 등 문자열(String)을 이용한 비교 지양 (성능 저하 및 휴먼 에러 방지).
+
+4.리소스 및 에셋 (Resource & Asset)
+프리팹(Prefab) 우선주의: 동적/반복 객체는 무조건 프리팹화. 씬 직접 수정 금지, 반드시 'Prefab Mode'에서 원본 수정.
+접두사 네이밍 룰: 직관적인 에셋 식별. (P_ : Prefab, T_ : Texture, M_ : Material)
+사용자가 프리팹을 원할하게 바꿀 수 있도록 @Resources 폴더에 프리팹 폴더별로 배치
+
+5.매 프레임 동적할당 금지
+특별한 경우를 제외하고 Update와 같이 매 프레임 동작하는 코드에 객체 동적할당 금지
+
+5.기획
+"지금부터 Unity/C# 기반의 게임 개발을 시작할 거야. 첨부된 Claude.md는 우리의 아키텍처 및 코딩 컨벤션 룰이고, 
+Plan.md는 구현할 시스템의 기획 내용이야. 두 문서를 완벽히 숙지해. 이해했다면 코드를 짜지 말고 기획의 핵심 코어 루프만 3줄로 요약해 봐."
+
+6.미리 만들어둔 파일에 생성하기 
