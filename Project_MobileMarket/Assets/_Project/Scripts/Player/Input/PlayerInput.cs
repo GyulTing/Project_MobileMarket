@@ -11,6 +11,9 @@ namespace MobileMarket.Player
         public Vector2 MoveInput { get; private set; }
         public Vector2 MouseScreenPosition { get; private set; }
         public bool IsSprinting { get; private set; }
+        public bool IsAiming { get; private set; }
+        public bool IsInteractPressed { get; private set; }
+        public bool IsFirePressed { get; private set; }
 
         private void Update()
         {
@@ -24,6 +27,9 @@ namespace MobileMarket.Player
 
             MouseScreenPosition = mouse.position.ReadValue();
             IsSprinting = keyboard.shiftKey.isPressed;
+            IsAiming = mouse.rightButton.isPressed;
+            IsInteractPressed = keyboard.fKey.wasPressedThisFrame;
+            IsFirePressed = mouse.leftButton.wasPressedThisFrame;
         }
     }
 }

@@ -11,6 +11,7 @@ namespace MobileMarket.Player
     {
         [SerializeField] private float moveSpeed = 5f;
         [SerializeField] private float sprintMultiplier = 1.5f;
+        [SerializeField] private float aimMultiplier = 0.7f;
         [SerializeField] private float turnSpeed = 15f;
 
         private CharacterController controller;
@@ -28,16 +29,22 @@ namespace MobileMarket.Player
 
         private void Update()
         {
-            Move();
-            FaceMouse();
-        }
-
-        private void Move()
-        {
             Vector2 move = input.MoveInput;
-            Vector3 direction = new Vector3(move.x, 0f, move.y).normalized;
-            float speed = moveSpeed * (input.IsSprinting ? sprintMultiplier : 1f);
-            controller.Move(direction * speed * Time.deltaTime);
+            Vector3 moveDirection = new Vector3(move.x, 0f, move.y).normalized;
+
+            bool canSprint = input.IsSprinting && !input.IsAiming;
+            float multiplier = canSprint ? sprintMultiplier : (input.IsAiming ? aimMultiplier : 1f);
+            float speed = moveSpeed * multiplier;
+            controller.Move(moveDirection * speed * Time.deltaTime);
+
+            if (input.IsAiming)
+            {
+                FaceMouse();
+            }
+            else if (moveDirection.sqrMagnitude > 0.001f)
+            {
+                FaceDirection(moveDirection);
+            }
         }
 
         private void FaceMouse()
@@ -52,7 +59,12 @@ namespace MobileMarket.Player
             lookDirection.y = 0f;
             if (lookDirection.sqrMagnitude < 0.001f) return;
 
-            Quaternion targetRotation = Quaternion.LookRotation(lookDirection);
+            FaceDirection(lookDirection);
+        }
+
+        private void FaceDirection(Vector3 direction)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(direction);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, turnSpeed * Time.deltaTime);
         }
     }
