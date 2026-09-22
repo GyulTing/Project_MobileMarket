@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d3a5bafa0581814891e359933166f15, type: 3}
   m_Name: Pistol
   m_EditorClassIdentifier: Assembly-CSharp::MobileMarket.Items.WeaponData
-  weaponName: "\uAD8C\uCD1D"
+  id: weapon_pistol
+  itemName: "\uAD8C\uCD1D"
+  weight: 3
   damage: 10
-  range: 15
+  fireRate: 4
+  aimSpeed: 20

@@ -4,11 +4,11 @@ using MobileMarket.Systems;
 
 namespace MobileMarket.UI
 {
-    /// <summary>Read-only grid view of a player's Inventory, shown alongside a LootPanel.</summary>
+    /// <summary>Grid view of a player's Inventory, shown alongside a LootPanel. Items can be dragged out (e.g. to an EquipSlotUI).</summary>
     public class InventoryPanelUI : MonoBehaviour
     {
         [SerializeField] private Text weightText;
-        [SerializeField] private Text[] cells;
+        [SerializeField] private BagSlotUI[] cells;
 
         private Inventory inventory;
 
@@ -39,7 +39,7 @@ namespace MobileMarket.UI
 
             for (int i = 0; i < cells.Length; i++)
             {
-                cells[i].text = i < inventory.Items.Count ? inventory.Items[i].itemName : "";
+                cells[i].SetItem(i < inventory.Items.Count ? inventory.Items[i] : null);
             }
             weightText.text = $"{inventory.CurrentWeight:0.#}/{inventory.MaxWeight:0.#}";
         }

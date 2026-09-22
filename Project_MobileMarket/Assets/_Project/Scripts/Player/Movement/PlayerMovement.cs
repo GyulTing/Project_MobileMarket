@@ -16,6 +16,7 @@ namespace MobileMarket.Player
 
         private CharacterController controller;
         private PlayerInput input;
+        private PlayerCombat combat;
         private Animator animator;
         private Camera mainCamera;
         private Plane groundPlane;
@@ -24,6 +25,7 @@ namespace MobileMarket.Player
         {
             controller = GetComponent<CharacterController>();
             input = GetComponent<PlayerInput>();
+            combat = GetComponent<PlayerCombat>();
             animator = GetComponentInChildren<Animator>();
             mainCamera = Camera.main;
             groundPlane = new Plane(Vector3.up, Vector3.zero);
@@ -61,6 +63,7 @@ namespace MobileMarket.Player
                 animator.SetFloat("Speed", animSpeed);
                 animator.SetFloat("Turn", isStationary ? turnAmount : 0f);
                 animator.SetFloat("MoveAngle", moveAngle);
+                animator.SetBool("IsArmed", combat != null && combat.IsArmed);
             }
         }
 
@@ -78,14 +81,20 @@ namespace MobileMarket.Player
             if (lookDirection.sqrMagnitude < 0.001f) return 0f;
 
             float signedAngle = Vector3.SignedAngle(transform.forward, lookDirection, Vector3.up);
-            FaceDirection(lookDirection);
+            float aimSpeed = combat != null && combat.EquippedWeapon != null ? combat.EquippedWeapon.aimSpeed : turnSpeed;
+            FaceDirection(lookDirection, aimSpeed);
             return Mathf.Clamp(signedAngle / 30f, -1f, 1f);
         }
 
         private void FaceDirection(Vector3 direction)
         {
+            FaceDirection(direction, turnSpeed);
+        }
+
+        private void FaceDirection(Vector3 direction, float speed)
+        {
             Quaternion targetRotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, turnSpeed * Time.deltaTime);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, speed * Time.deltaTime);
         }
     }
 }
