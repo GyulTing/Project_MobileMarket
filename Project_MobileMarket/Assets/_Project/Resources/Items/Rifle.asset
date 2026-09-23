@@ -15,6 +15,7 @@ MonoBehaviour:
   id: weapon_rifle
   itemName: "\uC18C\uCD1D"
   weight: 6
+  weaponType: 2
   damage: 25
   fireRate: 2
   aimSpeed: 12

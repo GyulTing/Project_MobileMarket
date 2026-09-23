@@ -15,6 +15,7 @@ MonoBehaviour:
   id: weapon_pistol
   itemName: "\uAD8C\uCD1D"
   weight: 3
+  weaponType: 1
   damage: 10
   fireRate: 4
   aimSpeed: 20

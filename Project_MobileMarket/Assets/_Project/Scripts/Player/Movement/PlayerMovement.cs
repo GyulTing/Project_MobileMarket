@@ -64,6 +64,11 @@ namespace MobileMarket.Player
                 animator.SetFloat("Turn", isStationary ? turnAmount : 0f);
                 animator.SetFloat("MoveAngle", moveAngle);
                 animator.SetBool("IsArmed", combat != null && combat.IsArmed);
+                animator.SetBool("IsAiming", input.IsAiming);
+
+                bool isArmedWithWeapon = combat != null && combat.IsArmed && combat.EquippedWeapon != null;
+                int weaponType = isArmedWithWeapon ? (int)combat.EquippedWeapon.weaponType : 0;
+                animator.SetInteger("WeaponType", weaponType);
             }
         }
 
