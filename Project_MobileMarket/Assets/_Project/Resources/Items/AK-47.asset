@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d3a5bafa0581814891e359933166f15, type: 3}
+  m_Name: AK-47
+  m_EditorClassIdentifier: Assembly-CSharp::MobileMarket.Items.WeaponData
+  id: weapon_ak47
+  itemName: AK-47
+  weight: 1
+  weaponType: 2
+  damage: 35
+  fireRate: 1
+  aimSpeed: 15
+  magazineSize: 30
+  pelletCount: 1
+  weaponModelPrefab: {fileID: 2558141238811818592, guid: 10c36d6e39be8f441814fc3a29a9090e, type: 3}

@@ -17,5 +17,8 @@ namespace MobileMarket.Items
         public float damage = 10f;
         public float fireRate = 3f;
         public float aimSpeed = 15f;
+        public int magazineSize = 10;
+        public int pelletCount = 1;
+        public GameObject weaponModelPrefab;
     }
 }

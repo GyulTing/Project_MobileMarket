@@ -16,6 +16,7 @@ namespace MobileMarket.Player
         public bool IsFirePressed { get; private set; }
         public bool IsEquipNextPressed { get; private set; }
         public bool IsArmTogglePressed { get; private set; }
+        public bool IsReloadPressed { get; private set; }
 
         private void Update()
         {
@@ -34,6 +35,7 @@ namespace MobileMarket.Player
             IsFirePressed = mouse.leftButton.isPressed;
             IsEquipNextPressed = keyboard.qKey.wasPressedThisFrame;
             IsArmTogglePressed = keyboard.rKey.isPressed;
+            IsReloadPressed = keyboard.gKey.wasPressedThisFrame;
         }
     }
 }
