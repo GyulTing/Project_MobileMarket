@@ -28,11 +28,16 @@ namespace MobileMarket.EditorTools
 
         private static Material sandMat, packedMat, dirtMat, roofGrey, roofGreen, roofTeal, roofYellow, roofRust, roofRed, beamMat;
 
-        private static Vector3 P(float px, float py) => new Vector3((px - 768f) * PxToM, 0f, (255f - py) * PxToM);
+        // The VARCO settlement is built at 75% of the reference plan so buildings match the player/NPC scale.
+        private const float VarcoLayoutScale = 0.75f;
+        private static float layout = 1f;
+
+        private static Vector3 P(float px, float py) => new Vector3((px - 768f) * PxToM * layout, 0f, (255f - py) * PxToM * layout);
 
         [MenuItem("MobileMarket/Build Small Settlement")]
         public static void Build()
         {
+            layout = 1f;
             rng = new System.Random(1234);
             modelCache.Clear();
             occupied.Clear();
@@ -64,6 +69,7 @@ namespace MobileMarket.EditorTools
         [MenuItem("MobileMarket/Build Small Settlement (VARCO)")]
         public static void BuildVarco()
         {
+            layout = VarcoLayoutScale;
             rng = new System.Random(1234);
             modelCache.Clear();
             occupied.Clear();
@@ -73,15 +79,19 @@ namespace MobileMarket.EditorTools
             root = new GameObject(RootName).transform;
 
             CreateMaterials();
-            BuildGround();
+            var terrain = BuildTerrain();
             BuildVarcoPerimeter();
             BuildVarcoBuildings();
             BuildVarcoProps();
-            BuildDesertGroundTiles();
             BuildVegetation(true);
+            SnapToTerrain(terrain, "Vegetation");
+            SnapToTerrain(terrain, "Props");
 
             foreach (var t in root.GetComponentsInChildren<Transform>(true))
                 GameObjectUtility.SetStaticEditorFlags(t.gameObject, StaticEditorFlags.BatchingStatic | StaticEditorFlags.OccluderStatic | StaticEditorFlags.OccludeeStatic | StaticEditorFlags.ContributeGI);
+
+            // Animated, so added after the static pass.
+            BuildNpcs(terrain);
 
             EditorSceneManager.MarkSceneDirty(root.gameObject.scene);
             Debug.Log($"[SettlementBuilder] Built VARCO settlement with {root.GetComponentsInChildren<Transform>().Length} objects.");
@@ -111,11 +121,15 @@ namespace MobileMarket.EditorTools
             return wrapper;
         }
 
-        /// <summary>Places a VARCO model so its footprint fits width x depth (long axes matched), grounded at y=0, with a box collider.</summary>
-        private static GameObject PlaceFit(string model, Transform parent, Vector3 center, float width, float depth, float yaw, bool collider = true)
+        /// <summary>
+        /// Places a VARCO model so its footprint fits width x depth (long axes matched), grounded at y=0, with a box collider.
+        /// Sizes follow the layout scale unless keepSize (real-world sized props like cars).
+        /// </summary>
+        private static GameObject PlaceFit(string model, Transform parent, Vector3 center, float width, float depth, float yaw, bool collider = true, bool keepSize = false)
         {
             var prefab = Model(VA + model + ".fbx");
             if (prefab == null) return null;
+            if (!keepSize) { width *= layout; depth *= layout; }
             var w = Wrap(prefab, parent);
             var native = RendererBounds(w.gameObject).size;
 
@@ -137,11 +151,12 @@ namespace MobileMarket.EditorTools
         private static void BuildVarcoPerimeter()
         {
             var g = Group("PerimeterWall");
+            // North-side segments run a couple of meters into the barracks so the wall/building line has no gaps.
             VarcoWall(g, new[] { P(45, 365), P(690, 365) });
-            VarcoWall(g, new[] { P(805, 365), P(1230, 372), P(1310, 358), P(1380, 330), P(1435, 285), P(1462, 220), P(1466, 125) });
-            VarcoWall(g, new[] { P(45, 365), P(45, 100), P(655, 100) });
-            VarcoWall(g, new[] { P(960, 60), P(1030, 60) });
-            VarcoWall(g, new[] { P(1200, 80), P(1240, 80) });
+            VarcoWall(g, new[] { P(805, 365), P(1230, 372), P(1310, 358), P(1380, 330), P(1435, 285), P(1462, 220), P(1466, 125), P(1424, 125) });
+            VarcoWall(g, new[] { P(45, 365), P(45, 100), P(707, 100) });
+            VarcoWall(g, new[] { P(903, 60), P(1030, 60) });
+            VarcoWall(g, new[] { P(1200, 80), P(1276, 80) });
 
             var gate = Group("Gate");
             var mid = (P(690, 365) + P(805, 365)) * 0.5f;
@@ -151,8 +166,8 @@ namespace MobileMarket.EditorTools
             {
                 var col = new GameObject("HutCollider");
                 col.transform.SetParent(gate, false);
-                col.transform.position = mid + new Vector3(side * 15.5f, 3f, 0f);
-                col.AddComponent<BoxCollider>().size = new Vector3(7f, 6f, 8f);
+                col.transform.position = mid + new Vector3(side * 15.5f, 3f, 0f) * layout;
+                col.AddComponent<BoxCollider>().size = new Vector3(7f, 6f, 8f) * layout;
             }
         }
 
@@ -231,8 +246,8 @@ namespace MobileMarket.EditorTools
             var g = Group("Props");
             PlaceFit("Settle_WaterTank", g, P(695, 125), 7f, 7f, 0f);
             PlaceFit("Settle_WaterTank", g, P(1395, 290), 8f, 8f, 30f);
-            PlaceFit("Settle_Car", g, P(625, 455), 5f, 2.4f, -60f);
-            PlaceFit("Settle_Car", g, P(1270, 415), 5f, 2.4f, 20f);
+            PlaceFit("Settle_Car", g, P(625, 455), 5f, 2.4f, -60f, true, true);
+            PlaceFit("Settle_Car", g, P(1270, 415), 5f, 2.4f, 20f, true, true);
 
             Prop(g, RU + "detail-barrier-strong-damaged.fbx", P(665, 445), 10f, M * 1.5f, true);
             Prop(g, RU + "detail-barrier-strong-type-a.fbx", P(790, 450), -5f, M * 1.5f, true);
@@ -388,11 +403,9 @@ namespace MobileMarket.EditorTools
         // ---------------------------------------------------------------- ground
 
         private const string DE = "Assets/@ExternalAssets/Low Poly Desert Environment/Prefabs/";
-        private static readonly List<Rect> groundExclusions = new List<Rect>();
 
         private static void BuildGround()
         {
-            groundExclusions.Clear();
             var g = Group("Ground");
             var ground = Slab("Sand", g, new Vector3(0f, -0.5f, -10f), new Vector3(440f, 1f, 200f), 0f, sandMat, 8f, true);
             ground.isStatic = true;
@@ -403,9 +416,7 @@ namespace MobileMarket.EditorTools
             {
                 var a = P(px0, py0); var b = P(px1, py1);
                 var c = (a + b) * 0.5f;
-                var size = new Vector3(Mathf.Abs(b.x - a.x), 0.02f, Mathf.Abs(b.z - a.z));
-                Slab("Dirt", g, new Vector3(c.x, y, c.z), size, 0f, mat, 10f, false);
-                groundExclusions.Add(new Rect(c.x - size.x * 0.5f, c.z - size.z * 0.5f, size.x, size.z));
+                Slab("Dirt", g, new Vector3(c.x, y, c.z), new Vector3(Mathf.Abs(b.x - a.x), 0.02f, Mathf.Abs(b.z - a.z)), 0f, mat, 10f, false);
                 y += 0.005f;
             }
             Dirt(240, 95, 1460, 360, packedMat);   // compound interior
@@ -718,7 +729,7 @@ namespace MobileMarket.EditorTools
             var g = Group("Clutter", parent);
             for (int i = 0; i < count; i++)
             {
-                var p = center + new Vector3(Rand(-radius, radius), 0f, Rand(-radius, radius));
+                var p = center + new Vector3(Rand(-radius, radius), 0f, Rand(-radius, radius)) * layout;
                 if (!IsFree(p)) continue;
                 var go = Place(Pick(clutter), g, p, Rand(0f, 360f), M);
                 if (go != null) AddBoundsCollider(go);
@@ -739,40 +750,195 @@ namespace MobileMarket.EditorTools
 
         // ---------------------------------------------------------------- vegetation
 
-        /// <summary>Covers the desert outside the dirt/compound areas with Low Poly Desert Environment ground tiles (visual only; the sand slab keeps the collider).</summary>
-        private static void BuildDesertGroundTiles()
-        {
-            var tile = Model(DE + "Ground_01.prefab");
-            if (tile == null) return;
-            var g = Group("DesertTiles", root.Find("Ground"));
+        // ---------------------------------------------------------------- terrain (VARCO scene)
 
-            // Paint the base sand slab with the tile's palette colour so the gaps left along roads/compound edges blend in.
-            var tileMf = tile.GetComponentInChildren<MeshFilter>();
-            var tileMr = tile.GetComponentInChildren<MeshRenderer>();
-            var slab = root.Find("Ground/Sand");
-            if (tileMf != null && tileMr != null && slab != null)
+        private const float TerrainW = 880f, TerrainD = 400f, TerrainH = 20f;
+        private static readonly Vector3 TerrainOrigin = new Vector3(-440f, 0f, -210f);
+        private const string TerrainDataPath = "Assets/_Project/Scenes/Main/TD_SmallSettlement2.asset";
+
+        // Compound interior + warehouse yard, and the roads that run out to the map edges (meters, min/max corners).
+        private static Rect CompoundRect => RectFromPx(45, 95, 1465, 365);
+        private static Rect[] RoadRects => new[]
+        {
+            RectFromPx(718, 360, 782, 1120),   // gate road south, out to the map edge
+            RectFromPx(-1060, 442, 718, 478),  // west branch, out to the map edge
+            RectFromPx(782, 427, 2600, 463),   // east branch, out to the map edge
+            RectFromPx(718, 250, 782, 365),    // gate to plaza
+        };
+
+        private static Rect RectFromPx(float px0, float py0, float px1, float py1)
+        {
+            var a = P(px0, py0); var b = P(px1, py1);
+            return Rect.MinMaxRect(Mathf.Min(a.x, b.x), Mathf.Min(a.z, b.z), Mathf.Max(a.x, b.x), Mathf.Max(a.z, b.z));
+        }
+
+        private static bool OnRoad(Vector3 p, float margin)
+        {
+            foreach (var r in RoadRects) if (RectDistance(r, p.x, p.z) < margin) return true;
+            return false;
+        }
+
+        /// <summary>Signed distance (m) from a point to a rect: negative inside, positive outside.</summary>
+        private static float RectDistance(Rect r, float x, float z)
+        {
+            float dx = Mathf.Abs(x - r.center.x) - r.width * 0.5f;
+            float dz = Mathf.Abs(z - r.center.y) - r.height * 0.5f;
+            float outside = new Vector2(Mathf.Max(dx, 0f), Mathf.Max(dz, 0f)).magnitude;
+            return outside + Mathf.Min(Mathf.Max(dx, dz), 0f);
+        }
+
+        private static TerrainLayer GetOrCreateLayer(string name, Texture2D tex, float tile, Vector4 remap)
+        {
+            string path = MatFolder + name + ".terrainlayer";
+            var layer = AssetDatabase.LoadAssetAtPath<TerrainLayer>(path);
+            if (layer == null)
             {
-                var slabMesh = slab.GetComponent<MeshFilter>().sharedMesh;
-                var paletteUv = tileMf.sharedMesh.uv[0];
-                var uvs = new Vector2[slabMesh.vertexCount];
-                for (int i = 0; i < uvs.Length; i++) uvs[i] = paletteUv;
-                slabMesh.uv = uvs;
-                slab.GetComponent<MeshRenderer>().sharedMaterial = tileMr.sharedMaterial;
+                layer = new TerrainLayer();
+                AssetDatabase.CreateAsset(layer, path);
             }
-            const float size = 5f;
-            for (float x = -220f + size * 0.5f; x < 220f; x += size)
+            layer.diffuseTexture = tex;
+            layer.tileSize = new Vector2(tile, tile);
+            layer.diffuseRemapMax = remap;
+            layer.smoothness = 0.05f;
+            EditorUtility.SetDirty(layer);
+            return layer;
+        }
+
+        /// <summary>
+        /// One terrain for the whole map: flat under the settlement and roads, gentle dunes elsewhere, and sand / packed sand / dirt
+        /// blended with noisy soft edges so nothing reads as a hard rectangle.
+        /// </summary>
+        private static Terrain BuildTerrain()
+        {
+            var g = Group("Ground");
+
+            var td = AssetDatabase.LoadAssetAtPath<TerrainData>(TerrainDataPath);
+            if (td == null)
             {
-                for (float z = -110f + size * 0.5f; z < 90f; z += size)
+                td = new TerrainData();
+                AssetDatabase.CreateAsset(td, TerrainDataPath);
+            }
+            td.heightmapResolution = 513;
+            td.alphamapResolution = 1024;
+            td.baseMapResolution = 1024;
+            td.size = new Vector3(TerrainW, TerrainH, TerrainD);
+
+            var sandTex = FindTexture("Sand_Beach_Base_Basecolor");
+            var dirtTex = FindTexture("Dirt_Path_Basecolor");
+            td.terrainLayers = new[]
+            {
+                GetOrCreateLayer("TL_Settle_Sand", sandTex, 10f, new Vector4(1f, 0.93f, 0.8f, 1f)),
+                GetOrCreateLayer("TL_Settle_PackedSand", sandTex, 10f, new Vector4(0.86f, 0.74f, 0.58f, 1f)),
+                GetOrCreateLayer("TL_Settle_Dirt", dirtTex, 9f, new Vector4(1.25f, 1.1f, 0.92f, 1f)),
+            };
+
+            var compound = CompoundRect;
+            var roads = RoadRects;
+            float Noise(float x, float z, float f) => Mathf.PerlinNoise(x * f + 137.3f, z * f + 71.9f);
+
+            // Heights: flat (0) around the settlement and roads, dunes fading in with distance.
+            int hr = td.heightmapResolution;
+            var heights = new float[hr, hr];
+            for (int iz = 0; iz < hr; iz++)
+            {
+                for (int ix = 0; ix < hr; ix++)
                 {
-                    var r = new Rect(x - size * 0.5f, z - size * 0.5f, size, size);
-                    bool blocked = false;
-                    foreach (var ex in groundExclusions) if (ex.Overlaps(r)) { blocked = true; break; }
-                    if (blocked) continue;
-                    var go = (GameObject)PrefabUtility.InstantiatePrefab(tile, g);
-                    go.transform.position = new Vector3(x, 0.1f, z);
-                    foreach (var c in go.GetComponentsInChildren<Collider>()) Object.DestroyImmediate(c);
+                    float x = TerrainOrigin.x + TerrainW * ix / (hr - 1);
+                    float z = TerrainOrigin.z + TerrainD * iz / (hr - 1);
+                    float d = RectDistance(compound, x, z) - 18f;
+                    foreach (var r in roads) d = Mathf.Min(d, RectDistance(r, x, z) - 8f);
+                    float rise = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(d / 45f));
+                    float dunes = Noise(x, z, 0.012f) * 0.65f + Noise(x, z, 0.035f) * 0.35f;
+                    float amp = Mathf.Lerp(1.2f, 5f, Mathf.Clamp01((d - 45f) / 200f));
+                    heights[iz, ix] = rise * dunes * amp / TerrainH;
                 }
             }
+            td.SetHeights(0, 0, heights);
+
+            // Splat: noisy, soft-edged masks for the packed compound ground and the dirt roads.
+            int ar = td.alphamapResolution;
+            var alphas = new float[ar, ar, 3];
+            for (int iz = 0; iz < ar; iz++)
+            {
+                for (int ix = 0; ix < ar; ix++)
+                {
+                    float x = TerrainOrigin.x + TerrainW * (ix + 0.5f) / ar;
+                    float z = TerrainOrigin.z + TerrainD * (iz + 0.5f) / ar;
+                    float wobble = (Noise(x, z, 0.06f) - 0.5f) * 7f + (Noise(x, z, 0.25f) - 0.5f) * 2f;
+
+                    // Whole compound interior: mottled dirt over packed sand, fading to open sand just outside the wall.
+                    float interior = 1f - Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(-1f, 10f, RectDistance(compound, x, z) + wobble));
+                    float mottle = Noise(x, z, 0.08f) * 0.6f + Noise(x, z, 0.3f) * 0.4f;
+                    float mottleDirt = Mathf.Lerp(0.35f, 0.9f, Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(0.3f, 0.7f, mottle)));
+
+                    // Roads outside the compound keep their own dirt path; inside, they share the compound floor.
+                    // Coverage stays full across the blend so the road runs straight into the compound floor.
+                    float roadD = float.MaxValue;
+                    foreach (var r in roads) roadD = Mathf.Min(roadD, RectDistance(r, x, z));
+                    float road = 1f - Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(-2f, 3f, roadD + wobble * 0.6f));
+
+                    float cover = Mathf.Max(road, interior);
+                    float dirtShare = Mathf.Lerp(mottleDirt, 1f, road * (1f - interior));
+                    float dirt = cover * dirtShare;
+                    float packed = cover - dirt;
+                    float sand = 1f - cover;
+                    float sum = sand + packed + dirt;
+                    alphas[iz, ix, 0] = sand / sum;
+                    alphas[iz, ix, 1] = packed / sum;
+                    alphas[iz, ix, 2] = dirt / sum;
+                }
+            }
+            td.SetAlphamaps(0, 0, alphas);
+            EditorUtility.SetDirty(td);
+            AssetDatabase.SaveAssets();
+
+            var go = Terrain.CreateTerrainGameObject(td);
+            go.name = "Terrain";
+            go.transform.SetParent(g, false);
+            go.transform.position = TerrainOrigin;
+            var terrain = go.GetComponent<Terrain>();
+            terrain.heightmapPixelError = 3f;
+            terrain.basemapDistance = 400f;
+            return terrain;
+        }
+
+        /// <summary>Lifts every direct child of the named group so it sits on the terrain surface.</summary>
+        private static void SnapToTerrain(Terrain terrain, string groupName)
+        {
+            var group = root.Find(groupName);
+            if (group == null || terrain == null) return;
+            void Lift(Transform t)
+            {
+                var p = t.position;
+                p.y += terrain.SampleHeight(p) + terrain.transform.position.y;
+                t.position = p;
+            }
+            foreach (Transform child in group)
+            {
+                if (child.name == "Clutter") { foreach (Transform c in child) Lift(c); }
+                else Lift(child);
+            }
+        }
+
+        /// <summary>Merchants in front of the market stalls, guards at the gate and the north watchtower, farmers by the warehouse yard.</summary>
+        private static void BuildNpcs(Terrain terrain)
+        {
+            var g = Group("NPCs");
+            var spots = new (string npc, Vector3 pos, float yaw)[]
+            {
+                ("Merchant_Scrap", P(430, 345), 180f), ("Merchant_Food", P(468, 345), 180f), ("Merchant_Arms", P(506, 345), 180f),
+                ("Merchant_Cloth", P(544, 345), 180f), ("Merchant_Water", P(582, 345), 180f),
+                ("Guard_01", P(722, 339), 180f), ("Guard_02", P(776, 339), 180f), ("Guard_03", P(820, 158), 180f),
+                ("Farmer_01", P(150, 330), 90f), ("Farmer_02", P(175, 340), 250f),
+            };
+            foreach (var s in spots)
+            {
+                var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(NpcBuilder.PrefabPath(s.npc));
+                if (prefab == null) { Debug.LogWarning("[SettlementBuilder] Missing NPC prefab " + s.npc); continue; }
+                var go = (GameObject)PrefabUtility.InstantiatePrefab(prefab, g);
+                go.transform.SetPositionAndRotation(s.pos, Quaternion.Euler(0f, s.yaw, 0f));
+            }
+            SnapToTerrain(terrain, "NPCs");
         }
 
         /// <summary>Rocks, dead trees and cacti from Low Poly Desert Environment, scattered outside the compound.</summary>
@@ -787,9 +953,9 @@ namespace MobileMarket.EditorTools
                 int placed = 0;
                 for (int i = 0; i < count * 4 && placed < count; i++)
                 {
-                    var p = new Vector3(Rand(-210f, 210f), 0.05f, Rand(-105f, 85f));
-                    bool inside = p.x > -180f && p.x < 172f && p.z > -30f && p.z < 62f;
-                    if (inside || !IsFree(p)) continue;
+                    var p = new Vector3(Rand(-430f, 430f), 0.05f, Rand(-205f, 185f));
+                    bool inside = p.x > -180f * layout && p.x < 172f * layout && p.z > -30f * layout && p.z < 62f * layout;
+                    if (inside || !IsFree(p) || OnRoad(p, 4f)) continue;
                     var go = Place(Pick(set), g, p, Rand(0f, 360f), Rand(minS, maxS));
                     if (go == null) continue;
                     if (!keepCollider) foreach (var c in go.GetComponentsInChildren<Collider>()) Object.DestroyImmediate(c);
@@ -798,10 +964,10 @@ namespace MobileMarket.EditorTools
                 }
             }
 
-            Scatter(bigRocks, 45, 1f, 2.5f, true);
-            Scatter(smallRocks, 60, 2f, 5f, false);
-            Scatter(new[] { DE + "Tree_01.prefab" }, 25, 0.8f, 1.4f, true);
-            Scatter(cacti, 45, 0.8f, 1.5f, true);
+            Scatter(bigRocks, 150, 1f, 2.5f, true);
+            Scatter(smallRocks, 200, 2f, 5f, false);
+            Scatter(new[] { DE + "Tree_01.prefab" }, 80, 0.8f, 1.4f, true);
+            Scatter(cacti, 150, 0.8f, 1.5f, true);
         }
 
         private static void BuildVegetation(bool desertPack = false)
@@ -811,11 +977,13 @@ namespace MobileMarket.EditorTools
 
             // VARCO desert shrub (kenney's alpha-card shrubs render as solid green planes in URP, so they are not used).
             var shrub = Model(VA + "Settle_Shrub.fbx");
+            float ex = desertPack ? 430f : 210f, zMin = desertPack ? -205f : -105f, zMax = desertPack ? 185f : 85f;
+            int cap = desertPack ? 500 : 180;
             int placed = 0;
-            for (int i = 0; shrub != null && i < 400 && placed < 180; i++)
+            for (int i = 0; shrub != null && i < cap * 3 && placed < cap; i++)
             {
-                var p = new Vector3(Rand(-210f, 210f), 0f, Rand(-105f, 85f));
-                bool inside = p.x > -175f && p.x < 170f && p.z > -27f && p.z < 60f;
+                var p = new Vector3(Rand(-ex, ex), 0f, Rand(zMin, zMax));
+                bool inside = p.x > -175f * layout && p.x < 170f * layout && p.z > -27f * layout && p.z < 60f * layout;
                 if (inside && rng.NextDouble() < 0.8) continue;
                 if (!IsFree(p)) continue;
                 var w = Wrap(shrub, g);
@@ -836,7 +1004,7 @@ namespace MobileMarket.EditorTools
             for (int i = 0; i < 45; i++)
             {
                 var p = new Vector3(Rand(-210f, 210f), 0f, Rand(-105f, 85f));
-                bool inside = p.x > -175f && p.x < 170f && p.z > -27f && p.z < 60f;
+                bool inside = p.x > -175f * layout && p.x < 170f * layout && p.z > -27f * layout && p.z < 60f * layout;
                 if (inside || !IsFree(p)) continue;
                 var go = Place(Pick(rocks), g, p, Rand(0f, 360f), Rand(3f, 7f));
                 if (go != null) AddBoundsCollider(go);

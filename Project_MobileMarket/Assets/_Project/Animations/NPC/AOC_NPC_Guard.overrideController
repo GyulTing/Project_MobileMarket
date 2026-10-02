@@ -1,0 +1,13 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: AOC_NPC_Guard
+  m_Controller: {fileID: 9100000, guid: b104801dff871944298faf1b53782d44, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: 4fc129291e5fcce448fa9c0a62bc3f19, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 954152d9f749d6d4783beadce169819f, type: 2}

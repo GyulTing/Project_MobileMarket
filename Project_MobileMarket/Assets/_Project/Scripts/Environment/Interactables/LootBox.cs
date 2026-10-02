@@ -13,6 +13,9 @@ namespace MobileMarket.Environment
         [SerializeField] private LootTable lootTable;
         [SerializeField] private int slotCount = 3;
 
+        [Tooltip("If set, the box holds exactly these items instead of rolling the loot table.")]
+        [SerializeField] private ItemData[] fixedItems;
+
         private ItemData[] contents;
 
         public int SlotCount => slotCount;
@@ -21,6 +24,13 @@ namespace MobileMarket.Environment
         private void Awake()
         {
             contents = new ItemData[slotCount];
+
+            if (fixedItems != null && fixedItems.Length > 0)
+            {
+                for (int i = 0; i < slotCount && i < fixedItems.Length; i++) contents[i] = fixedItems[i];
+                return;
+            }
+
             if (lootTable == null) return;
 
             for (int i = 0; i < slotCount; i++)
