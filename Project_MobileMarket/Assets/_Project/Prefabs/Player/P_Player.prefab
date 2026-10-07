@@ -15,6 +15,11 @@ GameObject:
   - component: {fileID: 229528713954756638}
   - component: {fileID: 286594786988882766}
   - component: {fileID: 4665053243044966212}
+  - component: {fileID: 9092354533848333910}
+  - component: {fileID: 4757430824135884652}
+  - component: {fileID: 2270613315838795560}
+  - component: {fileID: 959676642981066341}
+  - component: {fileID: 467354561509031722}
   m_Layer: 0
   m_Name: P_Player
   m_TagString: Untagged
@@ -92,6 +97,12 @@ MonoBehaviour:
   sprintMultiplier: 2
   aimMultiplier: 0.6
   turnSpeed: 15
+  minAimCorrectionDistance: 1.2
+  barrelOffsetSmoothing: 3
+  maxBarrelYaw: 20
+  maxBarrelSideOffset: 0.5
+  minBarrelHeight: 0.3
+  maxBarrelHeight: 0.9
 --- !u!114 &229528713954756638
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -104,7 +115,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f94563cf3ae83d5468f686e9b25357c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MobileMarket.Systems.Inventory
-  maxWeight: 20
+  pocketColumns: 3
+  pocketRows: 3
 --- !u!114 &286594786988882766
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -133,12 +145,82 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70f591c8ed4eeca45a1da4531990fe14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MobileMarket.Player.PlayerCombat
-  equippedWeapon: {fileID: 11400000, guid: 2700de924c3922a4c966f0458bcaeda9, type: 2}
   bulletPrefab: {fileID: 2732207403462461833, guid: 19b22c531662ca14887daeef7589dbb5, type: 3}
   armHoldDuration: 0.5
   weaponSocket: {fileID: 6751104413598672211}
-  reloadDuration: 1.5
+  reloadClipLength: 1.7
+  reloadBlendTime: 0.15
   pelletSpreadAngle: 5
+--- !u!114 &9092354533848333910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 38637874019788742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d20c378b7386cb4db9ae5669fdc2089, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MobileMarket.Player.PlayerEquipmentVisuals
+--- !u!114 &4757430824135884652
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 38637874019788742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 585a74fda5f54474c910e5b92528146f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MobileMarket.Player.PlayerWeaponRecoil
+  kickBack: 0.01
+  muzzleRise: 1
+  randomYaw: 1.5
+  chestLean: 6
+  maxStack: 1.5
+  recoverySpeed: 25
+--- !u!114 &2270613315838795560
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 38637874019788742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 989e6ac5372b3c144aad3c20b8f9860b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MobileMarket.Enemy.FactionMember
+  faction: 0
+  aimOffset: {x: 0, y: 0.3, z: 0}
+--- !u!114 &959676642981066341
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 38637874019788742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 425983868a3e9be47930936b7755a07e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MobileMarket.Player.PlayerHealth
+  maxHealth: 100
+--- !u!114 &467354561509031722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 38637874019788742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ab9c9a5efcb6464d81ed8a38b79fede, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MobileMarket.VFX.BloodOnHit
+  effectPrefab: {fileID: 1357738489708021926, guid: bec69bb80d1790643bff21d7ecfcbcf3, type: 3}
 --- !u!1 &689144748014990643
 GameObject:
   m_ObjectHideFlags: 0

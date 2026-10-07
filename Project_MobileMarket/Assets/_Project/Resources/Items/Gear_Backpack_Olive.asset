@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f19c65b47cdfd84e8ce94814529407f, type: 3}
+  m_Name: Gear_Backpack_Olive
+  m_EditorClassIdentifier: Assembly-CSharp::MobileMarket.Data.BackpackData
+  id: gear_backpack_olive
+  itemName: Olive Rucksack
+  weight: 1
+  icon: {fileID: 21300000, guid: 288778ef88334c14da14b636ac207b0f, type: 3}
+  slot: 2
+  wornModel: {fileID: 919132149155446097, guid: bfc54c1e00fafbd45a02e125e7db0c35, type: 3}
+  wornPosition: {x: 0.001956278, y: 0.0641832, z: -0.023166932}
+  wornRotation: {x: 270, y: 180, z: 0}
+  wornSize: 0.62
+  columns: 5
+  rows: 5
+  panelArt: {fileID: 21300000, guid: 36ff35a6f31105542ac9a8e7713d5c9a, type: 3}
+  gridArea:
+    serializedVersion: 2
+    x: 0.18
+    y: 0.17
+    width: 0.64
+    height: 0.44

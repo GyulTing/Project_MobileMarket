@@ -15,10 +15,15 @@ MonoBehaviour:
   id: weapon_m1_carbine
   itemName: "M1 \uCE74\uBE48"
   weight: 1
+  icon: {fileID: 21300000, guid: 51a50d75f68e26f42a19926aaaee5914, type: 3}
   weaponType: 2
+  fireMode: 0
   damage: 38
-  fireRate: 1
+  fireRate: 2.3
   aimSpeed: 15
+  reloadTime: 1.8
+  recoil: 0.76
   magazineSize: 10
   pelletCount: 1
   weaponModelPrefab: {fileID: 1526090169149027592, guid: e1062f0df181c404c8578b6d9b3f25d2, type: 3}
+  muzzleOffset: {x: 0.000000011201409, y: 0.07960545, z: 0.7849999}

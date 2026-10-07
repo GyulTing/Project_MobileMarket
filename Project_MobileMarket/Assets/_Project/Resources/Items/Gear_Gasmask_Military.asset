@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c062e6e1072be14290c62c8d156ede7, type: 3}
+  m_Name: Gear_Gasmask_Military
+  m_EditorClassIdentifier: Assembly-CSharp::MobileMarket.Data.EquipmentData
+  id: gear_gasmask_military
+  itemName: Military Gas Mask
+  weight: 1
+  icon: {fileID: 21300000, guid: 2c6486c37e4f97b439913aa921a69f99, type: 3}
+  slot: 0
+  wornModel: {fileID: 919132149155446097, guid: 7fbd2fdee6a773b4cafaa8119b2a7891, type: 3}
+  wornPosition: {x: 0.001956278, y: -0.037985954, z: 0.06047499}
+  wornRotation: {x: 75.96379, y: 0, z: 0}
+  wornSize: 0.25

@@ -15,10 +15,11 @@ MonoBehaviour:
   id: seed_wheat
   itemName: "\uBC00 \uC528\uC557"
   weight: 0.1
+  icon: {fileID: 21300000, guid: 1217ebbdd995a92439ed7e7978e6b68f, type: 3}
   harvestItem: {fileID: 11400000, guid: 2037e2c721621f34985bf88a31625ea4, type: 2}
   harvestAmount: 3
   daysToGrow: 3
   stagePrefabs:
-  - {fileID: 4332994240255213454, guid: 0bd0916b5a6c8274d95efc25a0d8ea8f, type: 3}
-  - {fileID: 8958706077408398260, guid: 00f32f1e6e61f46448ac933bcb3777be, type: 3}
-  - {fileID: 5928986059171355300, guid: 3894194a9a8f40a4399d892d163df76e, type: 3}
+  - {fileID: 9139973192285301997, guid: 7b1f337e2c94a3643b53be6739daa244, type: 3}
+  - {fileID: 2643821097034491093, guid: 1dd49a332b37519409edd0ff476fb806, type: 3}
+  - {fileID: 7330973383575570341, guid: bb3b86030e962ce40bb1a22944927ac1, type: 3}

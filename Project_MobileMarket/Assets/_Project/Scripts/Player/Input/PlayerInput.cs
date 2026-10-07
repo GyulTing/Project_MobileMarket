@@ -14,9 +14,10 @@ namespace MobileMarket.Player
         public bool IsAiming { get; private set; }
         public bool IsInteractPressed { get; private set; }
         public bool IsFirePressed { get; private set; }
-        public bool IsEquipNextPressed { get; private set; }
-        public bool IsArmTogglePressed { get; private set; }
-        public bool IsReloadPressed { get; private set; }
+        public bool IsFireJustPressed { get; private set; }
+        /// <summary>Weapon key (R): tap = reload, hold = draw/holster. PlayerCombat tells the two apart.</summary>
+        public bool IsWeaponKeyHeld { get; private set; }
+        public bool IsWeaponKeyReleased { get; private set; }
 
         private void Update()
         {
@@ -33,9 +34,9 @@ namespace MobileMarket.Player
             IsAiming = mouse.rightButton.isPressed;
             IsInteractPressed = keyboard.fKey.wasPressedThisFrame;
             IsFirePressed = mouse.leftButton.isPressed;
-            IsEquipNextPressed = keyboard.qKey.wasPressedThisFrame;
-            IsArmTogglePressed = keyboard.rKey.isPressed;
-            IsReloadPressed = keyboard.gKey.wasPressedThisFrame;
+            IsFireJustPressed = mouse.leftButton.wasPressedThisFrame;
+            IsWeaponKeyHeld = keyboard.rKey.isPressed;
+            IsWeaponKeyReleased = keyboard.rKey.wasReleasedThisFrame;
         }
     }
 }

@@ -15,10 +15,15 @@ MonoBehaviour:
   id: weapon_stg44
   itemName: STG-44
   weight: 1
+  icon: {fileID: 21300000, guid: ef9bbaa7ce967174da4ca5ff0219f4a4, type: 3}
   weaponType: 2
+  fireMode: 1
   damage: 32
-  fireRate: 1
+  fireRate: 4.7
   aimSpeed: 15
+  reloadTime: 2.1
+  recoil: 0.64
   magazineSize: 30
   pelletCount: 1
   weaponModelPrefab: {fileID: 4441809679580037908, guid: 1a2426c6f8805a74eaa9c68d318cf8f9, type: 3}
+  muzzleOffset: {x: -0.00007843066, y: 0.080045246, z: 0.7225}

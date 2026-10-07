@@ -1,60 +1,53 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 using MobileMarket.Common;
 using MobileMarket.Data;
 using MobileMarket.Systems;
 
 namespace MobileMarket.Environment
 {
+    /// <summary>A lootable container with its own item grid. Opening it shows its grid next to the player's inventory.</summary>
     public class LootBox : MonoBehaviour, IInteractable
     {
         public static event Action<LootBox, GameObject> OnBoxOpened;
 
+        [SerializeField] private string displayName = "상자";
+        [SerializeField] private int columns = 3;
+        [SerializeField] private int rows = 3;
+
         [SerializeField] private LootTable lootTable;
-        [SerializeField] private int slotCount = 3;
+        [FormerlySerializedAs("slotCount")]
+        [SerializeField] private int rollCount = 3;
 
         [Tooltip("If set, the box holds exactly these items instead of rolling the loot table.")]
         [SerializeField] private ItemData[] fixedItems;
 
-        private ItemData[] contents;
-
-        public int SlotCount => slotCount;
-        public ItemData GetItemAt(int slotIndex) => contents[slotIndex];
+        public string DisplayName => displayName;
+        public ItemGrid Grid { get; private set; }
 
         private void Awake()
         {
-            contents = new ItemData[slotCount];
+            // Containers can hold backpacks that still have items in them.
+            Grid = new ItemGrid(columns, rows, true);
 
             if (fixedItems != null && fixedItems.Length > 0)
             {
-                for (int i = 0; i < slotCount && i < fixedItems.Length; i++) contents[i] = fixedItems[i];
+                foreach (var item in fixedItems) if (item != null) Grid.TryAdd(new ItemInstance(item));
                 return;
             }
 
             if (lootTable == null) return;
-
-            for (int i = 0; i < slotCount; i++)
+            for (int i = 0; i < rollCount; i++)
             {
-                contents[i] = lootTable.RollItem();
+                var item = lootTable.RollItem();
+                if (item != null) Grid.TryAdd(new ItemInstance(item));
             }
         }
 
         public void Interact(GameObject interactor)
         {
             OnBoxOpened?.Invoke(this, interactor);
-        }
-
-        /// <summary>Moves the item in a slot into the given inventory. Returns false (slot untouched) if the inventory can't fit it.</summary>
-        public bool TakeItem(int slotIndex, Inventory inventory)
-        {
-            if (slotIndex < 0 || slotIndex >= contents.Length) return false;
-
-            var item = contents[slotIndex];
-            if (item == null) return false;
-            if (!inventory.TryAddItem(item)) return false;
-
-            contents[slotIndex] = null;
-            return true;
         }
     }
 }

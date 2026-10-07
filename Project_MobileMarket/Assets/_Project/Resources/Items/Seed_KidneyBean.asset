@@ -15,10 +15,11 @@ MonoBehaviour:
   id: seed_kidneybean
   itemName: "\uAC15\uB0AD\uCF69 \uC528\uC557"
   weight: 0.1
+  icon: {fileID: 21300000, guid: ae50e566217ca8e479e701de3b231fc3, type: 3}
   harvestItem: {fileID: 11400000, guid: 8279487c0ef99024a9b58876a9627b9b, type: 2}
   harvestAmount: 3
   daysToGrow: 3
   stagePrefabs:
-  - {fileID: 4332994240255213454, guid: 0bd0916b5a6c8274d95efc25a0d8ea8f, type: 3}
-  - {fileID: 8958706077408398260, guid: 00f32f1e6e61f46448ac933bcb3777be, type: 3}
-  - {fileID: 5928986059171355300, guid: 3894194a9a8f40a4399d892d163df76e, type: 3}
+  - {fileID: 3398832114552988250, guid: 4a2a388f1050f1544bfe0312790c2a15, type: 3}
+  - {fileID: 8943198093106307840, guid: dc2be62192e353240a6c673333a5806f, type: 3}
+  - {fileID: 6980155696016691876, guid: 7ca3b79153be7f443a86e09d988cb9b5, type: 3}

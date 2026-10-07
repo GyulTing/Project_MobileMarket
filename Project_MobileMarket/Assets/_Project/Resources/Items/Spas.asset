@@ -15,10 +15,15 @@ MonoBehaviour:
   id: weapon_spas
   itemName: Spas
   weight: 1
+  icon: {fileID: 21300000, guid: b60db6ec4aa36f1488d3e1183abfa440, type: 3}
   weaponType: 2
+  fireMode: 0
   damage: 8
-  fireRate: 1
+  fireRate: 1.5
   aimSpeed: 15
+  reloadTime: 2.8
+  recoil: 0.96
   magazineSize: 7
   pelletCount: 6
   weaponModelPrefab: {fileID: 3289723630241895714, guid: b690e909903dcfe4dbfafbc13f499f62, type: 3}
+  muzzleOffset: {x: 0.000000021606684, y: 0.025624966, z: 0.69533336}

@@ -1,0 +1,155 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5197311608226165691
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2417740943878501704}
+  - component: {fileID: 7700483259556901426}
+  m_Layer: 0
+  m_Name: P_Wreck_BTR60
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 2147483647
+  m_IsActive: 1
+--- !u!4 &2417740943878501704
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5197311608226165691}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 964643175880969698}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!208 &7700483259556901426
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5197311608226165691}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 1.4737982, y: 1.2682568, z: 3.0431707}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 1.2682568, z: 0}
+  m_TimeToStationary: 0.5
+--- !u!1001 &786336248936442377
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2417740943878501704}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: d21320a468aabf64084c17a79830d699, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 6.096497
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d21320a468aabf64084c17a79830d699, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 6.096497
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d21320a468aabf64084c17a79830d699, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 6.096497
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d21320a468aabf64084c17a79830d699, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d21320a468aabf64084c17a79830d699, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.00000035762787
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d21320a468aabf64084c17a79830d699, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.00000015118792
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d21320a468aabf64084c17a79830d699, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d21320a468aabf64084c17a79830d699, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d21320a468aabf64084c17a79830d699, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d21320a468aabf64084c17a79830d699, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d21320a468aabf64084c17a79830d699, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d21320a468aabf64084c17a79830d699, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d21320a468aabf64084c17a79830d699, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d21320a468aabf64084c17a79830d699, type: 3}
+      propertyPath: m_Name
+      value: Wreck_BTR60
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d21320a468aabf64084c17a79830d699, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2292211489390394798}
+  m_SourcePrefab: {fileID: 100100000, guid: d21320a468aabf64084c17a79830d699, type: 3}
+--- !u!1 &443826076566919000 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: d21320a468aabf64084c17a79830d699, type: 3}
+  m_PrefabInstance: {fileID: 786336248936442377}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &2292211489390394798
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 443826076566919000}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -8006812049289700604, guid: d21320a468aabf64084c17a79830d699, type: 3}
+--- !u!4 &964643175880969698 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d21320a468aabf64084c17a79830d699, type: 3}
+  m_PrefabInstance: {fileID: 786336248936442377}
+  m_PrefabAsset: {fileID: 0}

@@ -8,5 +8,6 @@ namespace MobileMarket.Data
         public string id;
         public string itemName;
         public float weight = 1f;
+        public Sprite icon;
     }
 }

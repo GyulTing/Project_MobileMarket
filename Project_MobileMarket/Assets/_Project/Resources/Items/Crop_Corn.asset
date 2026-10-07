@@ -15,3 +15,4 @@ MonoBehaviour:
   id: crop_corn
   itemName: "\uC625\uC218\uC218"
   weight: 0.5
+  icon: {fileID: 21300000, guid: 0d6e15e1ef933a2429afd5819384706f, type: 3}

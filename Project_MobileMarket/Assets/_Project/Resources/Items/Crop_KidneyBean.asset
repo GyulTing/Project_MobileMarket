@@ -15,3 +15,4 @@ MonoBehaviour:
   id: crop_kidneybean
   itemName: "\uAC15\uB0AD\uCF69"
   weight: 0.5
+  icon: {fileID: 21300000, guid: 8287d8ef8b8e0384ba273b71994b347c, type: 3}

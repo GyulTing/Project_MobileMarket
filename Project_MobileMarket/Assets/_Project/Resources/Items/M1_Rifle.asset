@@ -15,10 +15,15 @@ MonoBehaviour:
   id: weapon_m1
   itemName: M1
   weight: 1
+  icon: {fileID: 21300000, guid: c054e68342059ac48b17c254bc693eff, type: 3}
   weaponType: 2
+  fireMode: 0
   damage: 50
-  fireRate: 1
+  fireRate: 1.5
   aimSpeed: 15
+  reloadTime: 1.6
+  recoil: 1
   magazineSize: 8
   pelletCount: 1
   weaponModelPrefab: {fileID: 327809216206490028, guid: 6ec17656b2be29840901bdbd37980dc6, type: 3}
+  muzzleOffset: {x: 0.000000015123794, y: 0.083999954, z: 0.92600006}

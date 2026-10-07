@@ -15,10 +15,15 @@ MonoBehaviour:
   id: weapon_k2
   itemName: K-2
   weight: 1
+  icon: {fileID: 21300000, guid: 4d5790841bc86c04a9d5a2482f871421, type: 3}
   weaponType: 2
+  fireMode: 1
   damage: 34
-  fireRate: 1
+  fireRate: 4.4
   aimSpeed: 15
+  reloadTime: 1.9
+  recoil: 0.68
   magazineSize: 30
   pelletCount: 1
   weaponModelPrefab: {fileID: 673434573658780236, guid: 393c16bb7a6b6eb4b97b0858cfe45ff0, type: 3}
+  muzzleOffset: {x: 0.00000001347968, y: 0.06749998, z: 0.8}

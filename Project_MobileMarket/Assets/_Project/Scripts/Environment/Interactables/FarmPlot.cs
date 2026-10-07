@@ -46,7 +46,7 @@ namespace MobileMarket.Environment
 
             if (plantedSeed == null)
             {
-                var seed = FindSeed(inventory);
+                var seed = inventory.FindFirst<SeedData>();
                 if (seed == null)
                 {
                     Debug.Log("[FarmPlot] No seed in inventory.");
@@ -79,7 +79,11 @@ namespace MobileMarket.Environment
                 yield return null;
             }
 
-            inventory.RemoveItem(seed);
+            if (!inventory.RemoveItem(seed))
+            {
+                FinishPlanting(label);
+                yield break;
+            }
             plantedSeed = seed;
             daysGrown = 0;
             RefreshVisual();
@@ -104,9 +108,9 @@ namespace MobileMarket.Environment
             var crop = plantedSeed.harvestItem;
             if (crop == null) return;
 
-            if (inventory.CurrentWeight + crop.weight * plantedSeed.harvestAmount > inventory.MaxWeight)
+            if (!inventory.HasFreeCells(plantedSeed.harvestAmount))
             {
-                Debug.Log("[FarmPlot] Inventory too heavy to harvest.");
+                Debug.Log("[FarmPlot] Not enough free inventory cells to harvest.");
                 return;
             }
 
@@ -115,15 +119,6 @@ namespace MobileMarket.Environment
             plantedSeed = null;
             daysGrown = 0;
             RefreshVisual();
-        }
-
-        private SeedData FindSeed(Inventory inventory)
-        {
-            foreach (var item in inventory.Items)
-            {
-                if (item is SeedData seed) return seed;
-            }
-            return null;
         }
 
         private void RefreshVisual()

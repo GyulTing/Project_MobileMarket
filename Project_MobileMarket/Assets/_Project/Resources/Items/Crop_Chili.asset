@@ -15,3 +15,4 @@ MonoBehaviour:
   id: crop_chili
   itemName: "\uACE0\uCD94"
   weight: 0.5
+  icon: {fileID: 21300000, guid: 398378c2bf661f249b066925dda6fd49, type: 3}

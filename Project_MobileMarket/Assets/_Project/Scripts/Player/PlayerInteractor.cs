@@ -11,12 +11,26 @@ namespace MobileMarket.Player
         [SerializeField] private LayerMask interactableLayer = ~0;
 
         private PlayerInput input;
+        private PlayerHealth health;
         private readonly Collider[] hits = new Collider[8];
 
         private void Awake()
         {
             input = GetComponent<PlayerInput>();
+            health = GetComponent<PlayerHealth>();
         }
+
+        private void OnEnable()
+        {
+            if (health != null) health.OnDied += HandleDied;
+        }
+
+        private void OnDisable()
+        {
+            if (health != null) health.OnDied -= HandleDied;
+        }
+
+        private void HandleDied() => enabled = false;
 
         private void Update()
         {

@@ -2,20 +2,38 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-using MobileMarket.Data;
 
 namespace MobileMarket.Systems
 {
+    /// <summary>One saved item: its id, plus the ids in its grid if it's a backpack ("" = empty cell).</summary>
+    [Serializable]
+    public class ItemSave
+    {
+        public string id = "";
+        public List<string> contents = new List<string>();
+    }
+
+    /// <summary>Everything the player carries: equipment slots and the pockets grid.</summary>
+    [Serializable]
+    public class InventorySaveData
+    {
+        public int version;
+        public ItemSave head = new ItemSave();
+        public ItemSave body = new ItemSave();
+        public ItemSave backpack = new ItemSave();
+        public ItemSave primary = new ItemSave();
+        public List<string> pockets = new List<string>();
+
+        // Version 0 saves were a flat list of item ids.
+        public List<string> itemIds = new List<string>();
+    }
+
     /// <summary>Persists the player's inventory to a JSON file. Map-spawned loot is never saved here.</summary>
     public class SaveManager : MonoBehaviour
     {
-        public static SaveManager Instance { get; private set; }
+        public const int InventoryVersion = 1;
 
-        [Serializable]
-        private class InventorySaveData
-        {
-            public List<string> itemIds = new List<string>();
-        }
+        public static SaveManager Instance { get; private set; }
 
         private string SavePath => Path.Combine(Application.persistentDataPath, "inventory_save.json");
 
@@ -30,30 +48,17 @@ namespace MobileMarket.Systems
             DontDestroyOnLoad(gameObject);
         }
 
-        public void SaveInventory(IReadOnlyList<ItemData> items)
+        public void SaveInventory(InventorySaveData data)
         {
-            var data = new InventorySaveData();
-            foreach (var item in items)
-            {
-                if (item != null) data.itemIds.Add(item.id);
-            }
+            data.version = InventoryVersion;
             File.WriteAllText(SavePath, JsonUtility.ToJson(data));
         }
 
-        public List<ItemData> LoadInventory()
+        /// <summary>Returns the saved inventory, or null if there is no save yet.</summary>
+        public InventorySaveData LoadInventory()
         {
-            var result = new List<ItemData>();
-            if (!File.Exists(SavePath)) return result;
-
-            var data = JsonUtility.FromJson<InventorySaveData>(File.ReadAllText(SavePath));
-            if (data == null) return result;
-
-            foreach (var id in data.itemIds)
-            {
-                var item = ItemDatabase.GetById(id);
-                if (item != null) result.Add(item);
-            }
-            return result;
+            if (!File.Exists(SavePath)) return null;
+            return JsonUtility.FromJson<InventorySaveData>(File.ReadAllText(SavePath));
         }
     }
 }

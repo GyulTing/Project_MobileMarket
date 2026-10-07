@@ -15,3 +15,4 @@ MonoBehaviour:
   id: old_spam
   itemName: "\uC624\uB798\uB41C \uC2A4\uD338"
   weight: 5
+  icon: {fileID: 21300000, guid: c17bf80855154ef4d9633413d0d3e2ad, type: 3}

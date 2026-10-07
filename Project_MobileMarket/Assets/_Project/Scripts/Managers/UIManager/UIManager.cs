@@ -10,8 +10,7 @@ namespace MobileMarket.Managers
     {
         public static UIManager Instance { get; private set; }
 
-        [SerializeField] private LootPanel lootPanel;
-        [SerializeField] private InventoryPanelUI bagPanel;
+        [SerializeField] private InventoryScreenUI inventoryScreen;
         [SerializeField] private Inventory playerInventory;
         [SerializeField] private DialoguePanel dialoguePanel;
 
@@ -19,7 +18,7 @@ namespace MobileMarket.Managers
         {
             if (Keyboard.current != null && Keyboard.current.tabKey.wasPressedThisFrame)
             {
-                bagPanel.Toggle(playerInventory);
+                inventoryScreen.Toggle(playerInventory);
             }
         }
 
@@ -47,7 +46,8 @@ namespace MobileMarket.Managers
 
         private void HandleBoxOpened(LootBox box, GameObject interactor)
         {
-            lootPanel.Open(box, interactor);
+            var inventory = interactor.GetComponent<Inventory>();
+            if (inventory != null) inventoryScreen.Open(inventory, box);
         }
 
         private void HandleTalkRequested(MerchantNPC merchant, GameObject interactor)

@@ -15,10 +15,15 @@ MonoBehaviour:
   id: weapon_bar1918
   itemName: BAR-1918
   weight: 1
+  icon: {fileID: 21300000, guid: b5e66dda9463d4d42b919dc67c3eae8f, type: 3}
   weaponType: 2
+  fireMode: 1
   damage: 42
-  fireRate: 1
+  fireRate: 2.9
   aimSpeed: 15
+  reloadTime: 2.6
+  recoil: 0.84
   magazineSize: 20
   pelletCount: 1
   weaponModelPrefab: {fileID: 5513053228594964927, guid: 082c2e3587cfb1543b735b80f3b415e6, type: 3}
+  muzzleOffset: {x: 0.00000012029584, y: 0.070499994, z: 1.0375}

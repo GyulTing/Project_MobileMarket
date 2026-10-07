@@ -67,6 +67,27 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6bfa3b270a025664c809ac8ec608a8b9, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4391754725112666968}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6bfa3b270a025664c809ac8ec608a8b9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4793929341394315729}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6bfa3b270a025664c809ac8ec608a8b9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2368207899495389003}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6bfa3b270a025664c809ac8ec608a8b9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8523770642797443128}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6bfa3b270a025664c809ac8ec608a8b9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5966630356275476399}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6bfa3b270a025664c809ac8ec608a8b9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7608191129453024631}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6bfa3b270a025664c809ac8ec608a8b9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 681293848034135659}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6bfa3b270a025664c809ac8ec608a8b9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 499297062602188495}
   m_SourcePrefab: {fileID: 100100000, guid: 6bfa3b270a025664c809ac8ec608a8b9, type: 3}
 --- !u!1 &6343837828759022676 stripped
 GameObject:
@@ -96,3 +117,132 @@ CapsuleCollider:
   m_Height: 2.0502684
   m_Direction: 1
   m_Center: {x: 0, y: 1.0251342, z: 0}
+--- !u!114 &4793929341394315729
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6343837828759022676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96e8868ca90edb0439bc4fde8db6545d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MobileMarket.Enemy.EnemyHealth
+  maxHealth: 250
+  despawnDelay: 5
+  flinchInterval: 1.5
+  staggerTime: 0.5
+  hitReactions:
+  - state: Hit_Shake
+    duration: 1.6
+  - state: Hit_Flail
+    duration: 1.1999999
+  - state: Hit_Stagger
+    duration: 1.1333333
+  hitStaggerFraction: 0.8
+--- !u!195 &2368207899495389003
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6343837828759022676}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.45
+  m_Speed: 1.6
+  m_Acceleration: 16
+  avoidancePriority: 50
+  m_AngularSpeed: 540
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2.0502684
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!114 &8523770642797443128
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6343837828759022676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 989e6ac5372b3c144aad3c20b8f9860b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MobileMarket.Enemy.FactionMember
+  faction: 3
+  aimOffset: {x: 0, y: 1.2301611, z: 0}
+--- !u!114 &5966630356275476399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6343837828759022676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f91ca9169c4a118409289171d76c9f61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MobileMarket.Enemy.EnemyMovement
+  moveSpeed: 1.6
+  turnSpeed: 8
+  hitSlowMultiplier: 0.3
+--- !u!114 &7608191129453024631
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6343837828759022676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9be90a25255adb34caf96fec0d650bde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MobileMarket.Enemy.EnemyBrain
+  sightRange: 12
+  loseSightRange: 22
+  retargetInterval: 0.3
+--- !u!114 &681293848034135659
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6343837828759022676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17c5698470b81284998459bc7771c32d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MobileMarket.Enemy.EnemyMeleeAttack
+  range: 1.8
+  damage: 25
+  swings:
+  - state: Attack_Pound
+    duration: 1.5
+    hitTime: 1
+  - state: Attack_Punch
+    duration: 1
+    hitTime: 0.4
+  - state: Attack_Headbutt
+    duration: 1.1
+    hitTime: 0.4
+  cooldown: 1.3
+  hitDelay: 0.5
+--- !u!114 &499297062602188495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6343837828759022676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ab9c9a5efcb6464d81ed8a38b79fede, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MobileMarket.VFX.BloodOnHit
+  effectPrefab: {fileID: 5040552479276350800, guid: 8c3523a002cc5b3488f175be0ba73113, type: 3}

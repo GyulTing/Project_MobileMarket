@@ -15,3 +15,4 @@ MonoBehaviour:
   id: crop_tomato
   itemName: "\uD1A0\uB9C8\uD1A0"
   weight: 0.5
+  icon: {fileID: 21300000, guid: 56884ad34c317e34f88fd9d50087d95a, type: 3}

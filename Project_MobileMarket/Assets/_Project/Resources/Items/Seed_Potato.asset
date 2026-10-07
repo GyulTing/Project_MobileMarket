@@ -15,10 +15,11 @@ MonoBehaviour:
   id: seed_potato
   itemName: "\uAC10\uC790 \uC528\uC557"
   weight: 0.1
+  icon: {fileID: 21300000, guid: 51bce88c02aa35d45a5c12906fa09258, type: 3}
   harvestItem: {fileID: 11400000, guid: f6df9755d4bf72f489282014ece92d65, type: 2}
   harvestAmount: 3
   daysToGrow: 3
   stagePrefabs:
-  - {fileID: 4332994240255213454, guid: 0bd0916b5a6c8274d95efc25a0d8ea8f, type: 3}
-  - {fileID: 8958706077408398260, guid: 00f32f1e6e61f46448ac933bcb3777be, type: 3}
-  - {fileID: 5928986059171355300, guid: 3894194a9a8f40a4399d892d163df76e, type: 3}
+  - {fileID: 5100329750373369511, guid: 39572baf44b175e4a9a779d537ee9660, type: 3}
+  - {fileID: 3040763385947183852, guid: 709d2cf2a0f45c24ba1aab4e955a725c, type: 3}
+  - {fileID: 2898748152826675201, guid: 27388f6bea28b1b498521320ffb3526b, type: 3}

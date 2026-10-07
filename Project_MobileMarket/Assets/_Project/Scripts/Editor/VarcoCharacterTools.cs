@@ -62,6 +62,61 @@ namespace MobileMarket.EditorTools
             if (avatar == null || !avatar.isHuman) Debug.LogWarning("[VarcoCharacterTools] Humanoid avatar failed for " + name);
         }
 
+        /// <summary>
+        /// Static (non-character) VARCO model: no rig or animation, embedded textures extracted next to the model as
+        /// T_{name}_BaseColor/Normal and an M_{name} URP Lit material remapped onto VARCO's single "material_0".
+        /// readable keeps the mesh data on the CPU (needed for MeshColliders on objects spawned at runtime).
+        /// </summary>
+        public static void SetupStaticModel(string modelPath, string name, bool readable = false)
+        {
+            var importer = (ModelImporter)AssetImporter.GetAtPath(modelPath);
+            importer.globalScale = 1f;
+            importer.animationType = ModelImporterAnimationType.None;
+            importer.importAnimation = false;
+            importer.importCameras = false;
+            importer.importLights = false;
+            importer.isReadable = readable;
+            importer.materialImportMode = ModelImporterMaterialImportMode.ImportStandard;
+
+            string dir = Path.GetDirectoryName(modelPath).Replace('\\', '/') + "/";
+            string basePath = dir + "T_" + name + "_BaseColor.png";
+            string normalPath = dir + "T_" + name + "_Normal.png";
+
+            if (AssetDatabase.LoadAssetAtPath<Texture2D>(basePath) == null)
+            {
+                importer.ExtractTextures(dir);
+                AssetDatabase.Refresh();
+                AssetDatabase.RenameAsset(dir + "base_color.png", "T_" + name + "_BaseColor");
+                AssetDatabase.RenameAsset(dir + "normal.png", "T_" + name + "_Normal");
+                AssetDatabase.Refresh();
+                if (AssetImporter.GetAtPath(normalPath) is TextureImporter ti)
+                {
+                    ti.textureType = TextureImporterType.NormalMap;
+                    ti.SaveAndReimport();
+                }
+            }
+
+            string matPath = MatDir + "M_" + name + ".mat";
+            var mat = AssetDatabase.LoadAssetAtPath<Material>(matPath);
+            if (mat == null)
+            {
+                mat = new Material(Shader.Find("Universal Render Pipeline/Lit"));
+                AssetDatabase.CreateAsset(mat, matPath);
+            }
+            mat.SetTexture("_BaseMap", AssetDatabase.LoadAssetAtPath<Texture2D>(basePath));
+            var normal = AssetDatabase.LoadAssetAtPath<Texture2D>(normalPath);
+            if (normal != null)
+            {
+                mat.SetTexture("_BumpMap", normal);
+                mat.EnableKeyword("_NORMALMAP");
+            }
+            mat.SetFloat("_Smoothness", 0.1f);
+            EditorUtility.SetDirty(mat);
+
+            importer.AddRemap(new AssetImporter.SourceAssetIdentifier(typeof(Material), "material_0"), mat);
+            importer.SaveAndReimport();
+        }
+
         /// <summary>Remaps humanoid bones when VARCO's auto-rig misnames joints; null bone clears the slot.</summary>
         private static void ApplyBoneOverrides(ModelImporter importer, (string human, string bone)[] overrides)
         {

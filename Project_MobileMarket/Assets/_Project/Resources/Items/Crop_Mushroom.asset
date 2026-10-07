@@ -15,3 +15,4 @@ MonoBehaviour:
   id: crop_mushroom
   itemName: "\uBC84\uC12F"
   weight: 0.5
+  icon: {fileID: 21300000, guid: 4bcc84c2b1a48fe4a9173d082b83e631, type: 3}

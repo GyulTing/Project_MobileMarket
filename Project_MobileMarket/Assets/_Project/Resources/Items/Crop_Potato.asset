@@ -15,3 +15,4 @@ MonoBehaviour:
   id: crop_potato
   itemName: "\uAC10\uC790"
   weight: 0.5
+  icon: {fileID: 21300000, guid: 5d384731713b6f8409c324703fb782d9, type: 3}

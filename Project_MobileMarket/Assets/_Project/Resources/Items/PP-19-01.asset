@@ -15,10 +15,15 @@ MonoBehaviour:
   id: weapon_pp19_01
   itemName: PP-19-01
   weight: 1
+  icon: {fileID: 21300000, guid: a354e45b74f9fda44bc1e9836629deeb, type: 3}
   weaponType: 2
+  fireMode: 1
   damage: 20
-  fireRate: 1
+  fireRate: 7.5
   aimSpeed: 15
+  reloadTime: 2.3
+  recoil: 0.4
   magazineSize: 30
   pelletCount: 1
   weaponModelPrefab: {fileID: 2505183761395143770, guid: 805b5e9eb8ffce34fb88035301335829, type: 3}
+  muzzleOffset: {x: 0.000000007761021, y: 0.04674999, z: 0.45375}

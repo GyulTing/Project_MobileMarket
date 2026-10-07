@@ -15,10 +15,11 @@ MonoBehaviour:
   id: seed_rice
   itemName: "\uC300 \uC528\uC557"
   weight: 0.1
+  icon: {fileID: 21300000, guid: c3d4726db0d071f48ac81b83150c1868, type: 3}
   harvestItem: {fileID: 11400000, guid: 8bb43b2bc780c2b4e93477b8ce004042, type: 2}
   harvestAmount: 3
   daysToGrow: 3
   stagePrefabs:
-  - {fileID: 4332994240255213454, guid: 0bd0916b5a6c8274d95efc25a0d8ea8f, type: 3}
-  - {fileID: 8958706077408398260, guid: 00f32f1e6e61f46448ac933bcb3777be, type: 3}
-  - {fileID: 5928986059171355300, guid: 3894194a9a8f40a4399d892d163df76e, type: 3}
+  - {fileID: 7317387728980854947, guid: 40f8d654c7070f4449eb2a802c99b5db, type: 3}
+  - {fileID: 7176240415943622889, guid: ef65fe946e6ef474fb6d5344e0cbba50, type: 3}
+  - {fileID: 2909584514752185241, guid: 7bbe7e63b7c4ceb41b9b35e63b37544e, type: 3}

@@ -15,10 +15,15 @@ MonoBehaviour:
   id: weapon_ash12
   itemName: Ash-12
   weight: 1
+  icon: {fileID: 21300000, guid: f74673d8e43e27c41acc488da5380788, type: 3}
   weaponType: 2
+  fireMode: 1
   damage: 48
-  fireRate: 1
+  fireRate: 2.6
   aimSpeed: 15
+  reloadTime: 2.2
+  recoil: 0.96
   magazineSize: 20
   pelletCount: 1
   weaponModelPrefab: {fileID: 7916494374254889978, guid: f2c3fbe76b4de5648918073530b72344, type: 3}
+  muzzleOffset: {x: 0.000000005691416, y: 0.03874999, z: 0.31500003}
