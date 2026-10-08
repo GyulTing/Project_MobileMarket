@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac0230a5f2e72c44091016d6f57d12ac, type: 3}
+  m_Name: LT_MedicalCase
+  m_EditorClassIdentifier: Assembly-CSharp::MobileMarket.Data.LootTable
+  entries:
+  - item: {fileID: 11400000, guid: b26bd7d46da1f3745bffcb6f09d310ed, type: 2}
+    weight: 1
+  - item: {fileID: 11400000, guid: 8a328d4acc2968943ae135f06e814bf8, type: 2}
+    weight: 0.7
+  - item: {fileID: 11400000, guid: de3d8a5d1a0410f40a609b6fefce3edd, type: 2}
+    weight: 0.4
+  - item: {fileID: 11400000, guid: 9dde82d84da027240b00161209dbff89, type: 2}
+    weight: 2
+  chanceToDropAnything: 0.8

@@ -8,14 +8,15 @@ namespace MobileMarket.EditorTools
     /// <summary>Turns the VARCO NPC exports into game-ready prefabs: humanoid models, shared humanoid clips, controllers and prefabs.</summary>
     public static class NpcBuilder
     {
-        public enum Role { Merchant, Guard, Farmer }
+        public enum Role { Merchant, Guard, Farmer, Resident }
 
         private const string ModelDir = "Assets/_Project/Models/NPC/";
         private const string AnimDir = "Assets/_Project/Animations/NPC/";
         private const string PrefabDir = "Assets/_Project/Prefabs/NPC/";
 
-        // The GLB animations were retargeted onto this rig in VARCO (its auto-rig is clean).
-        public const string SourceRig = "Merchant_Food";
+        // The GLB animations were retargeted in VARCO onto the first Merchant_Food model's rig (its auto-rig is clean).
+        // That model was kept as NPC_SourceRig.fbx when the NPCs were remade, so the GLBs still bake against the right skeleton.
+        public const string SourceRig = "SourceRig";
 
         public static readonly (string name, Role role)[] Npcs =
         {
@@ -23,13 +24,22 @@ namespace MobileMarket.EditorTools
             ("Merchant_Cloth", Role.Merchant), ("Merchant_Water", Role.Merchant),
             ("Guard_01", Role.Guard), ("Guard_02", Role.Guard), ("Guard_03", Role.Guard),
             ("Farmer_01", Role.Farmer), ("Farmer_02", Role.Farmer),
+            ("Resident_01", Role.Resident), ("Resident_02", Role.Resident), ("Resident_03", Role.Resident),
+            ("Resident_04", Role.Resident), ("Resident_05", Role.Resident),
         };
 
-        // VARCO's auto-rig shifted Merchant_Scrap's left leg names up one joint (LeftLeg sits on the hip, LeftFoot on the knee);
-        // the skin weights follow the real joints, so the avatar just maps one bone down.
+        // Avatar fixes for VARCO auto-rigs that place a bone name on the wrong joint (checked by bone world positions):
+        // human bone -> rig bone, or null to leave it unmapped.
+        // This rig got an extra leg joint: *UpLeg sits at the hip center, *Leg on the hip, *Foot on the knee, *ToeBase on the ankle.
+        private static readonly (string, string)[] ShiftedLegs =
+        {
+            ("LeftUpperLeg", "LeftLeg"), ("LeftLowerLeg", "LeftFoot"), ("LeftFoot", "LeftToeBase"), ("LeftToes", null),
+            ("RightUpperLeg", "RightLeg"), ("RightLowerLeg", "RightFoot"), ("RightFoot", "RightToeBase"), ("RightToes", null),
+        };
+
         private static readonly Dictionary<string, (string human, string bone)[]> BoneOverrides = new Dictionary<string, (string, string)[]>
         {
-            ["Merchant_Scrap"] = new[] { ("LeftUpperLeg", "LeftLeg"), ("LeftLowerLeg", "LeftFoot"), ("LeftFoot", "LeftToeBase"), ("LeftToes", null) },
+            ["Merchant_Cloth"] = ShiftedLegs,
         };
 
         public static string ModelPath(string npc) => ModelDir + "NPC_" + npc + ".fbx";
@@ -60,6 +70,13 @@ namespace MobileMarket.EditorTools
             var baseCtrl = BuildBaseController(idle, walk, LoadClip("NPC_Talk"));
             var guardCtrl = BuildOverride("AOC_NPC_Guard", baseCtrl, LoadClip("NPC_GuardIdle"));
             var farmerCtrl = BuildOverride("AOC_NPC_Farmer", baseCtrl, LoadClip("NPC_PickUp"));
+
+            // Write the freshly created controller to disk and reload it, otherwise the first prefabs can end up with a null reference.
+            AssetDatabase.SaveAssets();
+            AssetDatabase.ImportAsset(AnimDir + "AC_NPC.controller", ImportAssetOptions.ForceSynchronousImport);
+            baseCtrl = AssetDatabase.LoadAssetAtPath<AnimatorController>(AnimDir + "AC_NPC.controller");
+            guardCtrl = AssetDatabase.LoadAssetAtPath<AnimatorOverrideController>(AnimDir + "AOC_NPC_Guard.overrideController");
+            farmerCtrl = AssetDatabase.LoadAssetAtPath<AnimatorOverrideController>(AnimDir + "AOC_NPC_Farmer.overrideController");
 
             foreach (var (npc, role) in Npcs)
             {

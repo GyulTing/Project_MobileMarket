@@ -70,7 +70,7 @@ namespace MobileMarket.UI
             statusText.text = "";
 
             lootGrid.gameObject.SetActive(box != null);
-            if (box != null) lootGrid.Bind(this, box.Grid, box.DisplayName);
+            if (box != null) lootGrid.Bind(this, box.Grid, box.DisplayName, box.PanelArt, box.PanelArt != null ? box.PanelGridArea : (Rect?)null);
             else lootGrid.Unbind();
 
             Refresh();

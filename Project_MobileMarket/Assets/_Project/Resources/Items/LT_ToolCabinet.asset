@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac0230a5f2e72c44091016d6f57d12ac, type: 3}
+  m_Name: LT_ToolCabinet
+  m_EditorClassIdentifier: Assembly-CSharp::MobileMarket.Data.LootTable
+  entries:
+  - item: {fileID: 11400000, guid: b26bd7d46da1f3745bffcb6f09d310ed, type: 2}
+    weight: 1
+  - item: {fileID: 11400000, guid: 8a328d4acc2968943ae135f06e814bf8, type: 2}
+    weight: 1
+  - item: {fileID: 11400000, guid: b303d374cdc7971489465d43b82ff9c0, type: 2}
+    weight: 0.5
+  - item: {fileID: 11400000, guid: 49c67643a12ead14a89a85deeb89574e, type: 2}
+    weight: 0.3
+  - item: {fileID: 11400000, guid: 88a746c1350f91a4c835a3eeeec97467, type: 2}
+    weight: 0.3
+  - item: {fileID: 11400000, guid: 9dde82d84da027240b00161209dbff89, type: 2}
+    weight: 1.5
+  chanceToDropAnything: 0.7

@@ -64,7 +64,11 @@ namespace MobileMarket.Environment
         {
             isPlanting = true;
             var label = interactor.GetComponentInChildren<ActionLabelUI>();
-            if (label != null) label.Show("심는 중...");
+            if (label != null)
+            {
+                label.Show("심는 중...");
+                label.SetProgress(0f);
+            }
 
             float sqrCancelDistance = cancelDistance * cancelDistance;
             float elapsed = 0f;
@@ -76,6 +80,7 @@ namespace MobileMarket.Environment
                     yield break;
                 }
                 elapsed += Time.deltaTime;
+                if (label != null) label.SetProgress(elapsed / plantDuration);
                 yield return null;
             }
 

@@ -28,6 +28,11 @@ namespace MobileMarket.EditorTools
 
         private const float CellSize = 56f;
         private const float CellSpacing = 5f;
+        private const float MaxCellSize = 80f;
+        // The three panels are drawn 15% larger (laid out at their scaled widths) so cells and icons read better.
+        private const float PanelScale = 1.15f;
+        // Grid cell icons fill this share of the cell (on each side the rest is margin).
+        private const float CellIconMargin = 0.08f;
 
         private static Font titleFont, bodyFont;
         private static Sprite pocketsArt, crateArt, equipArt, brushArt, slotArt;
@@ -81,7 +86,8 @@ namespace MobileMarket.EditorTools
             cellTemplate.gameObject.SetActive(false);
 
             // Equipment: canvas tarp with the weapon slot on the left and head / body / backpack on the right.
-            var equip = ArtPanel("EquipmentPanel", root, new Vector2(-680f, -20f), new Vector2(400f, 640f), equipArt, "장비");
+            var equip = ArtPanel("EquipmentPanel", root, new Vector2(-675f, -25f), new Vector2(400f, 640f), equipArt, "장비");
+            equip.localScale = Vector3.one * PanelScale;
             var slots = new[]
             {
                 BuildCell("Slot_Primary", equip, new Vector2(130f, 540f), "주무기", true, EquipSlot.Primary, new Vector2(-95f, -20f), true),
@@ -91,8 +97,8 @@ namespace MobileMarket.EditorTools
             };
 
             // The player panel's drawing is swapped at runtime to match the worn backpack (or the open bundle without one).
-            var playerGrid = BuildGridView("PlayerGrid", root, new Vector2(-150f, -20f), new Vector2(600f, 760f), pocketsArt, cellTemplate);
-            var lootGrid = BuildGridView("LootGrid", root, new Vector2(480f, -20f), new Vector2(540f, 700f), crateArt, cellTemplate);
+            var playerGrid = BuildGridView("PlayerGrid", root, new Vector2(-80f, -25f), new Vector2(600f, 760f), pocketsArt, cellTemplate);
+            var lootGrid = BuildGridView("LootGrid", root, new Vector2(596f, -25f), new Vector2(540f, 700f), crateArt, cellTemplate);
 
             var status = AddText(Rect("Status", root, new Vector2(0f, -420f), new Vector2(900f, 50f)).gameObject, "", 30, TextAnchor.MiddleCenter, new Color32(255, 170, 110, 255), titleFont);
             status.gameObject.AddComponent<Outline>().effectColor = Color.black;
@@ -134,6 +140,7 @@ namespace MobileMarket.EditorTools
         private static ItemGridViewUI BuildGridView(string name, RectTransform parent, Vector2 pos, Vector2 size, Sprite art, ItemCellUI template)
         {
             var panel = ArtPanel(name, parent, pos, size, art, "");
+            panel.localScale = Vector3.one * PanelScale;
             var view = panel.gameObject.AddComponent<ItemGridViewUI>();
             var title = panel.Find("TitleBrush/Title").GetComponent<Text>();
 
@@ -155,6 +162,7 @@ namespace MobileMarket.EditorTools
             so.FindProperty("layout").objectReferenceValue = layout;
             so.FindProperty("title").objectReferenceValue = title;
             so.FindProperty("background").objectReferenceValue = panel.GetComponent<Image>();
+            so.FindProperty("maxCellSize").floatValue = MaxCellSize;
             so.ApplyModifiedPropertiesWithoutUndo();
             return view;
         }
@@ -200,6 +208,8 @@ namespace MobileMarket.EditorTools
             var icon = AddImage(Rect("Icon", cell, equip ? new Vector2(0f, -14f) : Vector2.zero, iconSize).gameObject, null, Color.white);
             icon.preserveAspect = true;
             icon.raycastTarget = false;
+            // Grid cells are resized at runtime to fit the drawing, so their icon stretches with the cell.
+            if (!equip) StretchInside(icon.rectTransform, CellIconMargin);
 
             var label = AddText(Rect("Label", cell, Vector2.zero, size - new Vector2(8f, 8f)).gameObject, "", 14, TextAnchor.MiddleCenter, TextColor, bodyFont);
             var badge = AddText(Rect("Badge", cell, new Vector2(0f, -size.y * 0.5f + 12f), new Vector2(size.x - 10f, 20f)).gameObject, "", 14, TextAnchor.LowerRight, new Color32(255, 214, 120, 255), bodyFont);
@@ -215,6 +225,14 @@ namespace MobileMarket.EditorTools
             so.FindProperty("rotateIcon").boolValue = rotateIcon;
             so.ApplyModifiedPropertiesWithoutUndo();
             return ui;
+        }
+
+        /// <summary>Anchors rt to its parent's rect inset by margin (0..0.5) on every side.</summary>
+        private static void StretchInside(RectTransform rt, float margin)
+        {
+            rt.anchorMin = new Vector2(margin, margin);
+            rt.anchorMax = new Vector2(1f - margin, 1f - margin);
+            rt.offsetMin = rt.offsetMax = Vector2.zero;
         }
 
         private static RectTransform Rect(string name, Transform parent, Vector2 pos, Vector2 size)

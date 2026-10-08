@@ -22,14 +22,28 @@ namespace MobileMarket.UI
         private ItemGrid grid;
         private InventoryScreenUI screen;
         private Rect gridArea = new Rect(0.2f, 0.2f, 0.6f, 0.6f);
+        private bool defaultsCaptured;
+        private Sprite defaultArt;
+        private Rect defaultArea;
 
-        /// <summary>Shows the grid. Passing art swaps the background drawing and the area of it the grid fits into.</summary>
+        /// <summary>
+        /// Shows the grid. Passing art swaps the background drawing and the area of it the grid fits into; passing none goes
+        /// back to the drawing this view was built with.
+        /// </summary>
         public void Bind(InventoryScreenUI owner, ItemGrid target, string heading, Sprite art = null, Rect? area = null)
         {
+            if (!defaultsCaptured)
+            {
+                defaultArt = background.sprite;
+                defaultArea = gridArea;
+                defaultsCaptured = true;
+            }
+
             screen = owner;
             title.text = heading;
-            if (art != null) background.sprite = art;
+            background.sprite = art != null ? art : defaultArt;
             if (area.HasValue) gridArea = area.Value;
+            else if (art == null) gridArea = defaultArea;
 
             if (grid != target)
             {

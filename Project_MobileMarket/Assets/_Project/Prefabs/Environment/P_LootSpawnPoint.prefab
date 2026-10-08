@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7178136673998260659
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5605483590335280131}
+  - component: {fileID: 6471008757708127733}
+  m_Layer: 0
+  m_Name: P_LootSpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5605483590335280131
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7178136673998260659}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6471008757708127733
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7178136673998260659}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23e81c31755c5e9458ee2c3d8b889b1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MobileMarket.Environment.LootSpawnPoint
+  candidates:
+  - {fileID: 1407278513152400845, guid: 145884310b4a5e24089980d088b41e8f, type: 3}
+  - {fileID: 7495861117436455527, guid: f220ca9c94bdd8147a4ccd664aab6224, type: 3}
+  - {fileID: 615790650269081939, guid: 5d5b2e6d57394644ea40fbccfb8601f7, type: 3}
+  - {fileID: 3522496442123892041, guid: 77c7b698358972140b97348752cd26be, type: 3}
+  - {fileID: 3332262116486855797, guid: c9b0ef42cd7ad504f93b6b2776f5a4bb, type: 3}
+  - {fileID: 1466708714331692250, guid: 2182b076bc9846d498899b3790b378b0, type: 3}
+  - {fileID: 2484779010528891112, guid: 3123da17987904d4c983bc6a677f9c07, type: 3}
+  spawnChance: 1

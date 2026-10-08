@@ -1,4 +1,5 @@
 using UnityEngine;
+using MobileMarket.Enemy;
 
 namespace MobileMarket.Player
 {
@@ -24,6 +25,9 @@ namespace MobileMarket.Player
         [SerializeField] private float minBarrelHeight = 0.3f;
         [SerializeField] private float maxBarrelHeight = 0.9f;
 
+        [Tooltip("How far the cursor ray looks for an enemy to lock the aim onto.")]
+        [SerializeField] private float cursorTargetDistance = 100f;
+
         private float barrelYaw;
         private float barrelSideOffset;
         private float barrelHeight = 0.65f;
@@ -39,6 +43,7 @@ namespace MobileMarket.Player
         private Animator animator;
         private Camera mainCamera;
         private Plane groundPlane;
+        private FactionMember faction;
 
         private void Awake()
         {
@@ -46,6 +51,7 @@ namespace MobileMarket.Player
             input = GetComponent<PlayerInput>();
             combat = GetComponent<PlayerCombat>();
             health = GetComponent<PlayerHealth>();
+            faction = GetComponent<FactionMember>();
             animator = GetComponentInChildren<Animator>();
             mainCamera = Camera.main;
             groundPlane = new Plane(Vector3.up, Vector3.zero);
@@ -123,6 +129,10 @@ namespace MobileMarket.Player
             if (!groundPlane.Raycast(ray, out float distance)) return 0f;
 
             Vector3 aimPoint = ray.GetPoint(distance);
+            // Cursor on an enemy: aim at the spot of its body under the cursor (not its center — no aim assist), since the
+            // angled camera would otherwise only line the barrel up with its upper body.
+            if (TryGetCursorTargetPoint(ray, out Vector3 targetPoint))
+                aimPoint = new Vector3(targetPoint.x, aimPoint.y, targetPoint.z);
             AimPoint = aimPoint;
             HasAimPoint = true;
 
@@ -146,6 +156,20 @@ namespace MobileMarket.Player
             float aimSpeed = combat != null && combat.EquippedWeapon != null ? combat.EquippedWeapon.aimSpeed : turnSpeed;
             FaceDirection(lookDirection, aimSpeed);
             return Mathf.Clamp(signedAngle / 30f, -1f, 1f);
+        }
+
+        /// <summary>Where the cursor touches the first thing under it, if that is a living fighter hostile to the player.</summary>
+        private bool TryGetCursorTargetPoint(Ray ray, out Vector3 point)
+        {
+            point = default;
+            if (!Physics.Raycast(ray, out RaycastHit hit, cursorTargetDistance, ~0, QueryTriggerInteraction.Ignore)) return false;
+
+            var member = hit.collider.GetComponent<FactionMember>();
+            if (member == null || member == faction || !member.IsAlive) return false;
+            if (faction != null && !faction.IsHostileTo(member)) return false;
+
+            point = hit.point;
+            return true;
         }
 
         /// <summary>
