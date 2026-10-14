@@ -17,7 +17,7 @@ MonoBehaviour:
   weight: 1
   icon: {fileID: 21300000, guid: 1789dd13a25a90b45b3eda69b43aa4b9, type: 3}
   weaponType: 2
-  fireMode: 1
+  fireMode: 0
   damage: 8
   fireRate: 2
   aimSpeed: 15

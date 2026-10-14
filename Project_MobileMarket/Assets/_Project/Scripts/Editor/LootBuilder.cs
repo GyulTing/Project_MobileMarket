@@ -47,7 +47,7 @@ namespace MobileMarket.EditorTools
 
         private static readonly string[] Seeds = { "Seed_Chili", "Seed_Corn", "Seed_KidneyBean", "Seed_Mushroom", "Seed_Potato", "Seed_Rice", "Seed_Tomato", "Seed_Wheat" };
         private static readonly string[] Crops = { "Crop_Chili", "Crop_Corn", "Crop_KidneyBean", "Crop_Mushroom", "Crop_Potato", "Crop_Rice", "Crop_Tomato", "Crop_Wheat" };
-        private static readonly string[] Guns = { "AK-47", "Ash-12", "BAR-1918", "K-2", "M1A1", "M1_Carbine", "M1_Rifle", "MP-40", "PP-19-01", "STG-44", "Spas", "Vepr" };
+        private static readonly string[] Guns = { "AK-47", "BAR-1918", "K-2", "M16", "M1A1", "M1_Carbine", "M1_Rifle", "MG42", "MP-40", "PP-19-01", "STG-44", "Spas", "Vepr" };
 
         // Tool and medical items don't exist yet: ToolCabinet and MedicalCase hold stand-ins until they do.
         private static readonly Kind[] Kinds =

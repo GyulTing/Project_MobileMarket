@@ -31,8 +31,6 @@ MonoBehaviour:
     weight: 1.5
   - item: {fileID: 11400000, guid: 5eb414bc8f2e2a4478d6776a2fa957c8, type: 2}
     weight: 0.6
-  - item: {fileID: 11400000, guid: a01227bcf9c0d5d4483297761af072d9, type: 2}
-    weight: 0.6
   - item: {fileID: 11400000, guid: 9141537d6f01f2044bffde3bbc72b56d, type: 2}
     weight: 0.6
   - item: {fileID: 11400000, guid: 295a1e78ec1356e40ac7bb5610081c67, type: 2}
@@ -52,5 +50,9 @@ MonoBehaviour:
   - item: {fileID: 11400000, guid: f4756ef0054c82742a1e2be03b59b532, type: 2}
     weight: 0.6
   - item: {fileID: 11400000, guid: 79ec577041636b244aab3de1c983b49d, type: 2}
+    weight: 0.6
+  - item: {fileID: 11400000, guid: fa38b19ce80a99e40897261650cf5eff, type: 2}
+    weight: 0.6
+  - item: {fileID: 11400000, guid: 02531e1d7d80ba54bb7edb28e33d076e, type: 2}
     weight: 0.6
   chanceToDropAnything: 0.8

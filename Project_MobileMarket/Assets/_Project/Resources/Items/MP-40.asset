@@ -19,7 +19,7 @@ MonoBehaviour:
   weaponType: 2
   fireMode: 1
   damage: 22
-  fireRate: 6.8
+  fireRate: 9.166667
   aimSpeed: 15
   reloadTime: 2
   recoil: 0.44

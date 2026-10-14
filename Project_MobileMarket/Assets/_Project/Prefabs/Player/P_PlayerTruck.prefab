@@ -1,0 +1,162 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7997379834688818856
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1313984311518908916}
+  - component: {fileID: 990879483936430650}
+  - component: {fileID: 8368063087793778827}
+  - component: {fileID: 2869221133486464264}
+  m_Layer: 0
+  m_Name: P_PlayerTruck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 2147483647
+  m_IsActive: 1
+--- !u!4 &1313984311518908916
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7997379834688818856}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1450587425368373803}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &990879483936430650
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7997379834688818856}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3.0289514, y: 3.2425077, z: 6.4405723}
+  m_Center: {x: 0, y: 1.6212538, z: 0}
+--- !u!208 &8368063087793778827
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7997379834688818856}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 1.5144757, y: 1.6212538, z: 3.2202861}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 1.6212538, z: 0}
+  m_TimeToStationary: 0.5
+--- !u!114 &2869221133486464264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7997379834688818856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1092b80f9442e74490629d593dc765e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MobileMarket.Environment.TruckInteractable
+  extractDuration: 5
+  extractText: "\uD0C8\uCD9C \uC911..."
+--- !u!1001 &1417293503088008640
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1313984311518908916}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 480bdc1802112284aa8e58e6fe1dbf5e, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 6.431138
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 480bdc1802112284aa8e58e6fe1dbf5e, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 6.431138
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 480bdc1802112284aa8e58e6fe1dbf5e, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 6.431138
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 480bdc1802112284aa8e58e6fe1dbf5e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 480bdc1802112284aa8e58e6fe1dbf5e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.00000035762787
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 480bdc1802112284aa8e58e6fe1dbf5e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.00000019326845
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 480bdc1802112284aa8e58e6fe1dbf5e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.00000003090862
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 480bdc1802112284aa8e58e6fe1dbf5e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.00000003090862
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 480bdc1802112284aa8e58e6fe1dbf5e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 480bdc1802112284aa8e58e6fe1dbf5e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 480bdc1802112284aa8e58e6fe1dbf5e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 480bdc1802112284aa8e58e6fe1dbf5e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 480bdc1802112284aa8e58e6fe1dbf5e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 480bdc1802112284aa8e58e6fe1dbf5e, type: 3}
+      propertyPath: m_Name
+      value: Vehicle_PlayerTruck
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 480bdc1802112284aa8e58e6fe1dbf5e, type: 3}
+--- !u!4 &1450587425368373803 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 480bdc1802112284aa8e58e6fe1dbf5e, type: 3}
+  m_PrefabInstance: {fileID: 1417293503088008640}
+  m_PrefabAsset: {fileID: 0}

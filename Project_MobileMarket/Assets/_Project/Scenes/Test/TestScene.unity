@@ -528,12 +528,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MobileMarket.Environment.LootBox
   displayName: "\uBB34\uAE30 \uC0C1\uC790"
   columns: 4
-  rows: 3
+  rows: 4
   lootTable: {fileID: 0}
   rollCount: 3
   fixedItems:
   - {fileID: 11400000, guid: 5eb414bc8f2e2a4478d6776a2fa957c8, type: 2}
-  - {fileID: 11400000, guid: a01227bcf9c0d5d4483297761af072d9, type: 2}
   - {fileID: 11400000, guid: 9141537d6f01f2044bffde3bbc72b56d, type: 2}
   - {fileID: 11400000, guid: 295a1e78ec1356e40ac7bb5610081c67, type: 2}
   - {fileID: 11400000, guid: b0f6daba31ef1b342a472fac408e2842, type: 2}
@@ -544,6 +543,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f4756ef0054c82742a1e2be03b59b532, type: 2}
   - {fileID: 11400000, guid: 1400d97e428f2ac418dfb2585101e48b, type: 2}
   - {fileID: 11400000, guid: 79ec577041636b244aab3de1c983b49d, type: 2}
+  - {fileID: 11400000, guid: fa38b19ce80a99e40897261650cf5eff, type: 2}
+  - {fileID: 11400000, guid: 02531e1d7d80ba54bb7edb28e33d076e, type: 2}
   openDuration: 1.5
   openingText: "\uC5EC\uB294 \uC911..."
   closedVisual: {fileID: 0}
@@ -721,6 +722,7 @@ RectTransform:
   - {fileID: 170183670}
   - {fileID: 1720313451}
   - {fileID: 7223753144889801106}
+  - {fileID: 5311227504736692207}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -994,6 +996,51 @@ MonoBehaviour:
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: 11519b8cbb623d645afdd64f9a400bcd, type: 2}
   m_BuildHeightMesh: 0
+--- !u!1 &405352594
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 405352595}
+  - component: {fileID: 405352596}
+  m_Layer: 0
+  m_Name: ParkingSpot_3
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &405352595
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 405352594}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: -20, y: 0, z: 15}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2125344612}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &405352596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 405352594}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e5dec89567b554439b7cd10606ed48f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MobileMarket.Environment.ParkingSpot
+  playerOffset: {x: -2.4, y: 0, z: 0}
 --- !u!1 &465510817
 GameObject:
   m_ObjectHideFlags: 0
@@ -1927,6 +1974,51 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &878101452
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 878101453}
+  - component: {fileID: 878101454}
+  m_Layer: 0
+  m_Name: ParkingSpot_1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &878101453
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 878101452}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -19, y: 0, z: -17}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2125344612}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &878101454
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 878101452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e5dec89567b554439b7cd10606ed48f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MobileMarket.Environment.ParkingSpot
+  playerOffset: {x: -2.4, y: 0, z: 0}
 --- !u!1 &911943218
 GameObject:
   m_ObjectHideFlags: 0
@@ -2984,6 +3076,63 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5479770485862268696, guid: c9b0ef42cd7ad504f93b6b2776f5a4bb, type: 3}
   m_PrefabInstance: {fileID: 1562281193}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1592908504
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3595631141220786524, guid: b09e14233e2a31149a19ff978dea6d11, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3595631141220786524, guid: b09e14233e2a31149a19ff978dea6d11, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3595631141220786524, guid: b09e14233e2a31149a19ff978dea6d11, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3595631141220786524, guid: b09e14233e2a31149a19ff978dea6d11, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3595631141220786524, guid: b09e14233e2a31149a19ff978dea6d11, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3595631141220786524, guid: b09e14233e2a31149a19ff978dea6d11, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3595631141220786524, guid: b09e14233e2a31149a19ff978dea6d11, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3595631141220786524, guid: b09e14233e2a31149a19ff978dea6d11, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3595631141220786524, guid: b09e14233e2a31149a19ff978dea6d11, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3595631141220786524, guid: b09e14233e2a31149a19ff978dea6d11, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4487236543838798132, guid: b09e14233e2a31149a19ff978dea6d11, type: 3}
+      propertyPath: m_Name
+      value: P_SceneLoader
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b09e14233e2a31149a19ff978dea6d11, type: 3}
 --- !u!1001 &1658815741
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3041,6 +3190,51 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f09bc260f03cd9d4289b325daec689f8, type: 3}
+--- !u!1 &1679946378
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1679946379}
+  - component: {fileID: 1679946380}
+  m_Layer: 0
+  m_Name: ParkingSpot_2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1679946379
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1679946378}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 19, y: 0, z: -18}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2125344612}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1679946380
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1679946378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e5dec89567b554439b7cd10606ed48f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MobileMarket.Environment.ParkingSpot
+  playerOffset: {x: -2.4, y: 0, z: 0}
 --- !u!1 &1718920604
 GameObject:
   m_ObjectHideFlags: 0
@@ -3942,6 +4136,7 @@ MonoBehaviour:
   inventoryScreen: {fileID: 7223753144889801107}
   playerInventory: {fileID: 159749679}
   dialoguePanel: {fileID: 578222892}
+  worldMap: {fileID: 5311227504736692206}
 --- !u!4 &2014456670
 Transform:
   m_ObjectHideFlags: 0
@@ -3955,6 +4150,40 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2125344611
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2125344612}
+  m_Layer: 0
+  m_Name: ParkingSpots
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2125344612
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2125344611}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 878101453}
+  - {fileID: 1679946379}
+  - {fileID: 405352595}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &118661588687341039
@@ -4081,6 +4310,119 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 425983868a3e9be47930936b7755a07e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MobileMarket.Player.PlayerHealth
+--- !u!1001 &5311227504736692205
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 297994651}
+    m_Modifications:
+    - target: {fileID: 6748310858503316803, guid: cc596700bea09aa49ae04c9f5b045969, type: 3}
+      propertyPath: m_Name
+      value: P_WorldMapScreen
+      objectReference: {fileID: 0}
+    - target: {fileID: 7472436992722556313, guid: cc596700bea09aa49ae04c9f5b045969, type: 3}
+      propertyPath: m_Pivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7472436992722556313, guid: cc596700bea09aa49ae04c9f5b045969, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7472436992722556313, guid: cc596700bea09aa49ae04c9f5b045969, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7472436992722556313, guid: cc596700bea09aa49ae04c9f5b045969, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7472436992722556313, guid: cc596700bea09aa49ae04c9f5b045969, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7472436992722556313, guid: cc596700bea09aa49ae04c9f5b045969, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7472436992722556313, guid: cc596700bea09aa49ae04c9f5b045969, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7472436992722556313, guid: cc596700bea09aa49ae04c9f5b045969, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7472436992722556313, guid: cc596700bea09aa49ae04c9f5b045969, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7472436992722556313, guid: cc596700bea09aa49ae04c9f5b045969, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7472436992722556313, guid: cc596700bea09aa49ae04c9f5b045969, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7472436992722556313, guid: cc596700bea09aa49ae04c9f5b045969, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7472436992722556313, guid: cc596700bea09aa49ae04c9f5b045969, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7472436992722556313, guid: cc596700bea09aa49ae04c9f5b045969, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7472436992722556313, guid: cc596700bea09aa49ae04c9f5b045969, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7472436992722556313, guid: cc596700bea09aa49ae04c9f5b045969, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7472436992722556313, guid: cc596700bea09aa49ae04c9f5b045969, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7472436992722556313, guid: cc596700bea09aa49ae04c9f5b045969, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7472436992722556313, guid: cc596700bea09aa49ae04c9f5b045969, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7472436992722556313, guid: cc596700bea09aa49ae04c9f5b045969, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: cc596700bea09aa49ae04c9f5b045969, type: 3}
+--- !u!114 &5311227504736692206 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4640080805270196428, guid: cc596700bea09aa49ae04c9f5b045969, type: 3}
+  m_PrefabInstance: {fileID: 5311227504736692205}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abfc834c69f310047817a26558e783a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MobileMarket.UI.WorldMapUI
+--- !u!224 &5311227504736692207 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 7472436992722556313, guid: cc596700bea09aa49ae04c9f5b045969, type: 3}
+  m_PrefabInstance: {fileID: 5311227504736692205}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7223753144889801105
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4230,3 +4572,5 @@ SceneRoots:
   - {fileID: 1266985229}
   - {fileID: 497277779}
   - {fileID: 232614716}
+  - {fileID: 1592908504}
+  - {fileID: 2125344612}

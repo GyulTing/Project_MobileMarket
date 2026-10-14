@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 514611e66fd3f084cb96ee79c0cd8595, type: 3}
+  m_Name: Region_Home
+  m_EditorClassIdentifier: Assembly-CSharp::MobileMarket.Data.RegionData
+  displayName: HOME
+  type: 0
+  sceneName: Player_Settlement
+  mapPosition: {x: 0.69, y: 0.52}
+  locked: 0
+  connections:
+  - {fileID: 11400000, guid: e48471ab2d2a73d4cabe0bdf8019f07c, type: 2}
+  - {fileID: 11400000, guid: 1721488673cc33d40a81f40bc8a4b2e4, type: 2}
+  - {fileID: 11400000, guid: 64b932e65234f534dad5a0a24901b83d, type: 2}
+  - {fileID: 11400000, guid: f4133a43b052b404ba8ef249b18c13a6, type: 2}

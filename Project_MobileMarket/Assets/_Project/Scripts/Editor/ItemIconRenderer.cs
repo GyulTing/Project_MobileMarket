@@ -22,6 +22,15 @@ namespace MobileMarket.EditorTools
         [MenuItem("MobileMarket/Items/Render Item Icons")]
         public static void RenderAll()
         {
+            var items = new System.Collections.Generic.List<ItemData>();
+            foreach (var guid in AssetDatabase.FindAssets("t:ItemData", new[] { ItemDir }))
+                items.Add(AssetDatabase.LoadAssetAtPath<ItemData>(AssetDatabase.GUIDToAssetPath(guid)));
+            Render(items);
+        }
+
+        /// <summary>Renders icons for just these items (e.g. newly added weapons), leaving the others untouched.</summary>
+        public static void Render(System.Collections.Generic.IEnumerable<ItemData> items)
+        {
             var rt = new RenderTexture(Size, Size, 24, RenderTextureFormat.ARGB32) { antiAliasing = 4 };
             var camGo = new GameObject("__IconCamera");
             var cam = camGo.AddComponent<Camera>();
@@ -42,9 +51,8 @@ namespace MobileMarket.EditorTools
             int count = 0;
             try
             {
-                foreach (var guid in AssetDatabase.FindAssets("t:ItemData", new[] { ItemDir }))
+                foreach (var data in items)
                 {
-                    var data = AssetDatabase.LoadAssetAtPath<ItemData>(AssetDatabase.GUIDToAssetPath(guid));
                     var model = ModelFor(data, out bool sideProfile);
                     if (model == null) continue;
 
@@ -133,13 +141,10 @@ namespace MobileMarket.EditorTools
                 Vector3 forward, up;
                 if (sideProfile)
                 {
-                    // Look along the thinnest axis with the middle axis up, so the long axis (barrel) runs left-right.
-                    var s = bounds.size;
-                    int thin = s.x <= s.y && s.x <= s.z ? 0 : s.y <= s.z ? 1 : 2;
-                    int longest = s.x >= s.y && s.x >= s.z ? 0 : s.y >= s.z ? 1 : 2;
-                    int middle = 3 - thin - longest;
-                    forward = Axis(thin);
-                    up = Axis(middle);
+                    // Weapon models are built barrel along +Z, top up +Y: look along +X so the barrel runs left-right.
+                    // (Not "the thinnest axis": a spread bipod makes the MG42 wider than it is tall.)
+                    forward = Vector3.right;
+                    up = Vector3.up;
                 }
                 else
                 {
@@ -167,8 +172,6 @@ namespace MobileMarket.EditorTools
                 Object.DestroyImmediate(inst);
             }
         }
-
-        private static Vector3 Axis(int i) => i == 0 ? Vector3.right : i == 1 ? Vector3.up : Vector3.forward;
 
         /// <summary>Half-height of the ortho view needed to fit the bounds' 8 corners.</summary>
         private static float FitSize(Camera cam, Bounds b)

@@ -4,7 +4,7 @@ using MobileMarket.Enemy;
 namespace MobileMarket.Player
 {
     /// <summary>
-    /// Moves the player on the XZ plane and faces the mouse cursor (quarter-view).
+    /// Moves the player on the XZ plane with gravity and faces the mouse cursor (quarter-view).
     /// </summary>
     [RequireComponent(typeof(CharacterController))]
     [RequireComponent(typeof(PlayerInput))]
@@ -14,6 +14,11 @@ namespace MobileMarket.Player
         [SerializeField] private float sprintMultiplier = 1.5f;
         [SerializeField] private float aimMultiplier = 0.7f;
         [SerializeField] private float turnSpeed = 15f;
+
+        [Tooltip("Downward acceleration (CharacterController has no gravity of its own).")]
+        [SerializeField] private float gravity = -20f;
+        [Tooltip("Small downward speed kept while grounded so the player stays stuck to slopes and steps down off ledges.")]
+        [SerializeField] private float groundedStickSpeed = -2f;
 
         [Tooltip("Within this distance of the cursor the barrel correction is skipped (the gun's side offset would make it spin).")]
         [SerializeField] private float minAimCorrectionDistance = 1.2f;
@@ -28,6 +33,7 @@ namespace MobileMarket.Player
         [Tooltip("How far the cursor ray looks for an enemy to lock the aim onto.")]
         [SerializeField] private float cursorTargetDistance = 100f;
 
+        private float verticalSpeed;
         private float barrelYaw;
         private float barrelSideOffset;
         private float barrelHeight = 0.65f;
@@ -77,7 +83,14 @@ namespace MobileMarket.Player
             bool canSprint = input.IsSprinting && !input.IsAiming;
             float multiplier = canSprint ? sprintMultiplier : (input.IsAiming ? aimMultiplier : 1f);
             float speed = moveSpeed * multiplier;
-            controller.Move(moveDirection * speed * Time.deltaTime);
+
+            // Fall when nothing is underfoot; otherwise keep a light push down so the player follows the ground.
+            if (controller.isGrounded && verticalSpeed < 0f) verticalSpeed = groundedStickSpeed;
+            else verticalSpeed += gravity * Time.deltaTime;
+
+            Vector3 velocity = moveDirection * speed;
+            velocity.y = verticalSpeed;
+            controller.Move(velocity * Time.deltaTime);
 
             bool isStationary = moveDirection.sqrMagnitude < 0.001f;
             float turnAmount = 0f;

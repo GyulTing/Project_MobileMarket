@@ -26,6 +26,7 @@ namespace MobileMarket.EditorTools
             ("Farmer_01", Role.Farmer), ("Farmer_02", Role.Farmer),
             ("Resident_01", Role.Resident), ("Resident_02", Role.Resident), ("Resident_03", Role.Resident),
             ("Resident_04", Role.Resident), ("Resident_05", Role.Resident),
+            ("TwinsMechanic1", Role.Resident), ("TwinsMechanic2", Role.Resident),
         };
 
         // Avatar fixes for VARCO auto-rigs that place a bone name on the wrong joint (checked by bone world positions):
