@@ -56,7 +56,6 @@ namespace MobileMarket.EditorTools
         private const float CaveFacadeDepth = 18f;  // the facade's arch front stands this far behind the mouth line
         private const float CaveArmLength = 38f;    // how far the rock shoulders reach forward around the entrance
         private const float CaveArchHalfWidth = 11f; // half the arch opening (kept clear behind so the dark tunnel shows)
-        private const float CaveOverhangSink = 2.5f;  // how far the overhang rock sits down into the facade's lintel
         private const float PitFloor = -10f, PitInner = 28f, PitOuter = 52f;
         private const int PitTerraces = 3;
 
@@ -94,12 +93,199 @@ namespace MobileMarket.EditorTools
         private static Terrain terrain;
         private static Material blockMat, waterMat;
 
+        // ---------------------------------------------------------------- hand edits
+
+        /// <summary>Objects placed by hand go under this root; the builder never touches it.</summary>
+        public const string CustomRootName = "ExcavationSite_Custom";
+        private const string EditsPath = "Assets/_Project/Scenes/Main/ExcavationSite_Edits.asset";
+        private const string CompareRootName = "ExcavationSite__HandEdited";
+
+        /// <summary>
+        /// Rebuilds the site, keeping hand edits: recorded moves/deletions are re-applied and ExcavationSite_Custom is left
+        /// alone. If the current site holds edits that haven't been captured yet, nothing is rebuilt; the edits are listed
+        /// and Capture Hand Edits will record them.
+        /// </summary>
         [MenuItem("MobileMarket/Excavation Site/Build Layout")]
         public static void Build()
         {
             var scene = SceneManager.GetActiveScene();
             if (scene.path != ScenePath) { Debug.LogError("[ExcavationSiteBuilder] Open " + ScenePath + " first."); return; }
 
+            var diff = CompareWithFreshBuild(out var current, out var fresh);
+            if (diff.HasUncaptured)
+            {
+                // Keep the hand-edited site, drop the fresh one, and stop.
+                Object.DestroyImmediate(fresh.gameObject);
+                current.name = RootName;
+                EditorSceneManager.MarkSceneDirty(scene);
+                string msg = "The site has hand edits that a rebuild would lose:\n\n" + diff.Describe(20) +
+                             "\n\nRun MobileMarket > Excavation Site > Capture Hand Edits first.";
+                Debug.LogWarning("[ExcavationSiteBuilder] Build stopped. " + msg);
+                if (!Application.isBatchMode) EditorUtility.DisplayDialog("Excavation Site", msg, "OK");
+                return;
+            }
+            if (current != null) Object.DestroyImmediate(current.gameObject);
+            ApplyEdits(fresh);
+            EditorSceneManager.MarkSceneDirty(scene);
+        }
+
+        /// <summary>
+        /// Records the site's hand edits so rebuilds keep them: moved/rotated/rescaled and deleted generated objects go to
+        /// ExcavationSite_Edits, objects added by hand move (in place) under ExcavationSite_Custom.
+        /// </summary>
+        [MenuItem("MobileMarket/Excavation Site/Capture Hand Edits")]
+        public static void CaptureHandEdits()
+        {
+            var scene = SceneManager.GetActiveScene();
+            if (scene.path != ScenePath) { Debug.LogError("[ExcavationSiteBuilder] Open " + ScenePath + " first."); return; }
+
+            var diff = CompareWithFreshBuild(out var current, out var fresh);
+            Object.DestroyImmediate(fresh.gameObject);
+            if (current == null) return;
+            current.name = RootName;
+
+            var edits = LoadEdits(true);
+            foreach (var key in diff.Moved)
+            {
+                var t = FindByKey(current, key);
+                edits.moved.RemoveAll(m => m.key == key);
+                edits.moved.Add(new ExcavationSiteEdits.Placement { key = key, localPosition = t.localPosition, localRotation = t.localRotation, localScale = t.localScale });
+            }
+            foreach (var key in diff.Removed) if (!edits.removed.Contains(key)) edits.removed.Add(key);
+            EditorUtility.SetDirty(edits);
+            AssetDatabase.SaveAssets();
+
+            var custom = CustomRoot(scene);
+            foreach (var t in diff.Added) t.SetParent(custom, true);
+
+            EditorSceneManager.MarkSceneDirty(scene);
+            Debug.Log("[ExcavationSiteBuilder] Captured " + diff.Moved.Count + " moved, " + diff.Removed.Count + " deleted, " +
+                      diff.Added.Count + " added (now under " + CustomRootName + ").");
+        }
+
+        private static Transform CustomRoot(Scene scene)
+        {
+            foreach (var go in scene.GetRootGameObjects()) if (go.name == CustomRootName) return go.transform;
+            return new GameObject(CustomRootName).transform;
+        }
+
+        private static ExcavationSiteEdits LoadEdits(bool create)
+        {
+            var edits = AssetDatabase.LoadAssetAtPath<ExcavationSiteEdits>(EditsPath);
+            if (edits == null && create)
+            {
+                edits = ScriptableObject.CreateInstance<ExcavationSiteEdits>();
+                AssetDatabase.CreateAsset(edits, EditsPath);
+            }
+            return edits;
+        }
+
+        private class SiteDiff
+        {
+            public readonly List<string> Moved = new List<string>();
+            public readonly List<string> Removed = new List<string>();
+            public readonly List<Transform> Added = new List<Transform>();
+            public bool HasUncaptured => Moved.Count + Removed.Count + Added.Count > 0;
+
+            public string Describe(int max)
+            {
+                var lines = new List<string>();
+                foreach (var k in Moved) lines.Add("moved: " + k);
+                foreach (var k in Removed) lines.Add("deleted: " + k);
+                foreach (var t in Added) lines.Add("added: " + t.name);
+                if (lines.Count > max) { int more = lines.Count - max; lines.RemoveRange(max, more); lines.Add("... and " + more + " more"); }
+                return string.Join("\n", lines);
+            }
+        }
+
+        /// <summary>
+        /// Builds a fresh site with the recorded edits applied and compares the current one against it. The current site is
+        /// renamed out of the way while building (so the build can't destroy it) and handed back in <paramref name="current"/>.
+        /// </summary>
+        private static SiteDiff CompareWithFreshBuild(out Transform current, out Transform fresh)
+        {
+            var scene = SceneManager.GetActiveScene();
+            current = null;
+            foreach (var go in scene.GetRootGameObjects()) if (go.name == RootName) current = go.transform;
+            if (current != null) current.name = CompareRootName;
+
+            BuildFresh();
+            fresh = root;
+            ApplyEdits(fresh);
+
+            var diff = new SiteDiff();
+            if (current == null) return diff;
+            var freshMap = KeyMap(fresh);
+            var currentMap = KeyMap(current);
+            foreach (var kv in currentMap)
+            {
+                if (!freshMap.TryGetValue(kv.Key, out var f))
+                {
+                    // Report only the top of an added subtree.
+                    if (!currentMap.ContainsValue(kv.Value.parent) || freshMap.ContainsKey(KeyOf(current, kv.Value.parent))) diff.Added.Add(kv.Value);
+                    continue;
+                }
+                var c = kv.Value;
+                if ((c.localPosition - f.localPosition).sqrMagnitude > 1e-4f || Quaternion.Angle(c.localRotation, f.localRotation) > 0.05f ||
+                    (c.localScale - f.localScale).sqrMagnitude > 1e-6f)
+                    diff.Moved.Add(kv.Key);
+            }
+            foreach (var kv in freshMap)
+                if (!currentMap.ContainsKey(kv.Key) && (kv.Value.parent == fresh || currentMap.ContainsKey(KeyOf(fresh, kv.Value.parent))))
+                    diff.Removed.Add(kv.Key);
+            return diff;
+        }
+
+        /// <summary>Every transform under the site (except the NavMesh baker) keyed by its path with same-name occurrence indices.</summary>
+        private static Dictionary<string, Transform> KeyMap(Transform siteRoot)
+        {
+            var map = new Dictionary<string, Transform>();
+            void Walk(Transform t, string prefix)
+            {
+                var seen = new Dictionary<string, int>();
+                foreach (Transform child in t)
+                {
+                    if (t == siteRoot && child.name == "NavMesh") continue;
+                    seen.TryGetValue(child.name, out int n);
+                    seen[child.name] = n + 1;
+                    string key = prefix + child.name + "#" + n;
+                    map[key] = child;
+                    Walk(child, key + "/");
+                }
+            }
+            Walk(siteRoot, "");
+            return map;
+        }
+
+        private static string KeyOf(Transform siteRoot, Transform t)
+        {
+            if (t == null || t == siteRoot) return "";
+            foreach (var kv in KeyMap(siteRoot)) if (kv.Value == t) return kv.Key;
+            return "";
+        }
+
+        private static Transform FindByKey(Transform siteRoot, string key) => KeyMap(siteRoot).TryGetValue(key, out var t) ? t : null;
+
+        private static void ApplyEdits(Transform siteRoot)
+        {
+            var edits = LoadEdits(false);
+            if (edits == null) return;
+            var map = KeyMap(siteRoot);
+            foreach (var m in edits.moved)
+                if (map.TryGetValue(m.key, out var t))
+                {
+                    t.localPosition = m.localPosition;
+                    t.localRotation = m.localRotation;
+                    t.localScale = m.localScale;
+                }
+            foreach (var key in edits.removed)
+                if (map.TryGetValue(key, out var t) && t != null) Object.DestroyImmediate(t.gameObject);
+        }
+
+        /// <summary>Builds the generated site from scratch (no hand edits), replacing any existing ExcavationSite root.</summary>
+        private static void BuildFresh()
+        {
+            var scene = SceneManager.GetActiveScene();
             foreach (var go in scene.GetRootGameObjects()) if (go.name == RootName) Object.DestroyImmediate(go);
             root = new GameObject(RootName).transform;
             blockMat = Mat("M_EX_Blockout", new Color(0.62f, 0.62f, 0.6f), false);
@@ -163,6 +349,29 @@ namespace MobileMarket.EditorTools
             pond.center = new Vector3(0f, -9f, 0f);
             pond.size = new Vector3(SinkholeRadius * 1.6f, 10f, SinkholeRadius * 1.6f);
 
+            // Props don't cut the NavMesh: it runs under every placed object except the structures that must block
+            // (walls, fences, barriers, the bunker, main lab and cave) and the surfaces walked on (floors, bridges, pads).
+            // The same goes for objects placed by hand under ExcavationSite_Custom.
+            var roots = new List<Transform> { siteRoot };
+            foreach (var go in scene.GetRootGameObjects()) if (go.name == CustomRootName) roots.Add(go.transform);
+            foreach (var r in roots)
+            {
+                foreach (var col in r.GetComponentsInChildren<Collider>(true))
+                {
+                    if (col is TerrainCollider) continue;
+                    var owner = PrefabUtility.GetNearestPrefabInstanceRoot(col.gameObject);
+                    string name = owner != null ? owner.name : col.gameObject.name;
+                    bool keep = false;
+                    foreach (var k in NavBlockers) if (name.Contains(k)) { keep = true; break; }
+                    if (keep || col.GetComponent<NavMeshModifier>() != null) continue;
+                    var mod = col.gameObject.AddComponent<NavMeshModifier>();
+                    mod.ignoreFromBuild = true;
+                    mod.applyToChildren = false;
+                }
+                // Shared prefabs from other maps (vehicle wrecks) still carve; switch it off on this map's instances only.
+                foreach (var obstacle in r.GetComponentsInChildren<UnityEngine.AI.NavMeshObstacle>(true)) obstacle.carving = false;
+            }
+
             var surface = nav.gameObject.AddComponent<NavMeshSurface>();
             surface.collectObjects = CollectObjects.All;
             surface.useGeometry = UnityEngine.AI.NavMeshCollectGeometry.PhysicsColliders;
@@ -174,6 +383,13 @@ namespace MobileMarket.EditorTools
             EditorSceneManager.MarkSceneDirty(scene);
             Debug.Log("[ExcavationSiteBuilder] NavMesh baked.");
         }
+
+        /// <summary>Name fragments of placed prefabs that stay in the NavMesh bake (blockers and walkable surfaces).</summary>
+        private static readonly string[] NavBlockers =
+        {
+            "_Wall", "_GlassWall", "_Fence", "_Barrier", "_Bunker", "_MainLab", "_CaveEntrance",
+            "_Floor", "_Bridge", "_Helipad",
+        };
 
         private static NavMeshModifierVolume NotWalkable(Transform parent, string name)
         {
@@ -207,6 +423,8 @@ namespace MobileMarket.EditorTools
                 // This map's own road layer (the settlement's packed sand stays untouched): same worn pattern, dark brown.
                 Layer("TL_EX_Road", CartoonTex + "SAND/SAND_Beach/Textures/Sand_Beach_Base_Basecolor.png", "", 10f),
                 Layer("TL_EX_Cliff", CartoonTex + "ROCKS/ROCKS_Cliff/Textures/Rocks_Cliff_A_Basecolor_A.png", CartoonTex + "ROCKS/ROCKS_Cliff/Textures/Rocks_Cliff_A_Normal.png", 14f),
+                // 4: the lab complex's concrete paving (slabs 4 m across; the texture holds 2 x 2 of them).
+                Layer("TL_EX_Concrete", ConcreteTexture(), "", 8f),
             };
             // The cartoon cliff rock is blue-grey; tint it to the reference's red-brown canyon rock.
             td.terrainLayers[3].diffuseRemapMax = new Vector4(1.05f, 0.72f, 0.5f, 1f);
@@ -229,7 +447,7 @@ namespace MobileMarket.EditorTools
             td.SetHeights(0, 0, heights);
 
             int ar = td.alphamapResolution;
-            var alphas = new float[ar, ar, 4];
+            var alphas = new float[ar, ar, 5];
             for (int iz = 0; iz < ar; iz++)
                 for (int ix = 0; ix < ar; ix++)
                 {
@@ -246,12 +464,16 @@ namespace MobileMarket.EditorTools
 
                     float packed = Mathf.Max(zone * 0.8f, Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(0.45f, 0.75f, mottle)) * 0.6f);
                     float rest = 1f - cliff;
+                    // Paved lab paths and plazas, their edges broken up where sand has drifted over the concrete.
+                    float paved = LabPaving(x, z, wobble) * rest;
+                    rest -= paved;
                     float roadW = road * rest;
                     rest -= roadW;
                     alphas[iz, ix, 0] = rest * (1f - packed);
                     alphas[iz, ix, 1] = rest * packed;
                     alphas[iz, ix, 2] = roadW;
                     alphas[iz, ix, 3] = cliff;
+                    alphas[iz, ix, 4] = paved;
                 }
             td.SetAlphamaps(0, 0, alphas);
             EditorUtility.SetDirty(td);
@@ -499,11 +721,29 @@ namespace MobileMarket.EditorTools
             WaterObject("Sinkhole", g, Disc(Sinkhole, SinkholeRadius, 48), "Assets/_Project/Models/Excavation/Mesh_EX_SinkholeWater.asset");
         }
 
+        /// <summary>
+        /// Saves a generated mesh as an asset, overwriting an existing one in place: deleting and recreating it would break
+        /// every scene object still pointing at the old asset (the kept hand-edited site during a compare build).
+        /// </summary>
+        private static Mesh SaveMesh(Mesh mesh, string assetPath)
+        {
+            var existing = AssetDatabase.LoadAssetAtPath<Mesh>(assetPath);
+            if (existing == null)
+            {
+                AssetDatabase.CreateAsset(mesh, assetPath);
+                return mesh;
+            }
+            string name = existing.name;
+            EditorUtility.CopySerialized(mesh, existing);
+            existing.name = name;
+            EditorUtility.SetDirty(existing);
+            Object.DestroyImmediate(mesh);
+            return existing;
+        }
+
         private static void WaterObject(string name, Transform parent, Mesh mesh, string assetPath)
         {
-            var old = AssetDatabase.LoadAssetAtPath<Mesh>(assetPath);
-            if (old != null) AssetDatabase.DeleteAsset(assetPath);
-            AssetDatabase.CreateAsset(mesh, assetPath);
+            mesh = SaveMesh(mesh, assetPath);
 
             var go = new GameObject(name);
             go.transform.SetParent(parent, false);
@@ -878,20 +1118,18 @@ namespace MobileMarket.EditorTools
                 dark.transform.localScale = new Vector3(26f, 22f, 0.5f);
                 dark.GetComponent<Renderer>().sharedMaterial = Mat("M_EX_CaveDark", new Color(0.02f, 0.015f, 0.01f), false);
 
-                // A rock overhang laid over the facade's stone lintel (the terrain can't overhang the open arch), its
-                // jagged lip just past the facade front, its back sunk into the cliff.
+                // The cliff carried over the entrance: the terrain can't overhang the open arch, so a rock wall mesh in the
+                // terrain's own cliff texture fills the notch from the facade's lintel up into the cliff.
                 float lintelTop = float.MinValue;
                 foreach (var r in cave.GetComponentsInChildren<Renderer>()) lintelTop = Mathf.Max(lintelTop, r.bounds.max.y);
-                var lip = CaveMouth - CaveFacing * (CaveFacadeDepth - 1.5f);
-                var overhangPath = ExcavationAssetBuilder.PrefabDir + "P_EX_Env_CaveOverhang.prefab";
-                var overhangAsset = AssetDatabase.LoadAssetAtPath<GameObject>(overhangPath);
-                if (overhangAsset != null)
-                {
-                    float depth = overhangAsset.GetComponentInChildren<Renderer>().bounds.size.z;
-                    var at = lip - CaveFacing * (depth * 0.5f);
-                    var overhang = PlacePrefab(overhangPath, g, at, YawFacing(CaveFacing));
-                    overhang.transform.position = new Vector3(at.x, lintelTop - CaveOverhangSink, at.y);
-                }
+                var fill = new GameObject("CaveCliffFill");
+                fill.transform.SetParent(g, false);
+                var mesh = CaveCliffFill(lintelTop - 1f);
+                const string fillPath = ExcavationAssetBuilder.ModelDir + "Mesh_EX_CaveCliffFill.asset";
+                mesh = SaveMesh(mesh, fillPath);
+                fill.AddComponent<MeshFilter>().sharedMesh = mesh;
+                fill.AddComponent<MeshRenderer>().sharedMaterial = CliffMaterial();
+                fill.isStatic = true;
             }
             else Debug.LogWarning("[ExcavationSiteBuilder] Missing " + cavePath);
 
@@ -899,6 +1137,106 @@ namespace MobileMarket.EditorTools
             foreach (var (prefab, pos, yaw) in DigLayout) PlacePrefab(ExcavationAssetBuilder.PrefabDir + prefab + ".prefab", dig, pos, yaw);
             var camp = Group("Camp", g);
             foreach (var (prefab, pos, yaw) in CampLayout) PlacePrefab(ExcavationAssetBuilder.PrefabDir + prefab + ".prefab", camp, pos, yaw);
+        }
+
+        /// <summary>
+        /// A closed rock block over the entrance: a rough front face just ahead of the facade front, spanning the notch and
+        /// buried in its side walls, rising from the lintel to the cliff top, its top sloping back up into the cliff.
+        /// World-space mesh, textured with the terrain's cliff rock so it reads as part of the canyon wall.
+        /// </summary>
+        private static Mesh CaveCliffFill(float bottom)
+        {
+            const float halfWidth = 22f, frontTop = 46f, backTop = 52f, backDepth = 34f, step = 1.5f;
+            float front = CaveFacadeDepth - 0.5f;
+            var perp = new Vector2(-CaveFacing.y, CaveFacing.x);
+            System.Func<float, float, float, Vector3> at = (t, s, y) =>
+            {
+                var p = CaveMouth + CaveFacing * t + perp * s;
+                return new Vector3(p.x, y, p.y);
+            };
+            var verts = new List<Vector3>();
+            var tris = new List<int>();
+            void Quad(Vector3 a, Vector3 b, Vector3 c, Vector3 d)   // a-b-c-d clockwise seen from outside
+            {
+                int i = verts.Count;
+                verts.Add(a); verts.Add(b); verts.Add(c); verts.Add(d);
+                tris.Add(i); tris.Add(i + 1); tris.Add(i + 2); tris.Add(i); tris.Add(i + 2); tris.Add(i + 3);
+            }
+
+            // Front face: a grid pushed in and out by noise stretched up the face, so it reads as the canyon's vertical
+            // rock ribs rather than round boulders.
+            int cols = Mathf.CeilToInt(halfWidth * 2f / step), rows = Mathf.CeilToInt((frontTop - bottom) / step);
+            var grid = new Vector3[cols + 1, rows + 1];
+            var gridUv = new Vector2[cols + 1, rows + 1];
+            for (int i = 0; i <= cols; i++)
+                for (int j = 0; j <= rows; j++)
+                {
+                    float s = -halfWidth + i * halfWidth * 2f / cols, y = bottom + j * (frontTop - bottom) / rows;
+                    float bump = (Noise(s * 4f, y * 0.6f, 0.05f) - 0.5f) * 2.5f + (Noise(s * 9f + 40f, y * 1.2f, 0.04f) - 0.5f) * 1f;
+                    // Edges sink back so the block melts into the side walls and the lintel.
+                    float edge = Mathf.InverseLerp(halfWidth, halfWidth - 4f, Mathf.Abs(s));
+                    float t = -front + bump * edge - (1f - edge) * 3f;
+                    grid[i, j] = at(t, s, y);
+                    // Textured the way the terrain textures its cliffs: projected from above onto a face that leans back
+                    // as it rises (the canyon wall's slope), which smears the rock into the same long vertical streaks.
+                    var flat = at(t - CliffLean * (y - bottom), s, 0f);
+                    gridUv[i, j] = new Vector2(flat.x - TerrainOrigin.x, flat.z - TerrainOrigin.z) / CliffTile;
+                }
+            // Shared vertices, so the bumps shade smoothly instead of as a grid of flat facets.
+            int baseIndex = verts.Count;
+            for (int i = 0; i <= cols; i++)
+                for (int j = 0; j <= rows; j++) verts.Add(grid[i, j]);
+            for (int i = 0; i < cols; i++)
+                for (int j = 0; j < rows; j++)
+                {
+                    int a = baseIndex + i * (rows + 1) + j, b = a + 1, c = a + rows + 2, d = a + rows + 1;
+                    tris.Add(a); tris.Add(b); tris.Add(c); tris.Add(a); tris.Add(c); tris.Add(d);
+                }
+
+            // Top (sloping back up into the cliff), back, sides and bottom close the block.
+            for (int i = 0; i < cols; i++)
+            {
+                float s0 = -halfWidth + i * halfWidth * 2f / cols, s1 = s0 + halfWidth * 2f / cols;
+                Quad(grid[i, rows], at(-front - backDepth, s0, backTop), at(-front - backDepth, s1, backTop), grid[i + 1, rows]);
+                Quad(grid[i + 1, 0], at(-front - backDepth, s1, bottom), at(-front - backDepth, s0, bottom), grid[i, 0]);
+            }
+            Quad(at(-front - backDepth, halfWidth, bottom), at(-front - backDepth, halfWidth, backTop), at(-front - backDepth, -halfWidth, backTop), at(-front - backDepth, -halfWidth, bottom));
+            for (int j = 0; j < rows; j++)
+            {
+                Quad(at(-front - backDepth, -halfWidth, bottom + (j + 1) * (frontTop - bottom) / rows), grid[0, j + 1], grid[0, j], at(-front - backDepth, -halfWidth, bottom + j * (frontTop - bottom) / rows));
+                Quad(grid[cols, j + 1], at(-front - backDepth, halfWidth, bottom + (j + 1) * (frontTop - bottom) / rows), at(-front - backDepth, halfWidth, bottom + j * (frontTop - bottom) / rows), grid[cols, j]);
+            }
+
+            var mesh = new Mesh { name = "Mesh_EX_CaveCliffFill", indexFormat = UnityEngine.Rendering.IndexFormat.UInt32 };
+            mesh.SetVertices(verts);
+            mesh.SetTriangles(tris, 0);
+            // The hidden faces (top, back, sides) are simply projected from above like the terrain.
+            var uv = new Vector2[verts.Count];
+            for (int i = 0; i < uv.Length; i++) uv[i] = new Vector2(verts[i].x - TerrainOrigin.x, verts[i].z - TerrainOrigin.z) / CliffTile;
+            for (int i = 0; i <= cols; i++)
+                for (int j = 0; j <= rows; j++) uv[baseIndex + i * (rows + 1) + j] = gridUv[i, j];
+            mesh.uv = uv;
+            mesh.RecalculateNormals();
+            mesh.RecalculateTangents();
+            mesh.RecalculateBounds();
+            return mesh;
+        }
+
+        private const float CliffTile = 14f;   // matches TL_EX_Cliff's tile size
+        private const float CliffLean = 0.55f;  // horizontal per vertical of the canyon wall (WallRise / WallHeight)
+
+        /// <summary>A Lit material that looks like the terrain's cliff layer (same textures and tint).</summary>
+        private static Material CliffMaterial()
+        {
+            var mat = Mat("M_EX_CliffRock", Color.white, false);
+            mat.SetTexture("_BaseMap", AssetDatabase.LoadAssetAtPath<Texture2D>(CartoonTex + "ROCKS/ROCKS_Cliff/Textures/Rocks_Cliff_A_Basecolor_A.png"));
+            mat.SetTexture("_BumpMap", AssetDatabase.LoadAssetAtPath<Texture2D>(CartoonTex + "ROCKS/ROCKS_Cliff/Textures/Rocks_Cliff_A_Normal.png"));
+            mat.EnableKeyword("_NORMALMAP");
+            // Warmed to match the cliffs as the terrain renders them (measured: R/G 1.13, B/G 0.84 against the raw texture).
+            mat.SetColor("_BaseColor", new Color(1.0f, 0.88f, 0.74f));
+            mat.SetFloat("_Smoothness", 0.1f);
+            EditorUtility.SetDirty(mat);
+            return mat;
         }
 
         // ---------------------------------------------------------------- laboratory complex (stage 4)
@@ -929,7 +1267,7 @@ namespace MobileMarket.EditorTools
             ("P_EX_Camp_WaterTank", new Vector2(140f, -160f), 0f),
             ("P_EX_Lab_LampPost", new Vector2(80f, -105f), 90f), ("P_EX_Lab_LampPost", new Vector2(146f, -112f), 270f),
             ("P_EX_Lab_LampPost", new Vector2(80f, -142f), 90f), ("P_EX_Lab_LampPost", new Vector2(140f, -142f), 270f),
-            ("P_EX_Lab_LampPost", new Vector2(70f, -58f), 0f), ("P_EX_Lab_LampPost", new Vector2(42f, -92f), 90f),
+            ("P_EX_Lab_LampPost", new Vector2(70f, -58f), 0f), ("P_EX_Lab_LampPost", new Vector2(37f, -80f), 90f),
             ("P_EX_Lab_LampPost", new Vector2(95f, -170f), 180f),
             // Filling out the compound: a third aux lab, decontamination tents, storage containers, gate sandbags.
             ("P_EX_Lab_AuxLab", new Vector2(85f, -152f), 0f),
@@ -938,9 +1276,107 @@ namespace MobileMarket.EditorTools
             ("P_EX_Camp_Container", new Vector2(40f, -120f), 90f), ("P_EX_Camp_Container", new Vector2(40f, -130f), 90f),
             ("P_EX_Mil_Sandbags", new Vector2(50f, -52f), 0f), ("P_EX_Mil_Sandbags", new Vector2(70f, -52f), 0f),
             ("P_EX_Mil_Sandbags", new Vector2(37f, -90f), 90f), ("P_EX_Mil_Sandbags", new Vector2(37f, -110f), 90f),
-            ("P_EX_Lab_HazardDrums", new Vector2(155f, -142f), 0f), ("P_EX_Lab_HazardDrums", new Vector2(88f, -97f), 60f),
-            ("P_EX_Mil_AmmoCrates", new Vector2(125f, -135f), 0f),
+            ("P_EX_Lab_HazardDrums", new Vector2(155f, -142f), 0f), ("P_EX_Lab_HazardDrums", new Vector2(75f, -92f), 60f),
+            ("P_EX_Mil_AmmoCrates", new Vector2(125f, -142f), 0f),
         };
+
+        /// <summary>Concrete paths inside the lab complex (the dirt roads end at its gates): a loop round the main lab
+        /// joined to its front avenue, a loop round the west aux lab from the north gate, one round the radar, and a spur
+        /// south to the lower avenue that runs past the warehouse to the east aux lab's door.</summary>
+        private static readonly Vector2[][] LabPaths =
+        {
+            new[] { new Vector2(60f, -48f), new Vector2(60f, -71f) },
+            new[] { new Vector2(43f, -71f), new Vector2(67f, -71f), new Vector2(67f, -100f), new Vector2(43f, -100f), new Vector2(43f, -71f) },
+            new[] { new Vector2(82f, -58f), new Vector2(153f, -58f), new Vector2(153f, -100f), new Vector2(82f, -100f), new Vector2(82f, -58f) },
+            new[] { new Vector2(43f, -100f), new Vector2(153f, -100f) },
+            new[] { new Vector2(153f, -58f), new Vector2(181f, -58f), new Vector2(181f, -79f), new Vector2(153f, -79f) },
+            new[] { new Vector2(115f, -100f), new Vector2(115f, -135f) },
+            new[] { new Vector2(52f, -135f), new Vector2(163f, -135f) },
+        };
+        private const float LabPathHalfWidth = 3.5f;
+
+        /// <summary>Paved forecourt between the main lab's doors and its avenue; a round pad under the radar dome.</summary>
+        private static readonly Rect LabForecourt = Rect.MinMaxRect(96f, -100f, 134f, -92f);
+        private static readonly Vector2 RadarPad = new Vector2(163f, -66f);
+        private const float RadarPadRadius = 11f;
+
+        /// <summary>0..1 how much concrete shows at (x, z); the wobble frays the edges where sand drifts over them.</summary>
+        private static float LabPaving(float x, float z, float wobble)
+        {
+            float d = float.MaxValue;
+            foreach (var path in LabPaths) d = Mathf.Min(d, PolylineDistance(x, z, path) - LabPathHalfWidth);
+            d = Mathf.Min(d, RectDistance(new Vector2(x, z), LabForecourt));
+            d = Mathf.Min(d, Vector2.Distance(new Vector2(x, z), RadarPad) - RadarPadRadius);
+            float paved = 1f - Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(-0.5f, 1.5f, d + wobble * 0.6f));
+            // Patches of windblown sand over the slabs.
+            float drift = Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(0.62f, 0.8f, Noise(x + 300f, z - 120f, 0.09f)));
+            return paved * (1f - drift * 0.7f);
+        }
+
+        private const string ConcreteTexturePath = "Assets/_Project/Textures/T_EX_ConcretePaving.png";
+
+        /// <summary>
+        /// Generates (once) a tileable hand-painted-looking concrete paving texture: 2 x 2 light grey slabs with dark
+        /// joints, soft mottling, a few stains and hairline cracks. Returns its asset path.
+        /// </summary>
+        private static string ConcreteTexture()
+        {
+            if (AssetDatabase.LoadAssetAtPath<Texture2D>(ConcreteTexturePath) != null) return ConcreteTexturePath;
+            const int size = 512, slab = size / 2;
+            var tex = new Texture2D(size, size, TextureFormat.RGB24, false);
+            var px = new Color[size * size];
+            var baseCol = new Color(0.6f, 0.58f, 0.54f);
+            var rng = new System.Random(77);
+            for (int y = 0; y < size; y++)
+                for (int x = 0; x < size; x++)
+                {
+                    // Tileable noise: sample on a torus.
+                    float u = x / (float)size * Mathf.PI * 2f, v = y / (float)size * Mathf.PI * 2f;
+                    float n1 = Mathf.PerlinNoise(Mathf.Cos(u) * 2f + 10f, Mathf.Sin(u) * 2f + Mathf.Cos(v) * 2f + 20f + Mathf.Sin(v) * 2f);
+                    float n2 = Mathf.PerlinNoise(Mathf.Cos(u) * 9f + 40f + Mathf.Sin(v) * 9f, Mathf.Sin(u) * 9f + Mathf.Cos(v) * 9f + 60f);
+                    // Each slab a slightly different shade.
+                    int sx = x / slab, sy = y / slab;
+                    float slabShade = ((sx * 7 + sy * 13) % 5 - 2) * 0.012f;
+                    var c = baseCol * (0.95f + n1 * 0.07f + n2 * 0.03f) + new Color(slabShade, slabShade, slabShade);
+                    // Joints between slabs (wrapping at the texture edge so it tiles).
+                    int jx = Mathf.Min(x % slab, slab - x % slab), jy = Mathf.Min(y % slab, slab - y % slab);
+                    int j = Mathf.Min(jx, jy);
+                    if (j < 3) c *= 0.55f + j * 0.12f;
+                    else if (j < 6) c *= 0.93f + (j - 3) * 0.02f;
+                    px[y * size + x] = c;
+                }
+            // Stains and cracks.
+            for (int k = 0; k < 7; k++)
+            {
+                int cx = rng.Next(size), cy = rng.Next(size), r = 20 + rng.Next(40);
+                for (int y = -r; y <= r; y++)
+                    for (int x = -r; x <= r; x++)
+                    {
+                        float f = 1f - Mathf.Sqrt(x * x + y * y) / r;
+                        if (f <= 0f) continue;
+                        int ix = (cx + x + size) % size, iy = (cy + y + size) % size;
+                        px[iy * size + ix] *= 1f - f * f * 0.18f;
+                    }
+            }
+            for (int k = 0; k < 6; k++)
+            {
+                float x = rng.Next(size), y = rng.Next(size), a = (float)rng.NextDouble() * Mathf.PI * 2f;
+                int len = 40 + rng.Next(80);
+                for (int s = 0; s < len; s++)
+                {
+                    a += ((float)rng.NextDouble() - 0.5f) * 0.6f;
+                    x += Mathf.Cos(a); y += Mathf.Sin(a);
+                    int ix = ((int)x % size + size) % size, iy = ((int)y % size + size) % size;
+                    px[iy * size + ix] *= 0.72f;
+                }
+            }
+            tex.SetPixels(px);
+            tex.Apply();
+            System.IO.File.WriteAllBytes(ConcreteTexturePath, tex.EncodeToPNG());
+            Object.DestroyImmediate(tex);
+            AssetDatabase.ImportAsset(ConcreteTexturePath);
+            return ConcreteTexturePath;
+        }
 
         private static void BuildLab()
         {

@@ -283,6 +283,164 @@ namespace MobileMarket.EditorTools
             });
         }
 
+        // ---------------------------------------------------------------- mutants (field monsters)
+
+        /// <summary>
+        /// One field monster: its own controller (locomotion speeds tuned to its clips), random melee swings, and AI stats.
+        /// Clips are baked into Animations/Enemy/Enemy_{name}_*.anim from VARCO GLBs made on the monster's own rig.
+        /// </summary>
+        private class Mutant
+        {
+            public string name;
+            public string idle, walk, run, hit, death;
+            public float walkAt, runAt, walkTimeScale = 1f, runTimeScale = 1f;
+            public (string state, string clip, float hitTime)[] swings;
+            public float health, speed, sight, damage, range, aimHeight;
+            public float flinchInterval = 1.5f, hitSlow = 1f;
+            // Body collider: vertical capsule (height, radius) or, for low crawlers, one lying along Z.
+            public float colHeight, colRadius;
+            public bool colLying;
+        }
+
+        private static readonly Mutant[] Mutants =
+        {
+            // Slow, heavy brute: shrugs off flinches, three heavy blows.
+            new Mutant
+            {
+                name = "Mutant_Brute",
+                idle = "Enemy_Brute_Idle", walk = "Enemy_Brute_Walk", run = "Enemy_Brute_Run",
+                hit = "Enemy_Brute_Hit", death = "Enemy_Brute_Death",
+                walkAt = 1.0f, runAt = 1.8f,
+                swings = new[]
+                {
+                    ("Attack_Pound", "Enemy_Brute_Attack_Pound", 1.1f),
+                    ("Attack_Grab", "Enemy_Brute_Attack_Grab", 0.6f),
+                    ("Attack_Smash", "Enemy_Brute_Attack_Smash", 1.05f),
+                },
+                health = 400f, speed = 1.8f, sight = 14f, damage = 30f, range = 2.4f, aimHeight = 1.7f,
+                flinchInterval = 3f, colHeight = 2.8f, colRadius = 0.6f,
+            },
+            // Low, fast spider crawl; lunges at its target. Never stands up: idle and flinch hold the crawl pose.
+            new Mutant
+            {
+                name = "Infected_Crawler",
+                idle = "Enemy_Crawler_Idle", walk = "Enemy_Crawler_Crawl", run = "Enemy_Crawler_Crawl",
+                hit = "Enemy_Crawler_Idle", death = "Enemy_Crawler_Death",
+                walkAt = 1.5f, runAt = 3.6f, runTimeScale = 1.6f,
+                swings = new[] { ("Attack_Lunge", "Enemy_Crawler_Attack_Lunge", 0.9f) },
+                health = 60f, speed = 3.6f, sight = 12f, damage = 10f, range = 1.6f, aimHeight = 0.5f,
+                hitSlow = 0.5f, colHeight = 2.0f, colRadius = 0.45f, colLying = true,
+            },
+            // Hunched upright walk, drops to all fours (the crawler's crawl, sped up) when chasing; rears up to claw.
+            new Mutant
+            {
+                name = "Feral_Beast",
+                idle = "Enemy_Beast_Idle", walk = "Enemy_Beast_Walk", run = "Enemy_Crawler_Crawl",
+                hit = "Enemy_Brute_Hit", death = "Enemy_Brute_Death",
+                walkAt = 1.5f, runAt = 4.2f, runTimeScale = 2f,
+                swings = new[]
+                {
+                    ("Attack_Swing1", "Enemy_Beast_Attack_Swing1", 0.3f),
+                    ("Attack_Swing2", "Enemy_Beast_Attack_Swing2", 0.3f),
+                },
+                health = 150f, speed = 4.2f, sight = 16f, damage = 18f, range = 2.0f, aimHeight = 1.0f,
+                hitSlow = 0.6f, colHeight = 1.9f, colRadius = 0.55f,
+            },
+        };
+
+        /// <summary>
+        /// Builds the field monsters end to end: AC_Enemy_{Brute|Crawler|Beast} controllers with one state per swing,
+        /// then P_Enemy_{name} prefabs with collider, NavMesh agent, Zombie faction, brain, health and melee attack.
+        /// </summary>
+        [MenuItem("MobileMarket/Enemy/6. Build Mutants")]
+        public static void BuildMutants()
+        {
+            foreach (var m in Mutants)
+            {
+                string ctrlName = "AC_Enemy_" + m.name.Substring(m.name.IndexOf('_') + 1);
+                var ctrl = BuildController(ctrlName, Clip(m.idle), Clip(m.walk), Clip(m.run), Clip(m.swings[0].clip),
+                    Clip(m.hit), Clip(m.death), m.walkAt, m.runAt, m.walkTimeScale, m.runTimeScale);
+                AddSwingStates(ctrl, m.swings);
+                AssetDatabase.SaveAssets();
+                ctrl = AssetDatabase.LoadAssetAtPath<AnimatorController>(AnimDir + ctrlName + ".controller");
+
+                var model = AssetDatabase.LoadAssetAtPath<GameObject>(ModelPath(m.name));
+                if (model == null) { Debug.LogWarning("[EnemyBuilder] Missing " + ModelPath(m.name)); continue; }
+                var root = (GameObject)PrefabUtility.InstantiatePrefab(model);
+                root.name = "P_Enemy_" + m.name;
+                var animator = root.GetComponent<Animator>();
+                animator.applyRootMotion = false;
+                animator.cullingMode = AnimatorCullingMode.CullUpdateTransforms;
+                animator.runtimeAnimatorController = ctrl;
+
+                var col = root.AddComponent<CapsuleCollider>();
+                col.radius = m.colRadius;
+                col.height = m.colHeight;
+                col.direction = m.colLying ? 2 : 1;
+                col.center = new Vector3(0f, m.colLying ? m.colRadius : m.colHeight * 0.5f, 0f);
+
+                var agent = root.AddComponent<NavMeshAgent>();
+                agent.radius = Mathf.Min(m.colRadius, 0.6f);
+                agent.height = m.colLying ? m.colRadius * 2f : m.colHeight;
+                agent.speed = m.speed;
+                agent.angularSpeed = 540f;
+                agent.acceleration = 16f;
+                agent.stoppingDistance = 0f;
+                agent.autoBraking = true;
+
+                Set(root.AddComponent<FactionMember>(), "faction", p => p.enumValueIndex = (int)Faction.Zombie);
+                Set(root.GetComponent<FactionMember>(), "aimOffset", p => p.vector3Value = new Vector3(0f, m.aimHeight, 0f));
+                var health = root.AddComponent<EnemyHealth>();
+                Set(health, "maxHealth", p => p.floatValue = m.health);
+                Set(health, "flinchInterval", p => p.floatValue = m.flinchInterval);
+                var movement = root.AddComponent<EnemyMovement>();
+                Set(movement, "moveSpeed", p => p.floatValue = m.speed);
+                Set(movement, "hitSlowMultiplier", p => p.floatValue = m.hitSlow);
+                Set(root.AddComponent<EnemyBrain>(), "sightRange", p => p.floatValue = m.sight);
+
+                var melee = root.AddComponent<EnemyMeleeAttack>();
+                Set(melee, "damage", p => p.floatValue = m.damage);
+                Set(melee, "range", p => p.floatValue = m.range);
+                Set(melee, "swings", p =>
+                {
+                    p.arraySize = m.swings.Length;
+                    for (int i = 0; i < m.swings.Length; i++)
+                    {
+                        var e = p.GetArrayElementAtIndex(i);
+                        e.FindPropertyRelative("state").stringValue = m.swings[i].state;
+                        e.FindPropertyRelative("duration").floatValue = Clip(m.swings[i].clip).length;
+                        e.FindPropertyRelative("hitTime").floatValue = m.swings[i].hitTime;
+                    }
+                });
+
+                PrefabUtility.SaveAsPrefabAsset(root, PrefabPath(m.name));
+                Object.DestroyImmediate(root);
+            }
+            AssetDatabase.SaveAssets();
+        }
+
+        /// <summary>Replaces the controller's single Attack state with one state per swing, each returning to Locomotion when done.</summary>
+        private static void AddSwingStates(AnimatorController ctrl, (string state, string clip, float hitTime)[] swings)
+        {
+            var sm = ctrl.layers[0].stateMachine;
+            AnimatorState locomotion = null;
+            foreach (var child in sm.states)
+            {
+                if (child.state.name == "Locomotion") locomotion = child.state;
+                else if (child.state.name == "Attack") sm.RemoveState(child.state);
+            }
+            for (int i = 0; i < swings.Length; i++)
+            {
+                var state = sm.AddState(swings[i].state, new Vector3(500f, 120f * i, 0f));
+                state.motion = Clip(swings[i].clip);
+                var back = state.AddTransition(locomotion);
+                back.hasExitTime = true;
+                back.exitTime = 0.95f;
+                back.duration = 0.15f;
+            }
+            EditorUtility.SetDirty(ctrl);
+        }
+
         private static T GetOrAdd<T>(GameObject go) where T : Component
         {
             var existing = go.GetComponent<T>();
@@ -303,7 +461,8 @@ namespace MobileMarket.EditorTools
         /// Hit on the Hit trigger, Death once Dead is set. Driven later by the enemy AI.
         /// </summary>
         private static AnimatorController BuildController(string name, AnimationClip idle, AnimationClip walk, AnimationClip run,
-            AnimationClip attack, AnimationClip hit, AnimationClip death)
+            AnimationClip attack, AnimationClip hit, AnimationClip death,
+            float walkAt = 1.5f, float runAt = 4.5f, float walkTimeScale = 1f, float runTimeScale = 1f)
         {
             string path = AnimDir + name + ".controller";
             AssetDatabase.DeleteAsset(path);
@@ -318,8 +477,12 @@ namespace MobileMarket.EditorTools
             tree.blendParameter = "Speed";
             tree.useAutomaticThresholds = false;
             tree.AddChild(idle, 0f);
-            tree.AddChild(walk, 1.5f);
-            tree.AddChild(run, 4.5f);
+            tree.AddChild(walk, walkAt);
+            tree.AddChild(run, runAt);
+            var children = tree.children;
+            children[1].timeScale = walkTimeScale;
+            children[2].timeScale = runTimeScale;
+            tree.children = children;
             sm.defaultState = locomotion;
 
             var sAttack = sm.AddState("Attack"); sAttack.motion = attack;

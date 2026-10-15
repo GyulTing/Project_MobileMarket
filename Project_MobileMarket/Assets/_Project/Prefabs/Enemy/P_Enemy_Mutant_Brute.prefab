@@ -1,0 +1,226 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &3578106006424815184
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: f5791a9cd8d83e04dbb44e0b7854f5e1, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: f5791a9cd8d83e04dbb44e0b7854f5e1, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: f5791a9cd8d83e04dbb44e0b7854f5e1, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: f5791a9cd8d83e04dbb44e0b7854f5e1, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: f5791a9cd8d83e04dbb44e0b7854f5e1, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: f5791a9cd8d83e04dbb44e0b7854f5e1, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: f5791a9cd8d83e04dbb44e0b7854f5e1, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: f5791a9cd8d83e04dbb44e0b7854f5e1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: f5791a9cd8d83e04dbb44e0b7854f5e1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: f5791a9cd8d83e04dbb44e0b7854f5e1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: f5791a9cd8d83e04dbb44e0b7854f5e1, type: 3}
+      propertyPath: m_Name
+      value: P_Enemy_Mutant_Brute
+      objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: f5791a9cd8d83e04dbb44e0b7854f5e1, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 6335fb441550b604fadd5417ecddbe44, type: 2}
+    - target: {fileID: 5866666021909216657, guid: f5791a9cd8d83e04dbb44e0b7854f5e1, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f5791a9cd8d83e04dbb44e0b7854f5e1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1836755820548014883}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f5791a9cd8d83e04dbb44e0b7854f5e1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6678743037199952928}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f5791a9cd8d83e04dbb44e0b7854f5e1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6077721277821409982}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f5791a9cd8d83e04dbb44e0b7854f5e1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3541471100277712027}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f5791a9cd8d83e04dbb44e0b7854f5e1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6136173814335902883}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f5791a9cd8d83e04dbb44e0b7854f5e1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6672168251055178520}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: f5791a9cd8d83e04dbb44e0b7854f5e1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6987801781435111042}
+  m_SourcePrefab: {fileID: 100100000, guid: f5791a9cd8d83e04dbb44e0b7854f5e1, type: 3}
+--- !u!1 &4424388221680073473 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: f5791a9cd8d83e04dbb44e0b7854f5e1, type: 3}
+  m_PrefabInstance: {fileID: 3578106006424815184}
+  m_PrefabAsset: {fileID: 0}
+--- !u!136 &1836755820548014883
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4424388221680073473}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.6
+  m_Height: 2.8
+  m_Direction: 1
+  m_Center: {x: 0, y: 1.4, z: 0}
+--- !u!195 &6678743037199952928
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4424388221680073473}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.6
+  m_Speed: 1.8
+  m_Acceleration: 16
+  avoidancePriority: 50
+  m_AngularSpeed: 540
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2.8
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!114 &6077721277821409982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4424388221680073473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 989e6ac5372b3c144aad3c20b8f9860b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MobileMarket.Enemy.FactionMember
+  faction: 3
+  aimOffset: {x: 0, y: 1.7, z: 0}
+--- !u!114 &3541471100277712027
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4424388221680073473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96e8868ca90edb0439bc4fde8db6545d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MobileMarket.Enemy.EnemyHealth
+  maxHealth: 400
+  despawnDelay: 5
+  flinchInterval: 3
+  staggerTime: 0.5
+  hitReactions: []
+  hitStaggerFraction: 0.8
+--- !u!114 &6136173814335902883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4424388221680073473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f91ca9169c4a118409289171d76c9f61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MobileMarket.Enemy.EnemyMovement
+  moveSpeed: 1.8
+  turnSpeed: 8
+  hitSlowMultiplier: 1
+--- !u!114 &6672168251055178520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4424388221680073473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9be90a25255adb34caf96fec0d650bde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MobileMarket.Enemy.EnemyBrain
+  sightRange: 14
+  loseSightRange: 22
+  retargetInterval: 0.3
+--- !u!114 &6987801781435111042
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4424388221680073473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17c5698470b81284998459bc7771c32d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MobileMarket.Enemy.EnemyMeleeAttack
+  range: 2.4
+  damage: 30
+  swings:
+  - state: Attack_Pound
+    duration: 1.9999999
+    hitTime: 1.1
+  - state: Attack_Grab
+    duration: 2.1333334
+    hitTime: 0.6
+  - state: Attack_Smash
+    duration: 2.5333333
+    hitTime: 1.05
+  cooldown: 1.3
+  hitDelay: 0.5

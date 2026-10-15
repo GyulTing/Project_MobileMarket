@@ -1,0 +1,236 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ffbed130e6ee16429f48b57ff18f9bb, type: 3}
+  m_Name: ExcavationSite_Edits
+  m_EditorClassIdentifier: Assembly-CSharp-Editor::MobileMarket.EditorTools.ExcavationSiteEdits
+  moved:
+  - key: Military#0/P_EX_Mil_RadioMast#0
+    localPosition: {x: 156.81, y: 13.9991455, z: 158.88}
+    localRotation: {x: -0, y: 0.0871557, z: -0, w: 0.9961947}
+    localScale: {x: 1, y: 1, z: 1}
+  - key: Military#0/P_EX_Mil_TruckWreck#1
+    localPosition: {x: 104.2, y: 13.9991455, z: 127.1}
+    localRotation: {x: 0, y: -0.77162457, z: 0, w: 0.63607824}
+    localScale: {x: 1, y: 1, z: 1}
+  - key: Military#0/P_Wreck_BTR60#0
+    localPosition: {x: 181.4, y: 13.9991455, z: 105.3}
+    localRotation: {x: -0, y: 0.6087614, z: -0, w: 0.7933533}
+    localScale: {x: 1.56, y: 1.56, z: 1.56}
+  - key: Military#0/P_Wreck_BTR60#1
+    localPosition: {x: 189.1, y: 13.9991455, z: 129.1}
+    localRotation: {x: -0, y: 0.81915206, z: -0, w: 0.57357645}
+    localScale: {x: 1.56, y: 1.56, z: 1.56}
+  - key: Military#0/P_Wreck_BTR60#2
+    localPosition: {x: 142.41, y: 13.9991455, z: 76.33}
+    localRotation: {x: -0, y: 0.25881907, z: -0, w: 0.9659259}
+    localScale: {x: 1.56, y: 1.56, z: 1.56}
+  - key: Excavation#0/Dig#0/P_EX_Exc_RuinWall#0
+    localPosition: {x: -307.37, y: -10.000732, z: 97.21}
+    localRotation: {x: 0, y: -0.877983, z: 0, w: 0.47869185}
+    localScale: {x: 1, y: 1, z: 1}
+  - key: Excavation#0/Dig#0/P_EX_Exc_Statue#0
+    localPosition: {x: -318.32, y: -10.000732, z: 102.51}
+    localRotation: {x: 0, y: -0.721579, z: 0, w: 0.69233215}
+    localScale: {x: 1, y: 1, z: 1}
+  - key: Excavation#0/Dig#0/P_EX_Exc_Scaffolding#0
+    localPosition: {x: -289.05, y: -10.000732, z: 127.44}
+    localRotation: {x: 0, y: -0.24022801, z: 0, w: 0.9707165}
+    localScale: {x: 1, y: 1, z: 1}
+  - key: Excavation#0/Dig#0/P_EX_Exc_Crane#0
+    localPosition: {x: -238.8, y: -9.9, z: 110.1}
+    localRotation: {x: -0, y: 0.8660254, z: -0, w: -0.50000006}
+    localScale: {x: 1, y: 1, z: 1}
+  - key: Excavation#0/Dig#0/P_EX_Exc_Sifting#0
+    localPosition: {x: -253.08, y: -10.000732, z: 85.07}
+    localRotation: {x: 0, y: 0.87923324, z: -0, w: -0.4763916}
+    localScale: {x: 1, y: 1, z: 1}
+  - key: Excavation#0/Dig#0/P_EX_Exc_Sifting#1
+    localPosition: {x: -281.2, y: -10.000732, z: 121.63}
+    localRotation: {x: -0, y: 0.1736482, z: -0, w: 0.9848078}
+    localScale: {x: 1, y: 1, z: 1}
+  - key: Excavation#0/Dig#0/P_EX_Exc_ArtifactCrates#0
+    localPosition: {x: -227.4, y: -10.000732, z: 101.54}
+    localRotation: {x: -0, y: -0, z: -0, w: 1}
+    localScale: {x: 1, y: 1, z: 1}
+  - key: Excavation#0/Dig#0/P_EX_Exc_ArtifactCrates#1
+    localPosition: {x: -273.84, y: -10.000732, z: 111.28}
+    localRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+    localScale: {x: 1, y: 1, z: 1}
+  - key: Excavation#0/Dig#0/P_EX_Exc_WorkLight#1
+    localPosition: {x: -287.14, y: -10.000732, z: 113.76}
+    localRotation: {x: -0, y: 0.7071068, z: -0, w: -0.7071068}
+    localScale: {x: 1, y: 1, z: 1}
+  - key: Excavation#0/Dig#0/P_EX_Camp_Tent#0
+    localPosition: {x: -259.17, y: -10.000732, z: 81.21}
+    localRotation: {x: -0, y: -0, z: -0, w: 1}
+    localScale: {x: 1, y: 1, z: 1}
+  - key: Excavation#0/Dig#0/P_EX_Mil_Generator#0
+    localPosition: {x: -277, y: -10.000732, z: 111.08}
+    localRotation: {x: 0, y: 0.99932843, z: -0, w: -0.036643673}
+    localScale: {x: 1, y: 1, z: 1}
+  - key: Excavation#0/Dig#0/P_EX_Exc_RuinWall#1
+    localPosition: {x: -303.23, y: -10.000732, z: 123.48}
+    localRotation: {x: 0, y: -0.16203439, z: 0, w: 0.9867851}
+    localScale: {x: 1, y: 1, z: 1}
+  - key: Excavation#0/Dig#0/P_EX_Exc_Scaffolding#1
+    localPosition: {x: -238.29, y: -9.980032, z: 75.01}
+    localRotation: {x: -0, y: -0, z: -0, w: 1}
+    localScale: {x: 1, y: 1, z: 1}
+  - key: Excavation#0/Dig#0/P_EX_Exc_ArtifactCrates#3
+    localPosition: {x: -224.97, y: -10.000732, z: 104.93}
+    localRotation: {x: -0, y: 0.25881907, z: -0, w: 0.9659259}
+    localScale: {x: 1, y: 1, z: 1}
+  - key: Excavation#0/Dig#0/P_EX_Exc_Sifting#2
+    localPosition: {x: -255.65, y: -10.000732, z: 112.17}
+    localRotation: {x: -0, y: 0.1736483, z: -0, w: -0.9848077}
+    localScale: {x: 1, y: 1, z: 1}
+  - key: Excavation#0/Camp#0/P_EX_Camp_Container#1
+    localPosition: {x: -105.89, y: -0.0004272461, z: 18.09}
+    localRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+    localScale: {x: 1, y: 1, z: 1}
+  - key: Excavation#0/Camp#0/P_EX_Camp_Container#2
+    localPosition: {x: -159.38, y: -0.0004272461, z: 47.01}
+    localRotation: {x: -0, y: -0, z: -0, w: 1}
+    localScale: {x: 1, y: 1, z: 1}
+  - key: Excavation#0/Camp#0/P_EX_Camp_Container#3
+    localPosition: {x: -169.38, y: -0.49762058, z: 47.01}
+    localRotation: {x: -0, y: -0, z: -0, w: 1}
+    localScale: {x: 1, y: 1, z: 1}
+  - key: Excavation#0/Camp#0/P_EX_Camp_Campfire#1
+    localPosition: {x: -124.05, y: -0.0004272461, z: 42.31}
+    localRotation: {x: -0, y: -0, z: -0, w: 1}
+    localScale: {x: 1, y: 1, z: 1}
+  - key: Laboratory#0/P_EX_Lab_RadarDome#0
+    localPosition: {x: 170.22, y: 0.04, z: -68.74}
+    localRotation: {x: -0, y: -0, z: -0, w: 1}
+    localScale: {x: 1, y: 1, z: 1}
+  - key: Laboratory#0/P_EX_Lab_SatDish#0
+    localPosition: {x: 132.07, y: 16.55, z: -86.21}
+    localRotation: {x: -0, y: 0.25881913, z: -0, w: -0.9659258}
+    localScale: {x: 1, y: 1, z: 1}
+  - key: Laboratory#0/P_EX_Lab_Dormitory#0
+    localPosition: {x: 44.43, y: 5.0007935, z: -135.59}
+    localRotation: {x: -0, y: 0.7071068, z: -0, w: -0.7071068}
+    localScale: {x: 1, y: 1, z: 1}
+  - key: Laboratory#0/P_EX_Lab_Warehouse#0
+    localPosition: {x: 100.42, y: 5.0007935, z: -146.39}
+    localRotation: {x: -0, y: 1, z: -0, w: -0.00000004371139}
+    localScale: {x: 1, y: 1, z: 1}
+  - key: Laboratory#0/P_EX_Lab_Greenhouse#0
+    localPosition: {x: 141.6, y: 5.0007935, z: -145.06}
+    localRotation: {x: -0, y: 1, z: -0, w: -0.00000004371139}
+    localScale: {x: 1, y: 1, z: 1}
+  - key: Laboratory#0/P_EX_Lab_Checkpoint#0
+    localPosition: {x: 61.49, y: 5.0007935, z: -42.1}
+    localRotation: {x: 0, y: 0.23632944, z: 0, w: 0.9716731}
+    localScale: {x: 1, y: 1, z: 1}
+  - key: Laboratory#0/P_EX_Lab_Transformer#0
+    localPosition: {x: 69.75, y: 5.0007935, z: -118.92}
+    localRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+    localScale: {x: 1, y: 1, z: 1}
+  - key: Laboratory#0/P_EX_Mil_Generator#0
+    localPosition: {x: 76.74, y: 5.0007935, z: -119.55}
+    localRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+    localScale: {x: 1, y: 1, z: 1}
+  - key: Laboratory#0/P_EX_Mil_FuelDrums#0
+    localPosition: {x: 86.22, y: 5.0007935, z: -147.08}
+    localRotation: {x: -0, y: -0, z: -0, w: 1}
+    localScale: {x: 1, y: 1, z: 1}
+  - key: Laboratory#0/P_EX_Lab_HazardDrums#0
+    localPosition: {x: 86.2, y: 5.0007935, z: -143.1}
+    localRotation: {x: -0, y: -0, z: -0, w: 1}
+    localScale: {x: 1, y: 1, z: 1}
+  - key: Laboratory#0/P_EX_Lab_HazardDrums#2
+    localPosition: {x: 154.38, y: 5.0007935, z: -152.57}
+    localRotation: {x: -0, y: -0, z: -0, w: 1}
+    localScale: {x: 1, y: 1, z: 1}
+  - key: Laboratory#0/P_EX_Lab_LampPost#0
+    localPosition: {x: 106.6, y: 5.0007935, z: -107.7}
+    localRotation: {x: 0, y: 0, z: 0, w: 1}
+    localScale: {x: 1, y: 1, z: 1}
+  - key: Laboratory#0/P_EX_Lab_LampPost#1
+    localPosition: {x: 143.84, y: 4.89, z: -111.6}
+    localRotation: {x: 0, y: 0, z: 0, w: 1}
+    localScale: {x: 1, y: 1, z: 1}
+  - key: Laboratory#0/P_EX_Lab_LampPost#1/EX_Lab_LampPost#0
+    localPosition: {x: -0.03, y: -0, z: 0.57}
+    localRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+    localScale: {x: 7.5599165, y: 7.5599165, z: 7.5599165}
+  - key: Laboratory#0/P_EX_Lab_LampPost#2
+    localPosition: {x: 75.7, y: 5.0007935, z: -128.7}
+    localRotation: {x: 0, y: 1, z: 0, w: 0}
+    localScale: {x: 1, y: 1, z: 1}
+  - key: Laboratory#0/P_EX_Lab_LampPost#3
+    localPosition: {x: 144.63, y: 5.0007935, z: -129.44}
+    localRotation: {x: 0, y: 1, z: 0, w: 0}
+    localScale: {x: 1, y: 1, z: 1}
+  - key: Laboratory#0/P_EX_Lab_LampPost#6
+    localPosition: {x: 121.56, y: 5.0007935, z: -129.66}
+    localRotation: {x: -0, y: 1, z: -0, w: -0.00000004371139}
+    localScale: {x: 1, y: 1, z: 1}
+  - key: Laboratory#0/P_EX_Lab_AuxLab#2
+    localPosition: {x: 63.63, y: 5.0007935, z: -144.87}
+    localRotation: {x: 0, y: 1, z: 0, w: 0}
+    localScale: {x: 1, y: 1, z: 1}
+  - key: Laboratory#0/P_EX_Camp_Tent#0
+    localPosition: {x: 70.17, y: 5.0007935, z: -106.93}
+    localRotation: {x: -0, y: -0, z: -0, w: 1}
+    localScale: {x: 1, y: 1, z: 1}
+  - key: Laboratory#0/P_EX_Camp_Container#0
+    localPosition: {x: 165.07, y: 5.0007935, z: -148.42}
+    localRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+    localScale: {x: 1, y: 1, z: 1}
+  - key: Laboratory#0/P_EX_Camp_Container#1
+    localPosition: {x: 171.51, y: 5.0007935, z: -148.47}
+    localRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+    localScale: {x: 1, y: 1, z: 1}
+  - key: Laboratory#0/P_EX_Camp_Container#2
+    localPosition: {x: 57.62, y: 5.0007935, z: -117.04}
+    localRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+    localScale: {x: 1, y: 1, z: 1}
+  - key: Laboratory#0/P_EX_Camp_Container#3
+    localPosition: {x: 52.26, y: 5.0007935, z: -116.67}
+    localRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+    localScale: {x: 1, y: 1, z: 1}
+  - key: Laboratory#0/P_EX_Mil_Sandbags#0
+    localPosition: {x: 53.02, y: 5.0007935, z: -52.36}
+    localRotation: {x: -0, y: -0, z: -0, w: 1}
+    localScale: {x: 1, y: 1, z: 1}
+  - key: Laboratory#0/P_EX_Mil_Sandbags#1
+    localPosition: {x: 65.85, y: 5.0007935, z: -52.12}
+    localRotation: {x: -0, y: -0, z: -0, w: 1}
+    localScale: {x: 1, y: 1, z: 1}
+  - key: Laboratory#0/P_EX_Mil_Sandbags#2
+    localPosition: {x: 37.7, y: 4.57646, z: -94.57}
+    localRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+    localScale: {x: 1, y: 1, z: 1}
+  - key: Laboratory#0/P_EX_Mil_Sandbags#3
+    localPosition: {x: 37.77, y: 5.0007935, z: -105.79}
+    localRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+    localScale: {x: 1, y: 1, z: 1}
+  - key: Laboratory#0/P_Wreck_BTR80#0
+    localPosition: {x: 83.2, y: 5.0007935, z: -121.29}
+    localRotation: {x: -0, y: 0.1736482, z: -0, w: 0.9848078}
+    localScale: {x: 1.56, y: 1.56, z: 1.56}
+  - key: Bridges#0/P_EX_Env_Bridge#0
+    localPosition: {x: 9.74, y: -6.917029, z: 94.78}
+    localRotation: {x: -0.00046031288, y: -0.0586077, z: 0.007840393, w: 0.9982502}
+    localScale: {x: 1, y: 0.97, z: 1}
+  - key: Bridges#0/P_EX_Env_Bridge#1
+    localPosition: {x: -16.3, y: -7.49, z: -44.2}
+    localRotation: {x: 0, y: 0.0061086393, z: 0, w: 0.99998134}
+    localScale: {x: 1.1, y: 0.96, z: 1.15}
+  - key: Excavation#0/P_EX_Exc_CaveEntrance#0
+    localPosition: {x: -323.22186, y: -10.81, z: 113.444374}
+    localRotation: {x: -0, y: -0.6339889, z: -0, w: 0.77334213}
+    localScale: {x: 1, y: 1, z: 1}
+  removed: []

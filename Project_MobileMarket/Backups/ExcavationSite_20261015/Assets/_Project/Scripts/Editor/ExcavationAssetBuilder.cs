@@ -290,8 +290,9 @@ namespace MobileMarket.EditorTools
             nav.shape = NavMeshObstacleShape.Box;
             nav.center = b.center;
             nav.size = b.size;
-            nav.carving = true;
-            nav.carveOnlyStationary = true;
+            // No carving: the NavMesh runs right up to and under props so agents can close in; they steer around
+            // the obstacle locally instead of the path keeping an agent-radius ring clear of it.
+            nav.carving = false;
         }
 
         private static void Save(GameObject root)
