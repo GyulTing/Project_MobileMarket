@@ -111,7 +111,13 @@ namespace MobileMarket.Managers
 
             var spot = PickSpot();
             if (spot == null) return;
-            if (truckPrefab != null) Instantiate(truckPrefab, spot.transform.position, spot.transform.rotation);
+            if (spot.TruckPlaced)
+            {
+                HideOtherPlacedTrucks(spot);
+                // A scene with its own trucks always starts the player at one, even when played straight from the editor.
+                movePlayerOnArrival = true;
+            }
+            else if (truckPrefab != null) Instantiate(truckPrefab, spot.transform.position, spot.transform.rotation);
 
             if (movePlayerOnArrival && player != null)
             {
@@ -128,6 +134,15 @@ namespace MobileMarket.Managers
             if (spots.Count == 0) return null;
             bool random = CurrentRegion != null && CurrentRegion.Type == RegionType.Combat;
             return spots[random ? UnityEngine.Random.Range(0, spots.Count) : 0];
+        }
+
+        /// <summary>Only the chosen truck stays in the scene (hiding a spot takes it off the active list, so work on a copy).</summary>
+        private static void HideOtherPlacedTrucks(ParkingSpot chosen)
+        {
+            var spots = new ParkingSpot[ParkingSpot.Active.Count];
+            for (int i = 0; i < spots.Length; i++) spots[i] = ParkingSpot.Active[i];
+            foreach (var spot in spots)
+                if (spot != chosen && spot.TruckPlaced) spot.gameObject.SetActive(false);
         }
 
         private RegionData FindRegion(string sceneName)

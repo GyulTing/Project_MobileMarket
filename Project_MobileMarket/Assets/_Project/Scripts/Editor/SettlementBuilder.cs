@@ -754,7 +754,7 @@ namespace MobileMarket.EditorTools
 
         private const float TerrainW = 880f, TerrainD = 400f, TerrainH = 20f;
         private static readonly Vector3 TerrainOrigin = new Vector3(-440f, 0f, -210f);
-        private const string TerrainDataPath = "Assets/_Project/Scenes/Main/TD_SmallSettlement2.asset";
+        private const string TerrainDataPath = "Assets/_Project/Scenes/Main/Terrain/TD_SmallSettlement2.asset";
 
         // Compound interior + warehouse yard, and the roads that run out to the map edges (meters, min/max corners).
         private static Rect CompoundRect => RectFromPx(45, 95, 1465, 365);

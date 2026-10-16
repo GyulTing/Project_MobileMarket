@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 namespace MobileMarket.EditorTools
 {
     /// <summary>
-    /// Lays out the player's settlement (Scenes/Main/Player_Settlement) after its preview art: a rounded perimeter of the
+    /// Lays out the player's settlement (Scenes/Main/Map/Player_Settlement) after its preview art: a rounded perimeter of the
     /// VARCO wall variants with a north gate, the player's container-and-plank house and water tower in the north-west, a farm in the south-east,
     /// a road from the gate down to the open lot in the west (left empty for the player's truck), desert terrain and scrub
     /// around it, and a NavMesh. Landmarks (gate, house, windmills, greenhouses...) come from the P_Settle_* prefabs
@@ -20,11 +20,11 @@ namespace MobileMarket.EditorTools
     /// </summary>
     public static class PlayerSettlementBuilder
     {
-        private const string ScenePath = "Assets/_Project/Scenes/Main/Player_Settlement.unity";
+        private const string ScenePath = "Assets/_Project/Scenes/Main/Map/Player_Settlement.unity";
         private const string TestScenePath = "Assets/_Project/Scenes/Test/TestScene.unity";
         private const string RootName = "PlayerSettlement";
-        private const string TerrainDataPath = "Assets/_Project/Scenes/Main/TD_PlayerSettlement.asset";
-        private const string NavMeshDataPath = "Assets/_Project/Scenes/Main/NavMesh_PlayerSettlement.asset";
+        private const string TerrainDataPath = "Assets/_Project/Scenes/Main/Terrain/TD_PlayerSettlement.asset";
+        private const string NavMeshDataPath = "Assets/_Project/Scenes/Main/NavMesh/NavMesh_PlayerSettlement.asset";
         private const string MatDir = "Assets/_Project/Materials/";
         private const string SettleModels = "Assets/_Project/Models/Settlement/";
         private const string EnvPrefabs = "Assets/_Project/Prefabs/Environment/";

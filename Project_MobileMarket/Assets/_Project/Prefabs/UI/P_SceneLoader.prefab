@@ -232,6 +232,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1721488673cc33d40a81f40bc8a4b2e4, type: 2}
   - {fileID: 11400000, guid: 64b932e65234f534dad5a0a24901b83d, type: 2}
   - {fileID: 11400000, guid: f4133a43b052b404ba8ef249b18c13a6, type: 2}
+  - {fileID: 11400000, guid: b98c0150ed7421945b391fea51540b97, type: 2}
   homeRegion: {fileID: 11400000, guid: 6314aa0e7dd0a464099b51d7a1ed8602, type: 2}
   truckPrefab: {fileID: 7997379834688818856, guid: 03f32679350d9c14aa80646f9eefb9b9, type: 3}
   loadingScreen: {fileID: 386753619781557593}

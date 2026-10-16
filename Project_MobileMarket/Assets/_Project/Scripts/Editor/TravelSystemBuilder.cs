@@ -27,9 +27,10 @@ namespace MobileMarket.EditorTools
         private const string PlayerPrefabPath = "Assets/_Project/Prefabs/Player/P_Player.prefab";
         private const string FontDir = "Assets/_Project/Fonts/";
 
-        private const string HomeScene = "Assets/_Project/Scenes/Main/Player_Settlement.unity";
-        private const string WaypointScene = "Assets/_Project/Scenes/Main/Small_Settlement 2.unity";
+        private const string HomeScene = "Assets/_Project/Scenes/Main/Map/Player_Settlement.unity";
+        private const string WaypointScene = "Assets/_Project/Scenes/Main/Map/Small_Settlement 2.unity";
         private const string TestScene = "Assets/_Project/Scenes/Test/TestScene.unity";
+        private const string ExcavationScene = "Assets/_Project/Scenes/Main/Map/Excavation site.unity";
 
         private static readonly Color TextColor = new Color32(232, 226, 210, 255);
         private static readonly Color CaptionColor = new Color32(165, 158, 140, 255);
@@ -51,12 +52,14 @@ namespace MobileMarket.EditorTools
             var rust = Region("Region_RustMarket", "RUST MARKET", RegionType.Settlement, "", new Vector2(0.70f, 0.78f), true);
             var wastes = Region("Region_AshenWastes", "ASHEN WASTES", RegionType.Combat, "TestScene", new Vector2(0.27f, 0.45f), false);
             var woods = Region("Region_BlackpineWoods", "BLACKPINE WOODS", RegionType.Combat, "TestScene", new Vector2(0.80f, 0.66f), false);
+            var excavation = Region("Region_ExcavationSite", "EXCAVATION SITE", RegionType.Combat, "Excavation site", new Vector2(0.40f, 0.62f), false);
 
-            Connect(home, waypoint, rust, wastes, woods);
+            Connect(home, waypoint, rust, wastes, woods, excavation);
             Connect(waypoint, wastes);
             Connect(rust);
             Connect(wastes);
             Connect(woods);
+            Connect(excavation);
             AssetDatabase.SaveAssets();
         }
 
@@ -91,6 +94,7 @@ namespace MobileMarket.EditorTools
         private static RegionData[] AllRegions() => new[]
         {
             Load("Region_Home"), Load("Region_Waypoint"), Load("Region_RustMarket"), Load("Region_AshenWastes"), Load("Region_BlackpineWoods"),
+            Load("Region_ExcavationSite"),
         };
 
         private static RegionData Load(string asset) => AssetDatabase.LoadAssetAtPath<RegionData>(RegionDir + asset + ".asset");
@@ -329,6 +333,7 @@ namespace MobileMarket.EditorTools
                 new EditorBuildSettingsScene(HomeScene, true),
                 new EditorBuildSettingsScene(WaypointScene, true),
                 new EditorBuildSettingsScene(TestScene, true),
+                new EditorBuildSettingsScene(ExcavationScene, true),
             };
         }
 
