@@ -7,7 +7,7 @@ namespace MobileMarket.Enemy
     /// <summary>
     /// The boss's straight-flying round (20 mm). Pooled. Sweeps the distance it covers each frame so it can't skip through
     /// thin colliders; passes through the boss's own parts (turrets, vents, walls of the rig under the ignored root),
-    /// hurts only the player side, and stops on anything else (walls, cover).
+    /// hurts any fighter it hits (the player, and zombies caught in the fire), and stops on anything else (walls, cover).
     /// </summary>
     public class BossProjectile : MonoBehaviour
     {
@@ -18,7 +18,14 @@ namespace MobileMarket.Enemy
         [SerializeField] private float maxLifetime = 15f;
         [Tooltip("Spawned where the round hits anything but the player (sparks on walls and cover).")]
         [SerializeField] private GameObject impactPrefab;
+        [Tooltip("Played where the round hits a wall or cover.")]
+        [SerializeField] private SoundEffect impactSound = new SoundEffect();
+        [Tooltip("Whizz played once when the round passes within passDistance of the player.")]
+        [SerializeField] private SoundEffect passSound = new SoundEffect();
+        [SerializeField] private float passDistance = 2.5f;
 
+        private Transform player;
+        private bool passed;
         private float speed;
         private float damage;
         private float levelHeight;
@@ -38,6 +45,15 @@ namespace MobileMarket.Enemy
             ignoreRoot = ownerRoot;
             levelHeight = flyLevelAt;
             dieTime = Time.time + maxLifetime;
+            passed = false;
+            player = FindPlayer();
+        }
+
+        private static Transform FindPlayer()
+        {
+            var members = FactionMember.Active;
+            for (int i = 0; i < members.Count; i++) if (members[i].Faction == Faction.Player) return members[i].transform;
+            return null;
         }
 
         private void Update()
@@ -60,7 +76,7 @@ namespace MobileMarket.Enemy
             {
                 var hit = HitBuffer[bestIndex];
                 var member = hit.collider.GetComponent<FactionMember>();
-                if (member != null && member.Faction == Faction.Player)
+                if (member != null)
                 {
                     hit.collider.GetComponent<IHitReaction>()?.OnHit(hit.point, dir);
                     hit.collider.GetComponent<IDamageable>()?.TakeDamage(damage);
@@ -79,6 +95,12 @@ namespace MobileMarket.Enemy
                 if (dir.sqrMagnitude > 0.0001f) transform.forward = dir.normalized;
             }
             transform.position = next;
+
+            if (!passed && player != null && (next - player.position).sqrMagnitude <= passDistance * passDistance)
+            {
+                passed = true;
+                SoundManager.PlayAt(passSound, next);
+            }
         }
 
         /// <summary>The boss's own rig (any turret or camera, the boss body) never stops its rounds; walls, vents and cover do.</summary>
@@ -90,6 +112,7 @@ namespace MobileMarket.Enemy
 
         private void SpawnImpact(RaycastHit hit)
         {
+            SoundManager.PlayAt(impactSound, hit.point);
             if (impactPrefab == null) return;
             // Sparks fly back out of the surface.
             var rot = Quaternion.LookRotation(hit.normal.sqrMagnitude > 0.01f ? hit.normal : -transform.forward);

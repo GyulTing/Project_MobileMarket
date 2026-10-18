@@ -26,4 +26,5 @@ MonoBehaviour:
   magazineSize: 30
   pelletCount: 1
   weaponModelPrefab: {fileID: 2505183761395143770, guid: 805b5e9eb8ffce34fb88035301335829, type: 3}
+  hudIcon: {fileID: 21300000, guid: 1e19fd977dfe1a440af5d39b4f95fb21, type: 3}
   muzzleOffset: {x: 0.000000007761021, y: 0.04674999, z: 0.45375}

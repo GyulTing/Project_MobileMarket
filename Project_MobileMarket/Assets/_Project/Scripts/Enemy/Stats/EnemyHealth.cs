@@ -45,7 +45,7 @@ namespace MobileMarket.Enemy
         public event Action<float> OnStaggered;
 
         public float CurrentHealth { get; private set; }
-        public float MaxHealth => maxHealth;
+        public float MaxHealth { get; private set; }
         public bool IsDead { get; private set; }
 
         private Animator animator;
@@ -66,6 +66,8 @@ namespace MobileMarket.Enemy
 
         private void OnEnable()
         {
+            // Every life (fresh or reused from the pool) starts at the prefab's health; spawners may override it after.
+            MaxHealth = maxHealth;
             CurrentHealth = maxHealth;
             IsDead = false;
             nextFlinchTime = 0f;
@@ -78,12 +80,21 @@ namespace MobileMarket.Enemy
             }
         }
 
+        /// <summary>Sets the max health (and fills up to it) for this life only; the next spawn starts from the prefab's value again.</summary>
+        public void SetMaxHealthForThisLife(float value)
+        {
+            if (IsDead || value <= 0f) return;
+            MaxHealth = value;
+            CurrentHealth = value;
+            OnHealthChanged?.Invoke(CurrentHealth, MaxHealth);
+        }
+
         public void TakeDamage(float amount)
         {
             if (IsDead || amount <= 0f) return;
 
             CurrentHealth = Mathf.Max(0f, CurrentHealth - amount);
-            OnHealthChanged?.Invoke(CurrentHealth, maxHealth);
+            OnHealthChanged?.Invoke(CurrentHealth, MaxHealth);
 
             if (CurrentHealth > 0f)
             {

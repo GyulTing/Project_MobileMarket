@@ -88,6 +88,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6bfa3b270a025664c809ac8ec608a8b9, type: 3}
       insertIndex: -1
       addedObject: {fileID: 499297062602188495}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6bfa3b270a025664c809ac8ec608a8b9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 399546881437189395}
   m_SourcePrefab: {fileID: 100100000, guid: 6bfa3b270a025664c809ac8ec608a8b9, type: 3}
 --- !u!1 &6343837828759022676 stripped
 GameObject:
@@ -207,6 +210,7 @@ MonoBehaviour:
   sightRange: 12
   loseSightRange: 22
   retargetInterval: 0.3
+  rallyArriveDistance: 1.5
 --- !u!114 &681293848034135659
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -246,3 +250,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MobileMarket.VFX.BloodOnHit
   effectPrefab: {fileID: 5040552479276350800, guid: 8c3523a002cc5b3488f175be0ba73113, type: 3}
+--- !u!114 &399546881437189395
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6343837828759022676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7307de36ac2bbc84ab52bf899eb656a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MobileMarket.Enemy.EnemyVoice
+  clips:
+  - {fileID: 8300000, guid: f630ab84026acdb4f996fc88cbe837a4, type: 3}
+  - {fileID: 8300000, guid: 57d508cb8ab540241b7fee6343c29918, type: 3}
+  - {fileID: 8300000, guid: b72218ce7fe85b846bd50e6e03feb0bc, type: 3}
+  volume: 0.5
+  pitchJitter: 0.08
+  interval: {x: 4, y: 9}
+  minDistance: 24
+  maxDistance: 45

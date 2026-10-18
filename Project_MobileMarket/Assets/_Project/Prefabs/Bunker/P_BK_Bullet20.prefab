@@ -169,6 +169,23 @@ MonoBehaviour:
   radius: 0.12
   maxLifetime: 15
   impactPrefab: {fileID: 2665760186929459911, guid: d15a9f97f17d0b04cb43dc3f46e9aaa9, type: 3}
+  impactSound:
+    clip: {fileID: 8300000, guid: 77416e26bb0572342937810b158cc268, type: 3}
+    volume: 0.5
+    pitchJitter: 0.06
+    maxDuration: 0
+    minInterval: 0.05
+    maxVoices: 4
+    global: 0
+  passSound:
+    clip: {fileID: 8300000, guid: 51231e523f404ea4d953b4cdbf9c5012, type: 3}
+    volume: 0.6
+    pitchJitter: 0.06
+    maxDuration: 0
+    minInterval: 0.12
+    maxVoices: 2
+    global: 0
+  passDistance: 2.5
 --- !u!1 &7573156386610269513
 GameObject:
   m_ObjectHideFlags: 0

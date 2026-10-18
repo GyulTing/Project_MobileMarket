@@ -37,6 +37,13 @@ namespace MobileMarket.Items
         public int pelletCount = 1;
         public GameObject weaponModelPrefab;
 
+        [Tooltip("White side-profile silhouette (muzzle left) for the in-game HUD. Without one the HUD draws the inventory icon as a silhouette.")]
+        public Sprite hudIcon;
+
+        [Tooltip("One shot (a single round, with its tail), played for every round fired.")]
+        public AudioClip fireSound;
+        [Range(0f, 1f)] public float fireVolume = 0.8f;
+
         [Tooltip("Muzzle position in the weapon model's local space (barrel along +Z). Filled by MobileMarket > Bake Weapon Muzzles.")]
         public Vector3 muzzleOffset;
     }

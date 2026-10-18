@@ -14,6 +14,8 @@ namespace MobileMarket.Enemy
         [SerializeField] private BossProjectile bulletPrefab;
         [SerializeField] private float bulletSpeed = 10f;
         [SerializeField] private float damage = 5f;
+        [Tooltip("Looping fire sound, on while a sweep or fan is running.")]
+        [SerializeField] private AudioSource fireLoop;
 
         [Header("Sweep")]
         [SerializeField] private float sweepHalfAngle = 55f;
@@ -42,6 +44,7 @@ namespace MobileMarket.Enemy
             float range = FlatDistance(player.position, aim.Muzzle.position);
             float side = Random.value < 0.5f ? -1f : 1f;
             float shotTimer = 0f;
+            SetFiring(true);
             for (float t = 0f; t < sweepDuration; t += Time.deltaTime)
             {
                 float angle = Mathf.Lerp(-sweepHalfAngle, sweepHalfAngle, t / sweepDuration) * side;
@@ -55,11 +58,13 @@ namespace MobileMarket.Enemy
                 }
                 yield return null;
             }
+            SetFiring(false);
         }
 
         /// <summary>A few spread volleys aimed at the player.</summary>
         public IEnumerator Fan(Transform player)
         {
+            SetFiring(true);
             for (int v = 0; v < fanVolleys; v++)
             {
                 Vector3 toPlayer = Flat(player.position - aim.Muzzle.position);
@@ -73,9 +78,17 @@ namespace MobileMarket.Enemy
                 }
                 yield return fanWait;
             }
+            SetFiring(false);
         }
 
         public void Track(Vector3 point) => aim.AimAt(point);
+
+        private void SetFiring(bool firing)
+        {
+            if (fireLoop == null) return;
+            if (firing && !fireLoop.isPlaying) fireLoop.Play();
+            else if (!firing) fireLoop.Stop();
+        }
 
         /// <summary>Fires along a ground direction, dipping so the round reaches chest height at the given range.</summary>
         private void Fire(Vector3 flatDir, float range)

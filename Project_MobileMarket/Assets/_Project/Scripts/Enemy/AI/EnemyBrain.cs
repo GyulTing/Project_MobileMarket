@@ -5,12 +5,13 @@ namespace MobileMarket.Enemy
     /// <summary>
     /// Enemy decision making: Idle until a hostile fighter (other faction or the player) is seen within sightRange,
     /// then Chase it and Attack once in range with a clear line of sight; back to Idle when the target dies or is lost.
+    /// Given a rally point (SetRallyPoint), it walks there instead of standing idle until it arrives or spots a target.
     /// Targets are re-evaluated a few times a second. A Patrol state (walking the map's routes) slots in later in place of Idle.
     /// </summary>
     [RequireComponent(typeof(FactionMember), typeof(EnemyMovement), typeof(EnemyHealth))]
     public class EnemyBrain : MonoBehaviour
     {
-        public enum State { Idle, Chase, Attack, Dead }
+        public enum State { Idle, Rally, Chase, Attack, Dead }
 
         private static readonly RaycastHit[] SightHits = new RaycastHit[8];
         private const float RepathDistance = 0.5f;
@@ -19,6 +20,8 @@ namespace MobileMarket.Enemy
         [Tooltip("A target already being chased is only dropped beyond this distance.")]
         [SerializeField] private float loseSightRange = 22f;
         [SerializeField] private float retargetInterval = 0.3f;
+        [Tooltip("Within this distance of the rally point it counts as arrived and goes idle.")]
+        [SerializeField] private float rallyArriveDistance = 1.5f;
 
         public State CurrentState { get; private set; }
         public FactionMember Target { get; private set; }
@@ -29,6 +32,8 @@ namespace MobileMarket.Enemy
         private EnemyAttack attack;
         private float nextRetargetTime;
         private Vector3 chaseDestination;
+        private bool hasRallyPoint;
+        private Vector3 rallyPoint;
 
         private void Awake()
         {
@@ -42,6 +47,7 @@ namespace MobileMarket.Enemy
         {
             CurrentState = State.Idle;
             Target = null;
+            hasRallyPoint = false;   // reused from the pool: forget the last life's rally point
             // Spread the target checks of a freshly spawned group over different frames.
             nextRetargetTime = Time.time + Random.Range(0f, retargetInterval);
             health.OnDied += HandleDied;
@@ -64,7 +70,8 @@ namespace MobileMarket.Enemy
 
             if (Target == null)
             {
-                EnterIdle();
+                if (hasRallyPoint) Rally();
+                else EnterIdle();
                 return;
             }
 
@@ -90,6 +97,29 @@ namespace MobileMarket.Enemy
                     movement.MoveTo(targetPosition);
                 }
             }
+        }
+
+        /// <summary>Walk to this point while no target is in sight (e.g. where the player was last seen); idle on arrival.</summary>
+        public void SetRallyPoint(Vector3 point)
+        {
+            rallyPoint = point;
+            hasRallyPoint = true;
+            if (CurrentState == State.Rally) movement.MoveTo(rallyPoint);
+        }
+
+        private void Rally()
+        {
+            if (FlatDistance(rallyPoint) <= rallyArriveDistance)
+            {
+                hasRallyPoint = false;
+                EnterIdle();
+                return;
+            }
+            if (CurrentState == State.Rally) return;
+            // Coming here from Idle or from losing a target: (re)issue the walk once.
+            CurrentState = State.Rally;
+            if (attack != null) attack.End();
+            movement.MoveTo(rallyPoint);
         }
 
         private void EnterIdle()

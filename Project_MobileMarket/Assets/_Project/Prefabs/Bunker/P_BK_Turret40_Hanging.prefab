@@ -343,6 +343,7 @@ GameObject:
   - component: {fileID: 1335928882347956280}
   - component: {fileID: 6033327961253636775}
   - component: {fileID: 6420726495080075471}
+  - component: {fileID: 561843112466346341}
   m_Layer: 0
   m_Name: P_BK_Turret40_Hanging
   m_TagString: Untagged
@@ -428,6 +429,17 @@ MonoBehaviour:
   yawLimit: 75
   pitchMin: -65
   pitchMax: 20
+  servoSource: {fileID: 561843112466346341}
+  servoMaxVolume: 0.35
+  servoFade: 4
+  powerDownSound:
+    clip: {fileID: 8300000, guid: 7259b9e295370ef4cb734149871e5b4c, type: 3}
+    volume: 0.6
+    pitchJitter: 0.06
+    maxDuration: 3
+    minInterval: 0.05
+    maxVoices: 3
+    global: 0
 --- !u!114 &6420726495080075471
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -449,6 +461,22 @@ MonoBehaviour:
   shellFlightTime: 0.5
   chainInterval: 0.45
   leadTime: 0.6
+  lockOnSound:
+    clip: {fileID: 8300000, guid: bb4ab6e0a3702f94bab24fb5524af5a1, type: 3}
+    volume: 0.7
+    pitchJitter: 0.06
+    maxDuration: 0
+    minInterval: 0.2
+    maxVoices: 2
+    global: 0
+  fireSound:
+    clip: {fileID: 8300000, guid: 45a8eec8ba93a9946ab0e0546d883a46, type: 3}
+    volume: 0.9
+    pitchJitter: 0.06
+    maxDuration: 1.5
+    minInterval: 0.08
+    maxVoices: 3
+    global: 0
   aimedTrackTime: 0.8
   aimedLockTime: 0.35
   aimedShellSpeed: 38
@@ -458,6 +486,103 @@ MonoBehaviour:
   sprayInterval: 0.18
   sprayWarning: 0.65
   sprayBlastRadius: 2.2
+--- !u!82 &561843112466346341
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5611442098030642479}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 8300000, guid: 6dd978079a3fdd647b0e7895eef580d0, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 0
+  m_Pitch: 1
+  Loop: 1
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 0
+  MinDistance: 12
+  MaxDistance: 60
+  Pan2D: 0
+  rolloffMode: 1
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &6622430517399542443
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using MobileMarket.Common;
 using MobileMarket.Managers;
 
 namespace MobileMarket.Enemy
@@ -23,6 +24,11 @@ namespace MobileMarket.Enemy
         [SerializeField] private float chainInterval = 0.45f;
         [Tooltip("How far ahead of the player each chained shot is placed, per second of the player's speed.")]
         [SerializeField] private float leadTime = 0.6f;
+
+        [Header("Sounds")]
+        [Tooltip("Beep when the laser locks onto the strike spot.")]
+        [SerializeField] private SoundEffect lockOnSound = new SoundEffect();
+        [SerializeField] private SoundEffect fireSound = new SoundEffect();
 
         private TurretAim aim;
         private WaitForSeconds chainWait, sprayWait, sprayEndWait, sprayFireWait;
@@ -55,6 +61,7 @@ namespace MobileMarket.Enemy
                 Vector3 target = Ground(player.position + velocity * (leadTime * i));
                 var marker = Spawn(markerPrefab.gameObject, target).GetComponent<AreaMarker>();
                 marker.Show(target, blastRadius, lockTime + shellFlightTime);
+                SoundManager.PlayAt(lockOnSound, target);
                 for (float t = 0f; t < lockTime; t += Time.deltaTime)
                 {
                     if (laser != null) laser.Track(target);
@@ -62,8 +69,7 @@ namespace MobileMarket.Enemy
                     yield return null;
                 }
                 if (laser != null) laser.Hide();
-                var shell = Spawn(shellPrefab.gameObject, aim.Muzzle.position).GetComponent<BossArtilleryRound>();
-                shell.Launch(aim.Muzzle.position, target, shellFlightTime, 0f, damage, blastRadius);
+                FireShell(target, shellFlightTime, blastRadius);
                 if (i < shots - 1) yield return chainWait;
             }
         }
@@ -93,6 +99,7 @@ namespace MobileMarket.Enemy
                 aim.AimAt(target);
                 yield return null;
             }
+            SoundManager.PlayAt(lockOnSound, target);
             for (float t = 0f; t < aimedLockTime; t += Time.deltaTime)
             {
                 if (laser != null) laser.Track(target);
@@ -101,8 +108,7 @@ namespace MobileMarket.Enemy
             }
             if (laser != null) laser.Hide();
             float flight = Vector3.Distance(aim.Muzzle.position, target) / Mathf.Max(1f, aimedShellSpeed);
-            var shell = Spawn(shellPrefab.gameObject, aim.Muzzle.position).GetComponent<BossArtilleryRound>();
-            shell.Launch(aim.Muzzle.position, target, flight, 0f, damage, aimedBlastRadius);
+            FireShell(target, flight, aimedBlastRadius);
         }
 
         /// <summary>Suppressive spray: rapid shells scattered around the player, each spot flagged just before it lands.</summary>
@@ -125,11 +131,18 @@ namespace MobileMarket.Enemy
         private IEnumerator SprayShell(Vector3 target)
         {
             yield return sprayFireWait;
-            var shell = Spawn(shellPrefab.gameObject, aim.Muzzle.position).GetComponent<BossArtilleryRound>();
-            shell.Launch(aim.Muzzle.position, target, shellFlightTime, 0f, damage, sprayBlastRadius);
+            FireShell(target, shellFlightTime, sprayBlastRadius);
         }
 
         public void Track(Vector3 point) => aim.AimAt(point);
+
+        private void FireShell(Vector3 target, float flightTime, float radius)
+        {
+            Vector3 muzzle = aim.Muzzle.position;
+            SoundManager.PlayAt(fireSound, muzzle);
+            var shell = Spawn(shellPrefab.gameObject, muzzle).GetComponent<BossArtilleryRound>();
+            shell.Launch(muzzle, target, flightTime, 0f, damage, radius);
+        }
 
         private static Vector3 Ground(Vector3 p) { p.y = 0f; return p; }
 

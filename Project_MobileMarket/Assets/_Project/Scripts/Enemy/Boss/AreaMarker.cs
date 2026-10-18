@@ -1,4 +1,5 @@
 using UnityEngine;
+using MobileMarket.Common;
 using MobileMarket.Managers;
 
 namespace MobileMarket.Enemy
@@ -13,6 +14,8 @@ namespace MobileMarket.Enemy
 
         [SerializeField] private Renderer ringRenderer;
         [ColorUsage(true, true)] [SerializeField] private Color color = new Color(3f, 0.25f, 0.15f, 1f);
+        [Tooltip("Warning when the ring appears; cut off when the ring's time runs out (capped by its Max Duration).")]
+        [SerializeField] private SoundEffect warningSound = new SoundEffect();
 
         private MaterialPropertyBlock block;
         private float startTime, duration;
@@ -26,6 +29,8 @@ namespace MobileMarket.Enemy
             transform.localScale = new Vector3(radius * 2f, 1f, radius * 2f);
             startTime = Time.time;
             duration = Mathf.Max(0.05f, seconds);
+            float soundLength = warningSound.maxDuration > 0f ? Mathf.Min(duration, warningSound.maxDuration) : duration;
+            SoundManager.PlayAt(warningSound, groundPoint, soundLength);
         }
 
         private void Update()

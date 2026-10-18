@@ -1,4 +1,6 @@
 using UnityEngine;
+using MobileMarket.Common;
+using MobileMarket.Managers;
 
 namespace MobileMarket.Enemy
 {
@@ -21,6 +23,15 @@ namespace MobileMarket.Enemy
         [SerializeField] private float pitchMin = -65f;
         [SerializeField] private float pitchMax = 20f;
 
+        [Header("Motor sound (optional)")]
+        [Tooltip("Looping servo whine; its volume follows how fast the turret is turning.")]
+        [SerializeField] private AudioSource servoSource;
+        [SerializeField] private float servoMaxVolume = 0.5f;
+        [Tooltip("How fast the motor sound follows the turning speed (volume per second).")]
+        [SerializeField] private float servoFade = 4f;
+        [Tooltip("Winding-down whine when the turret dies (PowerDown).")]
+        [SerializeField] private SoundEffect powerDownSound = new SoundEffect();
+
         public Transform Muzzle => muzzle != null ? muzzle : transform;
 
         private Vector3 target;
@@ -41,6 +52,7 @@ namespace MobileMarket.Enemy
             yawSpeed = 0f;
             pitchSpeed = 25f;
             AimAt(Muzzle.position + Vector3.down * 50f);
+            SoundManager.PlayAt(powerDownSound, Muzzle.position);
         }
 
         /// <summary>Angle (degrees) between where the barrel points and the target.</summary>
@@ -48,9 +60,28 @@ namespace MobileMarket.Enemy
 
         private void Update()
         {
-            if (!hasTarget) return;
             float dt = Time.deltaTime;
+            float prevYaw = yawAngle, prevPitch = pitchAngle;
+            if (hasTarget) Turn(dt);
+            UpdateServoSound(prevYaw, prevPitch, dt);
+        }
 
+        /// <summary>Motor whine: louder the faster the barrel is turning, silent when it holds still.</summary>
+        private void UpdateServoSound(float prevYaw, float prevPitch, float dt)
+        {
+            if (servoSource == null || dt <= 0f) return;
+            float turned = Mathf.Abs(Mathf.DeltaAngle(prevYaw, yawAngle)) + Mathf.Abs(Mathf.DeltaAngle(prevPitch, pitchAngle));
+            float fullSpeed = Mathf.Max(1f, Mathf.Max(yawSpeed, pitchSpeed));
+            float target = Mathf.Clamp01(turned / dt / fullSpeed) * servoMaxVolume;
+            servoSource.volume = Mathf.MoveTowards(servoSource.volume, target, servoFade * dt);
+
+            bool audible = servoSource.volume > 0.01f;
+            if (audible && !servoSource.isPlaying) servoSource.Play();
+            else if (!audible && servoSource.isPlaying) servoSource.Pause();
+        }
+
+        private void Turn(float dt)
+        {
             if (yaw != null)
             {
                 // Front is -Z: rotating -Z by angle a around Y gives (-sin a, 0, -cos a).

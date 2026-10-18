@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using MobileMarket.Common;
 using MobileMarket.Managers;
 
 namespace MobileMarket.Enemy
@@ -35,6 +36,12 @@ namespace MobileMarket.Enemy
         [SerializeField] private float fireLightIntensity = 6f;
         [SerializeField] private TurretAim[] turrets = System.Array.Empty<TurretAim>();
 
+        [Header("Sounds")]
+        [Tooltip("System failure alarm while the lights go haywire (cut off when the blasts start).")]
+        [SerializeField] private SoundEffect alarmSound = new SoundEffect();
+        [Tooltip("The final explosion, on top of the regular blasts.")]
+        [SerializeField] private SoundEffect finalBlastSound = new SoundEffect();
+
         private bool wrecked;
 
         private void Awake()
@@ -57,6 +64,7 @@ namespace MobileMarket.Enemy
         public IEnumerator Play()
         {
             // 1. Alarm: the unit's lights stutter and flare at random.
+            SoundManager.PlayGlobal(alarmSound, alarmTime + chainInterval * chainPoints.Length);
             var flickerWait = new WaitForSeconds(0.07f);
             for (float t = 0f; t < alarmTime; t += 0.07f)
             {
@@ -75,6 +83,7 @@ namespace MobileMarket.Enemy
 
             // 3. Final explosion: swap to the wreck, glow out, fires start, turrets die.
             foreach (var p in finalPoints) Blast(p);
+            SoundManager.PlayGlobal(finalBlastSound);
             if (intactModel != null) intactModel.SetActive(false);
             if (wreckedModel != null) wreckedModel.SetActive(true);
             foreach (var l in bossLights) if (l != null) l.enabled = false;

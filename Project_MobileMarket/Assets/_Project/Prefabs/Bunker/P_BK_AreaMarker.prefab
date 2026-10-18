@@ -47,6 +47,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MobileMarket.Enemy.AreaMarker
   ringRenderer: {fileID: 528171446615606789}
   color: {r: 3, g: 0.25, b: 0.15, a: 1}
+  warningSound:
+    clip: {fileID: 8300000, guid: baf463da95c602049af836c57dc7e156, type: 3}
+    volume: 0.55
+    pitchJitter: 0.06
+    maxDuration: 1.2
+    minInterval: 0.3
+    maxVoices: 2
+    global: 0
 --- !u!1 &7920651464425094429
 GameObject:
   m_ObjectHideFlags: 0

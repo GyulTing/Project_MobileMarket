@@ -14831,3 +14831,22 @@ MonoBehaviour:
   flash: {fileID: 7580876042902825687}
   flashIntensity: 40
   flashFade: 0.35
+  shakeStrength: 0.25
+  sound:
+    clip: {fileID: 8300000, guid: da727960431da124da96c4132467acca, type: 3}
+    volume: 1
+    pitchJitter: 0.06
+    maxDuration: 0
+    minInterval: 0.04
+    maxVoices: 6
+    global: 0
+  followUpSound:
+    clip: {fileID: 8300000, guid: 26c2adb8581e29a44975b64d9f38196d, type: 3}
+    volume: 0.45
+    pitchJitter: 0.06
+    maxDuration: 0
+    minInterval: 0.3
+    maxVoices: 2
+    global: 0
+  followUpDelay: 0.35
+  followUpChance: 0.5

@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using MobileMarket.Common;
 using MobileMarket.Managers;
 
 namespace MobileMarket.Enemy
@@ -27,6 +28,7 @@ namespace MobileMarket.Enemy
         [SerializeField] private float launchInterval = 0.12f;
         [SerializeField] private float flightTime = 1.1f;
         [SerializeField] private float arcHeight = 9f;
+        [SerializeField] private SoundEffect launchSound = new SoundEffect();
 
         private TurretAim aim;
         private Vector3[] targets = new Vector3[0];
@@ -56,6 +58,7 @@ namespace MobileMarket.Enemy
             yield return new WaitForSeconds(Mathf.Max(0f, warning - flightTime));
             for (int i = 0; i < rockets; i++)
             {
+                SoundManager.PlayAt(launchSound, aim.Muzzle.position);
                 var rocket = Spawn(rocketPrefab.gameObject, aim.Muzzle.position).GetComponent<BossArtilleryRound>();
                 rocket.Launch(aim.Muzzle.position, targets[i], flightTime, arcHeight, damage, blastRadius);
                 yield return launchWait;

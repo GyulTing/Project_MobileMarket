@@ -1,13 +1,14 @@
 using System;
 using UnityEngine;
 using MobileMarket.Common;
+using MobileMarket.Managers;
 
 namespace MobileMarket.Enemy
 {
     /// <summary>
     /// One of the bunker boss's heat vents. Open() lifts the hinged cover and the vent glows like forged iron (hot core,
     /// glowing metal, flickering light, sparks, smoke); only then do hits count. Losing half its health shows the next
-    /// damage model; at 0 it breaks: the heat dies and it shorts out with electric sparks until Close(). Every time it has
+    /// damage model; at 0 it breaks: a blast goes off, the heat dies and it shorts out with electric sparks until Close(). Every time it has
     /// broken before, it starts the next cooling one damage model further along (intact, damaged, wrecked).
     /// </summary>
     [RequireComponent(typeof(Collider))]
@@ -45,10 +46,33 @@ namespace MobileMarket.Enemy
         [SerializeField] private ParticleSystem sparks;
         [SerializeField] private ParticleSystem smoke;
 
+        [Header("Breaking")]
+        [Tooltip("Blast when the vent breaks (pooled), on the room side of the vent.")]
+        [SerializeField] private GameObject breakExplosionPrefab;
+        [Tooltip("Meters from the vent's pivot toward the room (against its forward) where the blast goes off.")]
+        [SerializeField] private float blastOffset = 0.6f;
+        [Tooltip("Seconds after the blast before it starts shorting out.")]
+        [SerializeField] private float shortCircuitDelay = 0.35f;
+
         [Header("Short circuit (broken)")]
         [SerializeField] private ParticleSystem shortCircuit;
         [SerializeField] private Light shortLight;
         [SerializeField] private float shortLightIntensity = 5f;
+
+        [Header("Sounds")]
+        [Tooltip("Looping furnace sizzle; its volume follows the glow.")]
+        [SerializeField] private AudioSource heatLoop;
+        [SerializeField] private float heatLoopVolume = 0.35f;
+        [Tooltip("Looping electric crackle while it shorts out.")]
+        [SerializeField] private AudioSource shortLoop;
+        [Tooltip("Steam burst when the cover lifts on a working vent.")]
+        [SerializeField] private SoundEffect steamSound = new SoundEffect();
+        [Tooltip("Metal clank for every hit that counts.")]
+        [SerializeField] private SoundEffect hitSound = new SoundEffect();
+        [Tooltip("Hydraulic cover moving (opening and closing).")]
+        [SerializeField] private SoundEffect coverSound = new SoundEffect();
+        [Tooltip("Metal tearing when it drops to the next damage model.")]
+        [SerializeField] private SoundEffect damagedSound = new SoundEffect();
 
         public event Action<VentHeat> OnBroken;
 
@@ -57,8 +81,11 @@ namespace MobileMarket.Enemy
         public float Health { get; private set; }
         /// <summary>Broken during the current boss phase: it reopens still shorting out and can't be hurt again.</summary>
         public bool BrokenThisPhase { get; private set; }
+        /// <summary>Room-side point in front of the vent (where its break blast and effects go).</summary>
+        public Vector3 FrontPoint => transform.position - transform.forward * blastOffset;
 
         private MaterialPropertyBlock block;
+        private float shortCircuitStartTime;   // the short starts at this time after a break (blast first)
         private float coverOpen;   // 0 closed .. 1 open
         private float heat;        // 0 cold .. 1 glowing
         private int startStage;
@@ -78,6 +105,7 @@ namespace MobileMarket.Enemy
         public void Open()
         {
             if (CurrentState != State.Closed) return;
+            SoundManager.PlayAt(coverSound, FrontPoint);
             if (BrokenThisPhase)
             {
                 // Already wrecked this phase: the cover lifts on a dead, sparking vent.
@@ -92,11 +120,13 @@ namespace MobileMarket.Enemy
             ShowStage(startStage);
             if (sparks != null) sparks.Play();
             if (smoke != null) smoke.Play();
+            SoundManager.PlayAt(steamSound, FrontPoint);
         }
 
         /// <summary>Lowers the cover and lets everything cool down and stop sparking.</summary>
         public void Close()
         {
+            if (CurrentState != State.Closed) SoundManager.PlayAt(coverSound, FrontPoint);
             CurrentState = State.Closed;
             if (sparks != null) sparks.Stop();
             if (smoke != null) smoke.Stop();
@@ -112,12 +142,15 @@ namespace MobileMarket.Enemy
             if (CurrentState != State.Open || coverOpen < 0.5f || amount <= 0f) return;
 
             Health = Mathf.Max(0f, Health - amount);
+            SoundManager.PlayAt(hitSound, FrontPoint);
             if (Health <= 0f)
             {
                 Break();
                 return;
             }
-            ShowStage(Mathf.Min(WreckedStage, startStage + (Health <= maxHealth * 0.5f ? 1 : 0)));
+            int newStage = Mathf.Min(WreckedStage, startStage + (Health <= maxHealth * 0.5f ? 1 : 0));
+            if (newStage != stage) SoundManager.PlayAt(damagedSound, FrontPoint);
+            ShowStage(newStage);
         }
 
         private void Break()
@@ -128,8 +161,17 @@ namespace MobileMarket.Enemy
             ShowStage(WreckedStage);
             if (sparks != null) sparks.Stop();
             if (smoke != null) smoke.Stop();
-            if (shortCircuit != null) shortCircuit.Play();
+            // Blast first so it reads as "that broke", then it shorts out (started from Update).
+            SpawnBreakBlast();
+            shortCircuitStartTime = Time.time + shortCircuitDelay;
             OnBroken?.Invoke(this);
+        }
+
+        private void SpawnBreakBlast()
+        {
+            if (breakExplosionPrefab == null) return;
+            if (PoolManager.Instance != null) PoolManager.Instance.Get(breakExplosionPrefab, FrontPoint, Quaternion.identity);
+            else Instantiate(breakExplosionPrefab, FrontPoint, Quaternion.identity);
         }
 
         private void Update()
@@ -144,9 +186,17 @@ namespace MobileMarket.Enemy
             float flicker = 0.85f + 0.15f * Mathf.PerlinNoise(Time.time * 3f, transform.position.x);
             ApplyHeat(heat * flicker);
             SetLight(heatLight, heat * flicker * heatLightIntensity);
+            SetLoop(heatLoop, heat * heatLoopVolume);
 
-            // Electric short: harsh random blue flashes while broken.
-            float shortLevel = CurrentState == State.Broken && UnityEngine.Random.value < 0.35f ? shortLightIntensity : 0f;
+            // Electric short: harsh random blue flashes while broken, once the break blast has gone off.
+            bool shorting = CurrentState == State.Broken && Time.time >= shortCircuitStartTime;
+            if (shorting && shortCircuit != null && !shortCircuit.isPlaying) shortCircuit.Play();
+            if (shortLoop != null && shorting != shortLoop.isPlaying)
+            {
+                if (shorting) shortLoop.Play();
+                else shortLoop.Stop();
+            }
+            float shortLevel = shorting && UnityEngine.Random.value < 0.35f ? shortLightIntensity : 0f;
             SetLight(shortLight, shortLevel);
         }
 
@@ -174,6 +224,16 @@ namespace MobileMarket.Enemy
             stage = index;
             for (int i = 0; i < frameStages.Length; i++) if (frameStages[i] != null) frameStages[i].SetActive(i == index);
             for (int i = 0; i < coverStages.Length; i++) if (coverStages[i] != null) coverStages[i].SetActive(i == index);
+        }
+
+        /// <summary>Runs a looping source at the given volume, silent (paused) at zero.</summary>
+        private static void SetLoop(AudioSource source, float volume)
+        {
+            if (source == null) return;
+            source.volume = volume;
+            bool audible = volume > 0.01f;
+            if (audible && !source.isPlaying) source.Play();
+            else if (!audible && source.isPlaying) source.Pause();
         }
 
         private static void SetLight(Light light, float intensity)

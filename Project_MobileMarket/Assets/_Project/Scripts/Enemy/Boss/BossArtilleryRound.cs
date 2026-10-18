@@ -6,7 +6,7 @@ namespace MobileMarket.Enemy
 {
     /// <summary>
     /// A round that flies to a fixed ground point over a set time (40 mm shell: flat and fast; S-5 rocket: lobbed in an arc)
-    /// and explodes there: everything on the player side within the radius takes damage once, an explosion effect is
+    /// and explodes there: every fighter within the radius (the player, zombies) takes damage once, an explosion effect is
     /// spawned, and the round goes back to the pool. Pooled.
     /// </summary>
     public class BossArtilleryRound : MonoBehaviour
@@ -14,6 +14,12 @@ namespace MobileMarket.Enemy
         private static readonly Collider[] OverlapBuffer = new Collider[16];
 
         [SerializeField] private GameObject explosionPrefab;
+        [Tooltip("Scales the round's damage against the player.")]
+        [SerializeField] private float playerDamageMultiplier = 0.5f;
+        [Tooltip("Scales the round's damage against every other fighter (zombies caught in the blast).")]
+        [SerializeField] private float otherDamageMultiplier = 1.3f;
+        [Tooltip("Flight sound that travels with the round (shell whistle, rocket hiss); stopped when it explodes.")]
+        [SerializeField] private AudioSource flightSound;
 
         private Vector3 start, end;
         private float flightTime, arcHeight, elapsed;
@@ -35,6 +41,11 @@ namespace MobileMarket.Enemy
             transform.position = from;
             foreach (var t in trails) t.Clear();
             foreach (var p in particles) { p.Clear(); p.Play(); }
+            if (flightSound != null)
+            {
+                flightSound.pitch = 1f + Random.Range(-0.06f, 0.06f);
+                flightSound.Play();
+            }
         }
 
         private void Update()
@@ -52,12 +63,14 @@ namespace MobileMarket.Enemy
         private void Explode()
         {
             flying = false;
+            if (flightSound != null) flightSound.Stop();
             int count = Physics.OverlapSphereNonAlloc(end, radius, OverlapBuffer, ~0, QueryTriggerInteraction.Ignore);
             for (int i = 0; i < count; i++)
             {
                 var member = OverlapBuffer[i].GetComponent<FactionMember>();
-                if (member == null || member.Faction != Faction.Player) continue;
-                OverlapBuffer[i].GetComponent<IDamageable>()?.TakeDamage(damage);
+                if (member == null) continue;
+                float multiplier = member.Faction == Faction.Player ? playerDamageMultiplier : otherDamageMultiplier;
+                OverlapBuffer[i].GetComponent<IDamageable>()?.TakeDamage(damage * multiplier);
             }
             if (explosionPrefab != null)
             {
