@@ -213,7 +213,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 425983868a3e9be47930936b7755a07e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MobileMarket.Player.PlayerHealth
-  maxHealth: 100
+  maxHealth: 500
 --- !u!114 &467354561509031722
 MonoBehaviour:
   m_ObjectHideFlags: 0

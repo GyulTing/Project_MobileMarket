@@ -32623,6 +32623,9 @@ MonoBehaviour:
   zoomSmoothing: 10
   shakePerRecoil: 0.03
   shakeDecay: 30
+  blastRange: 25
+  blastDecay: 6
+  maxBlastShake: 0.35
 --- !u!81 &1286806658
 AudioListener:
   m_ObjectHideFlags: 0
