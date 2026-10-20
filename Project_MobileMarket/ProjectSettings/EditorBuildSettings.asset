@@ -6,15 +6,21 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/_Project/Scenes/Main/Map/Tmp_Menu.unity
+    guid: d2dad08f0a404144baecbe78fbcf0f99
+  - enabled: 1
+    path: Assets/_Project/Scenes/Main/Map/BunkerBoss.unity
+    guid: ac9911f213582114d8148a6d29ac7234
+  - enabled: 0
     path: Assets/_Project/Scenes/Main/Map/Player_Settlement.unity
     guid: 2e63ca734db9385458eccd1508743141
-  - enabled: 1
+  - enabled: 0
     path: Assets/_Project/Scenes/Main/Map/Small_Settlement 2.unity
     guid: 78751c4fef123d543abf7b4ae91075de
-  - enabled: 1
+  - enabled: 0
     path: Assets/_Project/Scenes/Test/TestScene.unity
     guid: 79f8dcba97b498f43a6c65a7dfafc022
-  - enabled: 1
+  - enabled: 0
     path: Assets/_Project/Scenes/Main/Map/Excavation site.unity
     guid: 8a2efd333c2aea548b8d0755dfb2e09e
   m_configObjects:

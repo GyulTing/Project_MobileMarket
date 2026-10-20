@@ -19,13 +19,16 @@ namespace MobileMarket.Managers
         [SerializeField] private Inventory playerInventory;
         [SerializeField] private DialoguePanel dialoguePanel;
         [SerializeField] private WorldMapUI worldMap;
+        [Tooltip("Keypad for bunker code terminals (optional; only scenes with terminals need it).")]
+        [SerializeField] private CodePanelUI codePanel;
 
         private bool mapOpen;
         private bool travelling;
+        private bool codeOpen;
 
         private void Update()
         {
-            if (mapOpen || travelling) return;
+            if (mapOpen || travelling || codeOpen) return;
             if (Keyboard.current != null && Keyboard.current.tabKey.wasPressedThisFrame)
             {
                 inventoryScreen.Toggle(playerInventory);
@@ -53,6 +56,8 @@ namespace MobileMarket.Managers
                 worldMap.OnVisibilityChanged += HandleMapVisibilityChanged;
                 worldMap.OnDepartRequested += HandleDepartRequested;
             }
+            CodeTerminal.OnCodeRequested += HandleCodeRequested;
+            if (codePanel != null) codePanel.OnVisibilityChanged += HandleCodePanelVisibilityChanged;
         }
 
         private void OnDisable()
@@ -66,6 +71,8 @@ namespace MobileMarket.Managers
                 worldMap.OnVisibilityChanged -= HandleMapVisibilityChanged;
                 worldMap.OnDepartRequested -= HandleDepartRequested;
             }
+            CodeTerminal.OnCodeRequested -= HandleCodeRequested;
+            if (codePanel != null) codePanel.OnVisibilityChanged -= HandleCodePanelVisibilityChanged;
         }
 
         private void HandleBoxOpened(LootBox box, GameObject interactor)
@@ -95,13 +102,26 @@ namespace MobileMarket.Managers
         private void HandleMapVisibilityChanged(bool open)
         {
             mapOpen = open;
-            OnGameplayInputBlocked?.Invoke(mapOpen || travelling);
+            OnGameplayInputBlocked?.Invoke(mapOpen || travelling || codeOpen);
+        }
+
+        private void HandleCodeRequested(CodeTerminal terminal)
+        {
+            if (codePanel == null) return;
+            if (inventoryScreen.IsOpen) inventoryScreen.Close();
+            codePanel.Open(terminal);
+        }
+
+        private void HandleCodePanelVisibilityChanged(bool open)
+        {
+            codeOpen = open;
+            OnGameplayInputBlocked?.Invoke(mapOpen || travelling || codeOpen);
         }
 
         private void HandleTravelStateChanged(bool isTravelling)
         {
             travelling = isTravelling;
-            OnGameplayInputBlocked?.Invoke(mapOpen || travelling);
+            OnGameplayInputBlocked?.Invoke(mapOpen || travelling || codeOpen);
         }
     }
 }

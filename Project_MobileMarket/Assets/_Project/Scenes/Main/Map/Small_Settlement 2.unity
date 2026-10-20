@@ -50833,6 +50833,7 @@ MonoBehaviour:
   playerInventory: {fileID: 754693992}
   dialoguePanel: {fileID: 1543570126}
   worldMap: {fileID: 796711069}
+  codePanel: {fileID: 0}
 --- !u!4 &940743787
 Transform:
   m_ObjectHideFlags: 0
@@ -57253,6 +57254,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 266589402}
     m_Modifications:
+    - target: {fileID: 1415868637720671394, guid: ee5654687989a564996d432e2f8d6164, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1415868637720671394, guid: ee5654687989a564996d432e2f8d6164, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2318814297224844634, guid: ee5654687989a564996d432e2f8d6164, type: 3}
       propertyPath: area
       value: 
@@ -57261,6 +57270,30 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 754693988}
+    - target: {fileID: 4159836131576870488, guid: ee5654687989a564996d432e2f8d6164, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4159836131576870488, guid: ee5654687989a564996d432e2f8d6164, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4159836131576870488, guid: ee5654687989a564996d432e2f8d6164, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4159836131576870488, guid: ee5654687989a564996d432e2f8d6164, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4159836131576870488, guid: ee5654687989a564996d432e2f8d6164, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4159836131576870488, guid: ee5654687989a564996d432e2f8d6164, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4708289415966075739, guid: ee5654687989a564996d432e2f8d6164, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -57345,6 +57378,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: P_HUD
       objectReference: {fileID: 0}
+    - target: {fileID: 6665015111680881986, guid: ee5654687989a564996d432e2f8d6164, type: 3}
+      propertyPath: playerCombat
+      value: 
+      objectReference: {fileID: 754693991}
+    - target: {fileID: 6665015111680881986, guid: ee5654687989a564996d432e2f8d6164, type: 3}
+      propertyPath: playerHealth
+      value: 
+      objectReference: {fileID: 754693990}
     - target: {fileID: 6717175033367783354, guid: ee5654687989a564996d432e2f8d6164, type: 3}
       propertyPath: playerHealth
       value: 
@@ -91931,6 +91972,9 @@ MonoBehaviour:
   zoomSmoothing: 10
   shakePerRecoil: 0.03
   shakeDecay: 30
+  blastRange: 25
+  blastDecay: 6
+  maxBlastShake: 0.35
 --- !u!81 &1719201215
 AudioListener:
   m_ObjectHideFlags: 0

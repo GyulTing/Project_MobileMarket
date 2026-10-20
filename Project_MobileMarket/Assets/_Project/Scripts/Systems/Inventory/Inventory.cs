@@ -65,6 +65,17 @@ namespace MobileMarket.Systems
             return false;
         }
 
+        /// <summary>True if at least one instance of the given item is carried.</summary>
+        public bool Contains(ItemData data)
+        {
+            var grid = ActiveGrid;
+            for (int i = 0; i < grid.Size; i++)
+            {
+                if (grid[i] != null && grid[i].Data == data) return true;
+            }
+            return false;
+        }
+
         public T FindFirst<T>() where T : ItemData
         {
             var grid = ActiveGrid;
